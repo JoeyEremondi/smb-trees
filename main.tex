@@ -50,7 +50,23 @@
 \input{sharedmacros}
 \input{macros}
 \usepackage{agda}
-
+\usepackage{fontspec}
+\usepackage{fontspec}
+\setmonofont{JuliaMono}[
+  Extension=.ttf,
+  UprightFont=*,
+  BoldFont=*-Bold,
+  ItalicFont=*-RegularItalic,
+  BoldItalicFont=*-BoldItalic,
+]
+\usepackage{unicode-math}
+\setmathfont{JuliaMono}[
+  Extension=.ttf,
+  UprightFont=*,
+  BoldFont=*-Bold,
+  ItalicFont=*-RegularItalic,
+  BoldItalicFont=*-BoldItalic,
+]
 
 \ifdef{\reviewmode}{
   \settopmatter{printfolios=true,printccs=false,printacmref=false}
@@ -69,11 +85,6 @@
 }
 
 
-
-%%
-%% \BibTeX command to typeset BibTeX logo in the docs
-\AtBeginDocument{%
-  \providecommand\BibTeX{{%
 
 
 %% Rights management information.  This information is sent to you

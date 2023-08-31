@@ -4,18 +4,42 @@
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Data.Nat}\<%
+\AgdaModule{Data.Nat}\AgdaSpace{}%
+\AgdaKeyword{hiding}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Relation.Binary.PropositionalEquality}\<%
+\\
+%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Data.Product}\<%
+\\
+%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Relation.Nullary}\<%
+\\
+%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Iso}\<%
 \\
 %
 \>[2]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{Tree}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
+\\
+\>[0]\<%
 \end{code}
 
 Brouwer trees  are a simple but elegant tool for proving termination of higher-order procedures.
 Traditionally, they are defined as follows:
 \begin{code}%
-%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[2]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{SmallTree}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -44,28 +68,45 @@ Traditionally, they are defined as follows:
 \AgdaDatatype{SmallTree}\<%
 \end{code}
 Under this definition, a Brouwer tree is either zero, the successor of another Brouwer tree, or the limit of a countable sequence of Brouwer trees. However, these are quite weak, in that they can only take the limit of countable sequences.
-To represent the limits of uncountable sequences, we can paramterize our definition over some Universe \ala Tarski, then modify the Lim constructor to take a function whose domain is the interpretation of some code.
+To represent the limits of uncountable sequences, we can paramterize our definition over some Universe \ala Tarski:
 
 \begin{code}%
 %
 \>[2]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{ℓ}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{ℂ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{ℓ}\AgdaSymbol{\}}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaSymbol{(}\AgdaBound{ℂ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
-\AgdaBound{ℓ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaBound{El}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{ℂ}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
-\AgdaBound{ℓ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
+\AgdaBound{ℓ}\AgdaSymbol{)}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaSymbol{(}\AgdaBound{Cℕ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{CℕIso}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{Iso}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{Cℕ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaDatatype{ℕ}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\end{code}
+
+We then generalize limits to any function whose domain is the interpretation of some code.
+\begin{code}%
+%
 \>[4]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{Tree}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -74,22 +115,22 @@ To represent the limits of uncountable sequences, we can paramterize our definit
 \AgdaKeyword{where}\<%
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
-\>[6]\AgdaInductiveConstructor{OZ}\AgdaSpace{}%
+\>[6]\AgdaInductiveConstructor{Z}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Tree}\<%
 \\
 %
-\>[6]\AgdaInductiveConstructor{O↑}\AgdaSpace{}%
+\>[6]\AgdaInductiveConstructor{↑}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Tree}\AgdaSpace{}%
-\AgdaSymbol{->}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Tree}\<%
 \\
 %
-\>[6]\AgdaInductiveConstructor{OLim}\AgdaSpace{}%
+\>[6]\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}%
-\>[16]\AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
+\>[15]\AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{ℂ}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
@@ -103,14 +144,49 @@ To represent the limits of uncountable sequences, we can paramterize our definit
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Tree}\<%
 \end{code}
+
+\begin{code}[hiding]%
+\>[0]\<%
+\end{code}
+
+
 Our module is paramterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
 function $\mathit{El}$, which computes the type represented by each code.
+We require that there be a code whose interpretation is isomorphic to the natural numbers,
+as this is essential to our construction in \cref{sec:TODO}.
 Increasingly larger trees can be obtained by setting $\bC := \AgdaPrimitive{Set} \ \ell$ and
 $\mathit{El} := \mathit{id}$ for increasing $\ell$.
 However, by defining an inductive-recursive universe,
 one can still capture limits over some non-countable types, since
  $\AgdaDatatype{Tree}$ is in $\AgdaPrimitive{Set}$ whenever $\bC$ is.
 
+The small limit constructor can be recovered from the natural-number code
+\begin{code}%
+\>[0]\<%
+\\
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[4]\AgdaFunction{ℕLim}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{ℕ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\<%
+\\
+%
+\>[4]\AgdaFunction{ℕLim}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{Cℕ}%
+\>[21]\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{cn}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{Iso.fun}\AgdaSpace{}%
+\AgdaBound{CℕIso}\AgdaSpace{}%
+\AgdaBound{cn}\AgdaSymbol{))}\<%
+\end{code}
 
 Brouwer trees are a the quintessential example of a higher-order inductive type.%
 \footnote{Not to be confused with Higher Inductive Types (HITs) from Homotopy Type Theory~\citep{hottbook}}:
@@ -119,4 +195,1279 @@ a way of storing a possibly infinite number of smaller trees.
 
 \subsection{Ordering Trees}
 
-\subsection{A Join Operation}
+Our ultimate goal is to have a well-founded ordering%
+\footnote{Technically, this is a well-founded quasi-ordering because there are pairs of
+  trees which are related by both $\leq$ and $\qeq$, but which are not propositionally equal.},
+so we define a relation to order Brouwer trees.
+
+\begin{code}%
+%
+\>[4]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Set}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[4][@{}l@{\AgdaIndent{0}}]%
+\>[6]\AgdaInductiveConstructor{≤-Z}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{o}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{Z}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o}\<%
+\\
+%
+\>[6]\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{o1}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSymbol{\}}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o2}\<%
+\\
+%
+\>[8]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{↑}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaInductiveConstructor{↑}\AgdaSpace{}%
+\AgdaBound{o2}\<%
+\\
+%
+\>[6]\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[20]\AgdaSymbol{\{}\AgdaBound{o}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c}%
+\>[44]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSymbol{)}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\<%
+\\
+%
+\>[8]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f}\<%
+\\
+%
+\>[6]\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[23]\AgdaSymbol{\{}\AgdaBound{o}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{\}}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\<%
+\\
+%
+\>[8]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{)}\<%
+\\
+%
+\>[8]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o}\<%
+\\
+\>[0]\<%
+\end{code}
+The ordering is based on the one presented by \citet{KRAUS2023113843}, but we modify it
+so that transitivity can be proven constructively, rather than adding it as a constructor
+for the relation. This allows us to prove well-foundedness of the relation without needing
+quotient types or other advanced features.
+
+\begin{code}%
+\>[0]\<%
+\\
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[4]\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaInductiveConstructor{Z}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-Z}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{↑}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)))}\<%
+\\
+\>[0]\<%
+\end{code}
+
+\begin{code}%
+\>[0]\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[4]\AgdaFunction{≤-reflEq}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{o1}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o2}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-reflEq}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\\
+\>[0]\<%
+\end{code}
+
+\begin{code}%
+\>[0]\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{o1}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSpace{}%
+\AgdaBound{o3}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o3}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o3}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-Z}\AgdaSpace{}%
+\AgdaBound{p23}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-Z}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaBound{p12}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaBound{p23}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaBound{p12}\AgdaSpace{}%
+\AgdaBound{p23}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaBound{p12}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaBound{p23}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaBound{p12}\AgdaSpace{}%
+\AgdaBound{p23}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p23}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p23}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaBound{p12}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaDottedPattern{\AgdaSymbol{.}}\AgdaDottedPattern{\AgdaBound{f}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaBound{p12}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)}\<%
+\\
+\>[0]\<%
+\end{code}
+
+\begin{code}%
+\>[0]\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[4]\AgdaKeyword{infixr}\AgdaSpace{}%
+\AgdaNumber{10}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤⨟o\AgdaUnderscore{}}}\<%
+\\
+\>[0]\<%
+\end{code}
+
+\begin{code}%
+\>[0]\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[4]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤⨟o\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[13]\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{o1}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSpace{}%
+\AgdaBound{o3}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o3}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o3}\<%
+\\
+%
+\>[4]\AgdaBound{lt1}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≤⨟o}}\AgdaSpace{}%
+\AgdaBound{lt2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaBound{lt1}\AgdaSpace{}%
+\AgdaBound{lt2}\<%
+\\
+\>[0]\<%
+\end{code}
+
+\begin{code}%
+\>[0]\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[4]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<o\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Set}\AgdaSpace{}%
+\AgdaBound{ℓ}\<%
+\\
+%
+\>[4]\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{<o}}\AgdaSpace{}%
+\AgdaBound{o2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{↑}\AgdaSpace{}%
+\AgdaBound{o1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{o2}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaFunction{≤↑o}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaInductiveConstructor{↑}\AgdaSpace{}%
+\AgdaBound{o}\<%
+\\
+%
+\>[4]\AgdaFunction{≤↑o}\AgdaSpace{}%
+\AgdaInductiveConstructor{Z}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-Z}\<%
+\\
+%
+\>[4]\AgdaFunction{≤↑o}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{↑}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤↑o}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaFunction{≤↑o}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤↑o}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{))))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaFunction{<-in-≤}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{<o}}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{y}\<%
+\\
+%
+\>[4]\AgdaFunction{<-in-≤}\AgdaSpace{}%
+\AgdaBound{pf}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤↑o}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaBound{pf}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaComment{--\ https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html\#3168}\<%
+\\
+%
+\>[4]\AgdaComment{--\ TODO:\ proper\ credit}\<%
+\\
+%
+\>[4]\AgdaFunction{<∘≤-in-<}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{<o}}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{<o}}\AgdaSpace{}%
+\AgdaBound{z}\<%
+\\
+%
+\>[4]\AgdaFunction{<∘≤-in-<}\AgdaSpace{}%
+\AgdaBound{x<y}\AgdaSpace{}%
+\AgdaBound{y≤z}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaBound{x<y}\AgdaSpace{}%
+\AgdaBound{y≤z}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaComment{--\ https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html\#3168}\<%
+\\
+%
+\>[4]\AgdaComment{--\ TODO:\ proper\ credit}\<%
+\\
+%
+\>[4]\AgdaFunction{≤∘<-in-<}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{<o}}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{<o}}\AgdaSpace{}%
+\AgdaBound{z}\<%
+\\
+%
+\>[4]\AgdaFunction{≤∘<-in-<}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{x}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{y}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{z}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{x≤y}\AgdaSpace{}%
+\AgdaBound{y<z}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaBound{x≤y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{y<z}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaFunction{underLim}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[19]\AgdaSymbol{\{}\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[40]\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f}\<%
+\\
+%
+\>[4]\AgdaFunction{underLim}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{c}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{all}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaHole{\{!!\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{all}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaFunction{extLim}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[17]\AgdaSymbol{\{}\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[28]\AgdaSymbol{(}\AgdaBound{f1}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f1}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f2}\<%
+\\
+%
+\>[4]\AgdaFunction{extLim}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{c}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{f1}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSpace{}%
+\AgdaBound{all}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaBound{f1}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{all}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaFunction{existsLim}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[19]\AgdaSymbol{\{}\AgdaBound{c1}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{c2}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[40]\AgdaSymbol{(}\AgdaBound{f1}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c1}%
+\>[53]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f2}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}%
+\>[71]\AgdaBound{c2}%
+\>[75]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{k1}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Σ[}\AgdaSpace{}%
+\AgdaBound{k2}\AgdaSpace{}%
+\AgdaFunction{∈}\AgdaSpace{}%
+\AgdaBound{El}%
+\>[105]\AgdaBound{c2}\AgdaSpace{}%
+\AgdaFunction{]}\AgdaSpace{}%
+\AgdaBound{f1}\AgdaSpace{}%
+\AgdaBound{k1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSpace{}%
+\AgdaBound{k2}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}%
+\>[132]\AgdaBound{c1}\AgdaSpace{}%
+\AgdaBound{f1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}%
+\>[145]\AgdaBound{c2}\AgdaSpace{}%
+\AgdaBound{f2}\<%
+\\
+%
+\>[4]\AgdaFunction{existsLim}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{æ1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{æ2}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{f1}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSpace{}%
+\AgdaBound{allex}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-limiting}%
+\>[50]\AgdaBound{f1}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{proj₁}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{allex}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{proj₂}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{allex}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaFunction{¬Z<↑o}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[15]\AgdaBound{o}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{¬}}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaInductiveConstructor{↑}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaInductiveConstructor{Z}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaFunction{¬Z<↑o}\AgdaSpace{}%
+\AgdaBound{o}\AgdaSpace{}%
+\AgdaSymbol{()}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Induction.WellFounded}\<%
+\\
+%
+\>[4]\AgdaFunction{access}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{x}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Acc}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<o\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{WfRec}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<o\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{Acc}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<o\AgdaUnderscore{}}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\>[4]\AgdaFunction{access}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{acc}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{r}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaComment{--\ https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html\#3168}\<%
+\\
+%
+\>[4]\AgdaComment{--\ TODO:\ proper\ credit}\<%
+\\
+%
+\>[4]\AgdaFunction{smaller-accessible}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Acc}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<o\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Acc}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<o\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaBound{y}\<%
+\\
+%
+\>[4]\AgdaFunction{smaller-accessible}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{isAcc}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{x<y}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{acc}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{y'}\AgdaSpace{}%
+\AgdaBound{y'<y}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{access}\AgdaSpace{}%
+\AgdaBound{isAcc}\AgdaSpace{}%
+\AgdaBound{y'}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{<∘≤-in-<}\AgdaSpace{}%
+\AgdaBound{y'<y}\AgdaSpace{}%
+\AgdaBound{x<y}\AgdaSymbol{))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaComment{--\ https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html\#3168}\<%
+\\
+%
+\>[4]\AgdaComment{--\ TODO:\ proper\ credit}\<%
+\\
+%
+\>[4]\AgdaFunction{ordWF}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{WellFounded}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<o\AgdaUnderscore{}}}\<%
+\\
+%
+\>[4]\AgdaFunction{ordWF}\AgdaSpace{}%
+\AgdaInductiveConstructor{Z}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{acc}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{()}\<%
+\\
+%
+\>[4]\AgdaFunction{ordWF}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{↑}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{acc}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
+\AgdaBound{y≤x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{smaller-accessible}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ordWF}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaBound{y≤x}\AgdaSymbol{\})}\<%
+\\
+%
+\>[4]\AgdaFunction{ordWF}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{acc}\AgdaSpace{}%
+\AgdaFunction{helper}\<%
+\\
+\>[4][@{}l@{\AgdaIndent{0}}]%
+\>[6]\AgdaKeyword{where}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaFunction{helper}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{<o}}\AgdaSpace{}%
+\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Acc}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<o\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaBound{y}\<%
+\\
+%
+\>[8]\AgdaFunction{helper}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaDottedPattern{\AgdaSymbol{.}}\AgdaDottedPattern{\AgdaBound{f}}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaBound{y<fk}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{smaller-accessible}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ordWF}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{<-in-≤}\AgdaSpace{}%
+\AgdaBound{y<fk}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\<%
+\end{code}
+
+% \begin{code}
+
+
+%     private
+%       data MaxView : Tree → Tree → Set ℓ where
+%         MaxZ-L : ∀ {o} → MaxView Z o
+%         MaxZ-R : ∀ {o} → MaxView o Z
+%         MaxLim-L : ∀ {o } {c : ℂ} {f : El c → Tree} → MaxView (Lim c f) o
+%         MaxLim-R : ∀ {o } {c : ℂ} {f : El c → Tree}
+%           → (∀   {c' : ℂ} {f' : El c' → Tree} → ¬ (o ≡ Lim  c' f'))
+%           → MaxView o (Lim c f)
+%         MaxLim-Suc : ∀  {o1 o2 } → MaxView (↑ o1) (↑ o2)
+
+%       maxView : ∀ o1 o2 → MaxView o1 o2
+%       maxView Z o2 = MaxZ-L
+%       maxView (Lim c f) o2 = MaxLim-L
+%       maxView (↑ o1) Z = MaxZ-R
+%       maxView (↑ o1) (Lim c f) = MaxLim-R λ ()
+%       maxView (↑ o1) (↑ o2) = MaxLim-Suc
+
+%     abstract
+%       max : Tree → Tree → Tree
+%       max' : ∀ {o1 o2} → MaxView o1 o2 → Tree
+
+%       max o1 o2 = max' (maxView o1 o2)
+
+%       max' {.Z} {o2} MaxZ-L = o2
+%       max' {o1} {.Z} MaxZ-R = o1
+%       max' {(Lim c f)} {o2} MaxLim-L = Lim c λ x → max (f x) o2
+%       max' {o1} {(Lim c f)} (MaxLim-R _) = Lim c (λ x → max o1 (f x))
+%       max' {(↑ o1)} {(↑ o2)} MaxLim-Suc = ↑ (max o1 o2)
+
+%       max-≤L : ∀ {o1 o2} → o1 ≤ max o1 o2
+%       max-≤L {o1} {o2} with maxView o1 o2
+%       ... | MaxZ-L = ≤-Z
+%       ... | MaxZ-R = ≤-refl _
+%       ... | MaxLim-L {f = f} = extLim f (λ x → max (f x) o2) (λ k → max-≤L)
+%       ... | MaxLim-R {f = f} _ = underLim {!!} o1 (λ x → max o1 (f x)) (λ k → max-≤L)
+%       ... | MaxLim-Suc = ≤-sucMono max-≤L
+
+
+%       max-≤R : ∀ {o1 o2} → o2 ≤ max o1 o2
+%       max-≤R {o1} {o2} with maxView o1 o2
+%       ... | MaxZ-R = ≤-Z
+%       ... | MaxZ-L = ≤-refl _
+%       ... | MaxLim-R {f = f} _ = extLim f (λ x → max o1 (f x)) (λ k → max-≤R {o1 = o1} {f k})
+%       ... | MaxLim-L {f = f} = underLim {!!} o2 (λ x → max (f x) o2) (λ k → max-≤R {o1 = f k} {o2 = o2})
+%       ... | MaxLim-Suc {o1} {o2} = ≤-sucMono (max-≤R {o1 = o1} {o2 = o2})
+
+
+
+
+%       max-monoR : ∀ {o1 o2 o2'} → o2 ≤ o2' → max o1 o2 ≤ max o1 o2'
+%       max-monoR' : ∀ {o1 o2 o2'} → o2 <o o2' → max o1 o2 <o max (↑ o1) o2'
+
+%       max-monoR {o1} {o2} {o2'} lt with maxView o1 o2 in eq1 | maxView o1 o2' in eq2
+%       ... | MaxZ-L  | v2  = ≤-trans lt (≤-reflEq (cong max' eq2))
+%       ... | MaxZ-R  | v2  = ≤-trans max-≤L (≤-reflEq (cong max' eq2))
+%       ... | MaxLim-L {f = f1} |  MaxLim-L  = extLim _ _ λ k → max-monoR {o1 = f1 k} lt
+%       max-monoR {o1} {(Lim _ f')} {.(Lim _ f)} (≤-cocone f k lt) | MaxLim-R neq  | MaxLim-R neq'
+%         = ≤-limiting (λ x → max o1 (f' x)) (λ y → ≤-cocone (λ x → max o1 (f x)) k (max-monoR {o1 = o1} {o2 = f' y} (≤-trans (≤-cocone _ y (≤-refl _)) lt)))
+%       max-monoR {o1} {.(Lim _ _)} {o2'} (≤-limiting f x₁) | MaxLim-R x  | v2  =
+%         ≤-trans (≤-limiting (λ x₂ → max o1 (f x₂)) λ k → max-monoR {o1 = o1} (x₁ k)) (≤-reflEq (cong max' eq2))
+%       max-monoR {(↑ o1)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | MaxLim-Suc  | MaxLim-Suc  = ≤-sucMono (max-monoR {o1 = o1} lt)
+%       max-monoR {(↑ o1)} {(↑ o2)} {(Lim _ f)} (≤-cocone f k lt) | MaxLim-Suc  | MaxLim-R x
+%         = ≤-trans (max-monoR' {o1 = o1} {o2 = o2} {o2' = f k} lt) (≤-cocone (λ x₁ → max (↑ o1) (f x₁)) k (≤-refl _)) --max-monoR' {!lt!}
+
+%       max-monoR' {o1} {o2} {o2'}  (≤-sucMono lt) = ≤-sucMono ( (max-monoR {o1 = o1} lt))
+%       max-monoR' {o1} {o2} {.(Lim _ f)} (≤-cocone f k lt)
+%         = ≤-cocone _ k (max-monoR' {o1 = o1} lt)
+
+
+%       max-monoL : ∀ {o1 o1' o2} → o1 ≤ o1' → max o1 o2 ≤ max o1' o2
+%       max-monoL' : ∀ {o1 o1' o2} → o1 <o o1' → max o1 o2 <o max o1' (↑ o2)
+%       max-monoL {o1} {o1'} {o2} lt with maxView o1 o2 in eq1 | maxView o1' o2 in eq2
+%       ... | MaxZ-L | v2 = ≤-trans (max-≤R {o1 = o1'}) (≤-reflEq (cong max' eq2))
+%       ... | MaxZ-R | v2 = ≤-trans lt (≤-trans (max-≤L {o1 = o1'}) (≤-reflEq (cong max' eq2)))
+%       max-monoL {.(Lim _ _)} {.(Lim _ f)} {o2} (≤-cocone f k lt) | MaxLim-L  | MaxLim-L
+%         = ≤-cocone (λ x → max (f x) o2) k (max-monoL lt)
+%       max-monoL {.(Lim _ _)} {o1'} {o2} (≤-limiting f lt) | MaxLim-L |  v2
+%         = ≤-limiting (λ x₁ → max (f x₁) o2) λ k → ≤-trans (max-monoL (lt k)) (≤-reflEq (cong max' eq2))
+%       max-monoL {.Z} {.Z} {.(Lim _ _)} ≤-Z | MaxLim-R neq  | MaxZ-L  = ≤-refl _
+%       max-monoL  {.(Lim _ f)} {.Z} {.(Lim _ _)} (≤-limiting f x) | MaxLim-R neq | MaxZ-L
+%         with () ← neq refl
+%       max-monoL {o1} {.(Lim _ _)} {.(Lim _ _)} (≤-cocone _ k lt) | MaxLim-R {f = f} neq | MaxLim-L {f = f'}
+%         = ≤-limiting (λ x → max o1 (f x)) (λ y → ≤-cocone (λ x → max (f' x) (Lim _ _)) k
+%           (≤-trans (max-monoL lt) (max-monoR {o1 = f' k} (≤-cocone f y (≤-refl _)))))
+%       ... | MaxLim-R neq | MaxLim-R {f = f} neq' = extLim (λ x → max o1 (f x)) (λ x → max o1' (f x)) (λ k → max-monoL lt)
+%       max-monoL {.(↑ _)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | MaxLim-Suc  | MaxLim-Suc
+%         = ≤-sucMono (max-monoL lt)
+%       max-monoL {.(↑ _)} {.(Lim _ f)} {.(↑ _)} (≤-cocone f k lt) | MaxLim-Suc  | MaxLim-L
+%         = ≤-cocone (λ x → max (f x) (↑ _)) k (max-monoL' lt)
+
+%       max-monoL' {o1} {o1'} {o2} lt with maxView o1 o2 in eq1 | maxView o1' o2 in eq2
+%       max-monoL' {o1} {.(↑ _)} {o2} (≤-sucMono lt) | v1 | v2 = ≤-sucMono (≤-trans (≤-reflEq (cong max' (sym eq1))) (max-monoL lt))
+%       max-monoL' {o1} {.(Lim _ f)} {o2} (≤-cocone f k lt) | v1 | v2
+%         = ≤-cocone _ k (≤-trans (≤-sucMono (≤-reflEq (cong max' (sym eq1)))) (max-monoL' lt))
+
+
+%       max-mono : ∀ {o1 o2 o1' o2'} → o1 ≤ o1' → o2 ≤ o2' → max o1 o2 ≤ max o1' o2'
+%       max-mono {o1' = o1'} lt1 lt2 = ≤-trans (max-monoL lt1) (max-monoR {o1 = o1'} lt2)
+
+%       max-strictMono : ∀ {o1 o2 o1' o2'} → o1 <o o1' → o2 <o o2' → max o1 o2 <o max o1' o2'
+%       max-strictMono lt1 lt2 = max-mono lt1 lt2
+
+
+%       max-sucMono : ∀ {o1 o2 o1' o2'} → max o1 o2 ≤ max o1' o2' → max o1 o2 <o max (↑ o1') (↑ o2')
+%       max-sucMono lt = ≤-sucMono lt
+
+
+%       -- max-Z : ∀ o → max o Z ≡ o
+%       -- max-Z Z = refl
+%       -- max-Z (↑ o) = refl
+%       -- max-Z (Lim c f) = cong (Lim c) {!!} -- cong (Lim c) (funExt (λ x → max-Z (f x)))
+
+%       max-Z : ∀ o → max o Z ≤ o
+%       max-Z Z = ≤-Z
+%       max-Z (↑ o) = ≤-refl (max (↑ o) Z)
+%       max-Z (Lim c f) = extLim (λ x → max (f x) Z) f (λ k → max-Z (f k))
+
+%       max-↑ : ∀ {o1 o2} → max (↑ o1) (↑ o2) ≡ ↑ (max o1 o2)
+%       max-↑ = refl
+
+%       max-≤Z : ∀ o → max o Z ≤ o
+%       max-≤Z Z = ≤-refl _
+%       max-≤Z (↑ o) = ≤-refl _
+%       max-≤Z (Lim c f) = extLim _ _ (λ k → max-≤Z (f k))
+
+%       -- max-oneL : ∀ {o} → max O1 (↑ o) ≤ ↑ o
+%       -- max-oneL  = ≤-refl _
+
+%       -- max-oneR : ∀ {o} → max (↑ o) O1 ≤ ↑ o
+%       -- max-oneR {Z} = ≤-sucMono (≤-refl _)
+%       -- max-oneR {↑ o} = ≤-sucMono (≤-refl _)
+%       -- max-oneR {Lim c f} = ≤-sucMono (substPath (λ x → x ≤ Lim c f) (sym (max-Z (Lim c f))) (≤-refl (Lim c f))) -- rewrite ctop (max-Z (Lim c f))= ≤-refl _
+
+
+%       max-limR : ∀   {c : ℂ} (f : El  c  → Tree) o → max o (Lim c f) ≤ Lim c (λ k → max o (f k))
+%       max-limR f Z = ≤-refl _
+%       max-limR f (↑ o) = extLim _ _ λ k → ≤-refl _
+%       max-limR f (Lim c f₁) = ≤-limiting _ λ k → ≤-trans (max-limR f (f₁ k)) (extLim _ _ (λ k2 → max-monoL {o1 = f₁ k} {o1' = Lim c f₁} {o2 = f k2}  (≤-cocone _ k (≤-refl _))))
+
+
+%       max-commut : ∀ o1 o2 → max o1 o2 ≤ max o2 o1
+%       max-commut o1 o2 with maxView o1 o2
+%       ... | MaxZ-L = max-≤L
+%       ... | MaxZ-R = ≤-refl _
+%       ... | MaxLim-R {f = f} x = extLim _ _ (λ k → max-commut o1 (f k))
+%       ... | MaxLim-Suc {o1 = o1} {o2 = o2} = ≤-sucMono (max-commut o1 o2)
+%       ... | MaxLim-L {c = c} {f = f} with maxView o2 o1
+%       ... | MaxZ-L = extLim _ _ λ k → max-Z (f k)
+%       ... | MaxLim-R x = extLim _ _ (λ k → max-commut (f k) o2)
+%       ... | MaxLim-L {c = c2} {f = f2} =
+%         ≤-trans (extLim _ _ λ k → max-limR f2 (f k))
+%         (≤-trans (≤-limiting _ (λ k → ≤-limiting _ λ k2 → ≤-cocone _ k2 (≤-cocone _ k (≤-refl _))))
+%         (≤-trans (≤-refl (Lim c2 λ k2 → Lim c λ k → max (f k) (f2 k2)))
+%         (extLim _ _ (λ k2 → ≤-limiting _ λ k1 → ≤-trans (max-commut (f k1) (f2 k2)) (max-monoR {o1 = f2 k2} {o2 = f k1} {o2' = Lim c f} (≤-cocone _ k1 (≤-refl _)))))))
+
+
+%       max-assocL : ∀ o1 o2 o3 → max o1 (max o2 o3) ≤ max (max o1 o2) o3
+%       max-assocL o1 o2 o3 with maxView o2 o3 in eq23
+%       ... | MaxZ-L = max-monoL {o1 = o1} {o1' = max o1 Z} {o2 = o3} max-≤L
+%       ... | MaxZ-R = max-≤L
+%       ... | m with maxView o1 o2
+%       ... | MaxZ-L rewrite sym eq23 = ≤-refl _
+%       ... | MaxZ-R rewrite sym eq23 = ≤-refl _
+%       ... | MaxLim-R {f = f} x rewrite sym eq23 = ≤-trans (max-limR (λ x → max (f x) o3) o1) (extLim _ _ λ k → max-assocL o1 (f k) o3) -- f,max-limR f o1
+%       max-assocL .(↑ _) .(↑ _) .Z | MaxZ-R  | MaxLim-Suc = ≤-refl _
+%       max-assocL o1 o2 .(Lim _ _) | MaxLim-R {f = f} x   | MaxLim-Suc = extLim _ _ λ k → max-assocL o1 o2 (f k)
+%       max-assocL (↑ o1) (↑ o2) (↑ o3) | MaxLim-Suc  | MaxLim-Suc = ≤-sucMono (max-assocL o1 o2 o3)
+%       ... | MaxLim-L {f = f} rewrite sym eq23 = extLim _ _ λ k → max-assocL (f k) o2 o3
+
+
+
+%       max-assocR : ∀ o1 o2 o3 →  max (max o1 o2) o3 ≤ max o1 (max o2 o3)
+%       max-assocR o1 o2 o3 = ≤-trans (max-commut (max o1 o2) o3) (≤-trans (max-monoR {o1 = o3} (max-commut o1 o2))
+%         (≤-trans (max-assocL o3 o2 o1) (≤-trans (max-commut (max o3 o2) o1) (max-monoR {o1 = o1} (max-commut o3 o2)))))
+
+
+%       max-swap4 : ∀ {o1 o1' o2 o2'} → max (max o1 o1') (max o2 o2') ≤ max (max o1 o2) (max o1' o2')
+%       max-swap4 {o1}{o1'}{o2 }{o2'} =
+%         max-assocL (max o1 o1') o2 o2'
+%         ≤⨟o max-monoL {o1 = max (max o1 o1') o2} {o2 = o2'}
+%           (max-assocR o1 o1' o2 ≤⨟o max-monoR {o1 = o1} (max-commut o1' o2) ≤⨟o max-assocL o1 o2 o1')
+%         ≤⨟o max-assocR (max o1 o2) o1' o2'
+
+%       max-swap6 : ∀ {o1 o2 o3 o1' o2' o3'} → max (max o1 o1') (max (max o2 o2') (max o3 o3')) ≤ max (max o1 (max o2 o3)) (max o1' (max o2' o3'))
+%       max-swap6 {o1} {o2} {o3} {o1'} {o2'} {o3'} =
+%         max-monoR {o1 = max o1 o1'} (max-swap4 {o1 = o2} {o1' = o2'} {o2 = o3} {o2' = o3'})
+%         ≤⨟o max-swap4 {o1 = o1} {o1' = o1'}
+
+%       max-lim2L :
+%         ∀
+%         {c1 : ℂ}
+%         (f1 : El  c1 → Tree)
+%         {c2 : ℂ}
+%         (f2 : El  c2 → Tree)
+%         → Lim  c1 (λ k1 → Lim  c2 (λ k2 → max (f1 k1) (f2 k2))) ≤ max (Lim  c1 f1) (Lim  c2 f2)
+%       max-lim2L f1 f2 = ≤-limiting  _ (λ k1 → ≤-limiting  _ λ k2 → max-mono (≤-cocone  f1 k1 (≤-refl _)) (≤-cocone  f2 k2 (≤-refl _)))
+
+%       max-lim2R :
+%         ∀
+%         {c1 : ℂ}
+%         (f1 : El  c1 → Tree)
+%         {c2 : ℂ}
+%         (f2 : El  c2 → Tree)
+%         →  max (Lim  c1 f1) (Lim  c2 f2) ≤ Lim  c1 (λ k1 → Lim  c2 (λ k2 → max (f1 k1) (f2 k2)))
+%       max-lim2R f1 f2 = extLim  _ _ (λ k1 → max-limR  _ (f1 k1))
+
+%     --Attempt to have an idempotent version of max
+
+%       nmax : Tree → ℕ → Tree
+%       nmax o ℕ.zero = Z
+%       nmax o (ℕ.suc n) = max (nmax o n) o
+
+%       nmax-mono : ∀ {o1 o2 } n → o1 ≤ o2 → nmax o1 n ≤ nmax o2 n
+%       nmax-mono ℕ.zero lt = ≤-Z
+%       nmax-mono {o1 = o1} {o2} (ℕ.suc n) lt = max-mono {o1 = nmax o1 n} {o2 = o1} {o1' = nmax o2 n} {o2' = o2} (nmax-mono n lt) lt
+
+%     --
+%       max∞ : Tree → Tree
+%       max∞ o = OℕLim (λ n → nmax o n)
+
+
+%       max-∞lt1 : ∀ o → max (max∞ o) o ≤ max∞ o
+%       max-∞lt1 o = ≤-limiting  _ λ k → helper (Iso.fun CℕIso k)
+%         where
+%           helper : ∀ n → max (nmax o n) o ≤ max∞ o
+%           helper n = ≤-cocone  _ (Iso.inv CℕIso (ℕ.suc n)) (subst (λ sn → nmax o (ℕ.suc n) ≤ nmax o sn) (sym (Iso.rightInv CℕIso (suc n))) (≤-refl _))
+%         -- helper (ℕ.suc n) = ≤-cocone  _ (CℕfromNat (ℕ.suc (ℕ.suc n))) (subst (λ sn → max (max (nmax o n) o) o ≤ nmax o sn) (sym (Cℕembed (ℕ.suc n)))
+%         --   {!!})
+%         --
+
+%       -- nmax-idem-absorb : ∀ o n → max o o ≤ o → nmax o n ≤ o
+%       -- nmax-idem-absorb o ℕ.zero lt = ≤-Z
+%       -- nmax-idem-absorb o (ℕ.suc n) lt = max-monoL (nmax-idem-absorb o n lt) ≤⨟o lt
+%       -- max∞-idem-absorb : ∀ {o} → max o o ≤ o → max∞ o ≤ o
+%       -- max∞-idem-absorb lt = ≤-limiting  (λ x → nmax _ (CℕtoNat x)) (λ k → nmax-idem-absorb _ (CℕtoNat k) lt)
+
+%       max-∞ltn : ∀ n o → max (max∞ o) (nmax o n) ≤ max∞ o
+%       max-∞ltn ℕ.zero o = max-≤Z (max∞ o)
+%       max-∞ltn (ℕ.suc n) o =
+%         ≤-trans (max-monoR {o1 = max∞ o} (max-commut (nmax o n) o))
+%         (≤-trans (max-assocL (max∞ o) o (nmax o n))
+%         (≤-trans (max-monoL {o1 = max (max∞ o) o} {o2 = nmax o n} (max-∞lt1 o)) (max-∞ltn n o)))
+
+%       max∞-idem : ∀ o → max (max∞ o) (max∞ o) ≤ max∞ o
+%       max∞-idem o = ≤-limiting  _ λ k → ≤-trans (max-commut (nmax o (Iso.fun CℕIso k)) (max∞ o)) (max-∞ltn (Iso.fun CℕIso k) o)
+
+
+%       max∞-self : ∀ o → o ≤ max∞ o
+%       max∞-self o = ≤-cocone  _ (Iso.inv CℕIso 1) (subst (λ x → o ≤ nmax o x) (sym (Iso.rightInv CℕIso 1)) (≤-refl _))
+
+%       max∞-idem∞ : ∀ o → max o o ≤ max∞ o
+%       max∞-idem∞ o = ≤-trans (max-mono (max∞-self o) (max∞-self o)) (max∞-idem o)
+
+%       max∞-mono : ∀ {o1 o2} → o1 ≤ o2 → (max∞ o1) ≤ (max∞ o2)
+%       max∞-mono lt = extLim  _ _ λ k → nmax-mono (Iso.fun CℕIso k) lt
+
+
+
+%       nmax-≤ : ∀ {o} n → max o o ≤ o → nmax o n ≤ o
+%       nmax-≤ ℕ.zero lt = ≤-Z
+%       nmax-≤ {o = o} (ℕ.suc n) lt = ≤-trans (max-monoL {o1 = nmax o n} {o2 = o} (nmax-≤ n lt)) lt
+
+%       max∞-≤ : ∀ {o} → max o o ≤ o → max∞ o ≤ o
+%       max∞-≤ lt = ≤-limiting  _ λ k → nmax-≤ (Iso.fun CℕIso k) lt
+
+%       -- Convenient helper for turing < with max∞ into < without
+%       max<-∞ : ∀ {o1 o2 o} → max (max∞ (o1)) (max∞ o2) <o o → max o1 o2 <o o
+%       max<-∞ lt = ≤∘<-in-< (max-mono (max∞-self _) (max∞-self _)) lt
+
+%       max-<Ls : ∀ {o1 o2 o1' o2'} → max o1 o2 <o max (↑ (max o1 o1')) (↑ (max o2 o2'))
+%       max-<Ls {o1} {o2} {o1'} {o2'} = max-sucMono {o1 = o1} {o2 = o2} {o1' = max o1 o1'} {o2' = max o2 o2'}
+%         (max-mono {o1 = o1} {o2 = o2} (max-≤L) (max-≤L))
+
+%       max∞-<Ls : ∀ {o1 o2 o1' o2'} → max o1 o2 <o max (↑ (max (max∞ o1) o1')) (↑ (max (max∞ o2) o2'))
+%       max∞-<Ls {o1} {o2} {o1'} {o2'} =  <∘≤-in-< (max-<Ls {o1} {o2} {o1'} {o2'})
+%         (max-mono {o1 = ↑ (max o1 o1')} {o2 = ↑ (max o2 o2')}
+%           (≤-sucMono (max-monoL (max∞-self o1)))
+%           (≤-sucMono (max-monoL (max∞-self o2))))
+
+
+%       max∞-lub : ∀ {o1 o2 o} → o1 ≤ max∞ o → o2 ≤ max∞  o → max o1 o2 ≤ (max∞ o)
+%       max∞-lub {o1 = o1} {o2 = o2} lt1 lt2 = max-mono {o1 = o1} {o2 = o2} lt1 lt2 ≤⨟o max∞-idem _
+
+%       max∞-absorbL : ∀ {o1 o2 o} → o2 ≤ o1 → o1 ≤ max∞ o → max o1 o2 ≤ max∞ o
+%       max∞-absorbL lt12 lt1 = max∞-lub lt1 (lt12 ≤⨟o lt1)
+
+%       max∞-distL : ∀ {o1 o2} → max (max∞ o1) (max∞ o2) ≤ max∞ (max o1 o2)
+%       max∞-distL {o1} {o2} =
+%         max∞-lub {o1 = max∞ o1} {o2 = max∞ o2} (max∞-mono max-≤L) (max∞-mono (max-≤R {o1 = o1}))
+
+
+%       max∞-distR : ∀ {o1 o2} → max∞ (max o1 o2) ≤ max (max∞ o1) (max∞ o2)
+%       max∞-distR {o1} {o2} = ≤-limiting  _ λ k → helper {n = Iso.fun CℕIso k}
+%         where
+%         helper : ∀ {o1 o2 n} → nmax (max o1 o2) n ≤ max (max∞ o1) (max∞ o2)
+%         helper {o1} {o2} {ℕ.zero} = ≤-Z
+%         helper {o1} {o2} {ℕ.suc n} =
+%           max-monoL {o1 = nmax (max o1 o2) n} (helper {o1 = o1} {o2} {n})
+%           ≤⨟o max-swap4 {max∞ o1} {max∞ o2} {o1} {o2}
+%           ≤⨟o max-mono {o1 = max (max∞ o1) o1} {o2 = max (max∞ o2) o2} {o1' = max∞ o1} {o2' = max∞ o2}
+%             (max∞-lub {o1 = max∞ o1} (≤-refl _) (max∞-self _))
+%             (max∞-lub {o1 = max∞ o2} (≤-refl _) (max∞-self _))
+
+
+%       max∞-cocone : ∀  {c : ℂ} (f : El c → Tree) k →
+%         f k ≤ max∞ (Lim  c f)
+%       max∞-cocone f k =  max∞-self _ ≤⨟o max∞-mono (≤-cocone  _ k (≤-refl _))
+
+%       -- max* : ∀ {n} → Vec Tree n → Tree
+%       -- max* [] = Z
+%       -- max* (x ∷ os) = max x (max* os)
+
+%       -- max*-≤L : ∀ {n o} {os : Vec Tree n} → o ≤ max* (o ∷ os)
+%       -- max*-≤L = max-≤L
+
+%       -- max*-≤R : ∀ {n o} {os : Vec Tree n} → max* os ≤ max* (o ∷ os)
+%       -- max*-≤R {o = o} = max-≤R {o1 = o}
+
+%       -- max*-≤-n : ∀ {n} {os : Vec Tree n} (f : Fin n) → lookup f os ≤ max* os
+%       -- max*-≤-n {os = o ∷ os} Fin.zero = max*-≤L {o = o} {os = os}
+%       -- max*-≤-n {os = o ∷ os} (Fin.suc f) = max*-≤-n f ≤⨟o (max*-≤R {o = o} {os = os})
+
+%       -- max*-swap : ∀ {n} {os1 os2 : Vec Tree n} → max* (zipWith max os1 os2) ≤ max (max* os1) (max* os2)
+%       -- max*-swap {n = ℕ.zero} {[]} {[]} = ≤-Z
+%       -- max*-swap {n = ℕ.suc n} {o1 ∷ os1} {o2 ∷ os2} = max-monoR {o1 = max o1 o2} (max*-swap {n = n}) ≤⨟o max-swap4 {o1 = o1} {o1' = o2} {o2 = max* os1} {o2' = max* os2}
+
+%       -- max*-mono : ∀ {n} {os1 os2 : Vec Tree n} → foldr (λ (o1 , o2) rest → (o1 ≤ o2) × rest) Unit (zipWith _,_ os1 os2) → max* os1 ≤ max* os2
+%       -- max*-mono {ℕ.zero} {[]} {[]} lt = ≤-Z
+%       -- max*-mono {ℕ.suc n} {o1 ∷ os1} {o2 ∷ os2} (lt , rest) = max-mono {o1 = o1} {o1' = o2} lt (max*-mono {os1 = os1} {os2 = os2} rest)
+
+%     -- orec : ∀  (P : Tree → Set ℓ)
+%     --   → ((x : Tree) → (rec : (y : Tree) → (_ : ∥ y <o x ∥₁) → P y ) → P x)
+%     --   → ∀ {o} → P o
+%     -- orec P f = induction (λ x rec → f x rec) _
+%     --   where open WFI (ordWFProp)
+
+
+%     -- oPairRec : ∀  (P : Tree → Tree → Set ℓ)
+%     --   → ((x1 x2 : Tree) → (rec : (y1 y2 : Tree) → (_ : (y1 , y2) <oPair (x1 , x2)) → P y1 y2 ) → P x1 x2)
+%     --   → ∀ {o1 o2} → P o1 o2
+%     -- oPairRec P f = induction (λ (x1 , x2) rec → f x1 x2 λ y1 y2 → rec (y1 , y2)) _
+%     --   where open WFI (oPairWF)
+
+% \end{code}

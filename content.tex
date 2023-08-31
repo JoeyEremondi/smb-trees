@@ -6,8 +6,6 @@
 
 The usefulness of Brouwer trees is in defining well-founded recursion, but first we need on ordering on trees.
 
-The four constructors order trees such that zero is the smallest tree, successor is monotone, and the limit of a function is both an upper bound on the image of that function, and is the least such upper bound.
-The upper-bound and least constructors are written in a way to ensure that we can prove transitivity of our order, without resorting to taking the transitive closure. This will make it much easier to prove lemas by induction on on ordering derivation. The usual properties are easily recovered.
 
 A strict order can be defined in terms of the successor function. This strict relation is a well quasi-order: it has no infinite descending chains, and hence
 can be used as a decreasing metric

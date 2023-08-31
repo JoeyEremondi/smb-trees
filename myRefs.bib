@@ -4783,3 +4783,18 @@ note = {Preprint: \url{https://hal.inria.fr/hal-03596652/}}
 
   copyright = {arXiv.org perpetual, non-exclusive license}
 }
+
+
+@article{KRAUS2023113843,
+title = {Type-theoretic approaches to ordinals},
+journal = {Theoretical Computer Science},
+volume = {957},
+pages = {113843},
+year = {2023},
+issn = {0304-3975},
+doi = {https://doi.org/10.1016/j.tcs.2023.113843},
+url = {https://www.sciencedirect.com/science/article/pii/S0304397523001561},
+author = {Nicolai Kraus and Fredrik {Nordvall Forsberg} and Chuangjie Xu},
+keywords = {Ordinal numbers, Constructive mathematics, Homotopy type theory, Cantor normal forms, Brouwer trees, Extensional well-founded orders},
+abstract = {In a constructive setting, no concrete formulation of ordinal numbers can simultaneously have all the properties one might be interested in; for example, being able to calculate limits of sequences is constructively incompatible with deciding extensional equality. Using homotopy type theory as the foundational setting, we develop an abstract framework for ordinal theory and establish a collection of desirable properties and constructions. We then study and compare three concrete implementations of ordinals in homotopy type theory: first, a notation system based on Cantor normal forms (binary trees); second, a refined version of Brouwer trees (infinitely-branching trees); and third, extensional well-founded orders. Each of our three formulations has the central properties expected of ordinals, such as being equipped with an extensional and well-founded ordering as well as allowing basic arithmetic operations, but they differ with respect to what they make possible in addition. For example, for finite collections of ordinals, Cantor normal forms have decidable properties, but suprema of infinite collections cannot be computed. In contrast, extensional well-founded orders work well with infinite collections, but the price to pay is that almost all properties are undecidable. Brouwer trees, implemented as a quotient inductive-inductive type to ensure well-foundedness and extensionality, take the sweet spot in the middle by combining a restricted form of decidability with the ability to work with infinite increasing sequences. Our three approaches are connected by canonical order-preserving functions from the “more decidable” to the “less decidable” notions, i.e. from Cantor normal forms to Brouwer trees, and from there to extensional well-founded orders. We have formalised the results on Cantor normal forms and Brouwer trees in cubical Agda, while extensional well-founded orders have been studied and formalised thoroughly by Escardó and his collaborators. Finally, we compare the computational efficiency of our implementations with the results reported by Berger.}
+}
