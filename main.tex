@@ -49,24 +49,24 @@
 
 \input{sharedmacros}
 \input{macros}
+\usepackage{agda}
 
 
-
-% \ifdef{\reviewmode}{
-%   \settopmatter{printfolios=true,printccs=false,printacmref=false}
-%   \setcopyright{none}
-%   \renewcommand\footnotetextcopyrightpermission[1]{}
-%   % \pagestyle{plain}
-  % \raggedbottom
-% }{
-%   \settopmatter{printfolios=true,printccs=false,printacmref=false}
-%   \setcopyright{none}
-%   \renewcommand\footnotetextcopyrightpermission[1]{}
-%   \pagestyle{plain}
-% % \setcopyright{acmcopyright}
-% % \copyrightyear{2021}
-% % \acmDOI{10.1145/1122445.1122456}
-% }
+\ifdef{\reviewmode}{
+  \settopmatter{printfolios=true,printccs=false,printacmref=false}
+  \setcopyright{none}
+  \renewcommand\footnotetextcopyrightpermission[1]{}
+  % \pagestyle{plain}
+  \raggedbottom
+}{
+  \settopmatter{printfolios=true,printccs=false,printacmref=false}
+  \setcopyright{none}
+  \renewcommand\footnotetextcopyrightpermission[1]{}
+  \pagestyle{plain}
+% \setcopyright{acmcopyright}
+% \copyrightyear{2021}
+% \acmDOI{10.1145/1122445.1122456}
+}
 
 
 
@@ -74,7 +74,7 @@
 %% \BibTeX command to typeset BibTeX logo in the docs
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
-    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
 
 %% Rights management information.  This information is sent to you
 %% when you complete the rights form.  These commands have SAMPLE
@@ -119,24 +119,24 @@
 %%% 'Propositional Equality for Gradual Dependently Typed Programming'
 %%% by Joseph Eremondi, Ronald Garcia, and Éric Tanter.
 %%%
-\setcopyright{rightsretained}
-\acmPrice{}
-\acmDOI{10.1145/3547627}
-\acmYear{2022}
-\copyrightyear{2022}
-\acmSubmissionID{icfp22main-p16-p}
-\acmJournal{PACMPL}
-\acmVolume{6}
-\acmNumber{ICFP}
-\acmArticle{96}
-\acmMonth{8}
+% \setcopyright{rightsretained}
+% \acmPrice{}
+% \acmDOI{10.1145/3547627}
+% \acmYear{2022}
+% \copyrightyear{2022}
+% \acmSubmissionID{icfp22main-p16-p}
+% \acmJournal{PACMPL}
+% \acmVolume{6}
+% \acmNumber{ICFP}
+% \acmArticle{96}
+% \acmMonth{8}
 %%
 %% end of the preamble, start of the body of the document source.
 \begin{document}
 
-\title{Strictly Monotone Brouwer Trees for Well Founded Recursion}
-\titlenote{This work is partially funded by CONICYT FONDECYT Regular
-Project 1190058. This work is partially funded by an NSERC Discovery Grant.}
+\title{Join Idempotent Brouwer Trees for Well Founded Recursion}
+% \titlenote{This work is partially funded by CONICYT FONDECYT Regular
+% Project 1190058. This work is partially funded by an NSERC Discovery Grant.}
 
 % \subtitle{Exploring the Design Space of Gradual Propositional Equality}
 %%

@@ -1,0 +1,122 @@
+% !TEX root =  main.tex
+\section{Brouwer Trees: An Introduction}
+\begin{code}[hide]%
+%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Data.Nat}\<%
+\\
+%
+\>[2]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{Tree}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\end{code}
+
+Brouwer trees  are a simple but elegant tool for proving termination of higher-order procedures.
+Traditionally, they are defined as follows:
+\begin{code}%
+%
+\>[2]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaDatatype{SmallTree}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Set}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaInductiveConstructor{Z'}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{SmallTree}\<%
+\\
+%
+\>[4]\AgdaInductiveConstructor{↑'}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{SmallTree}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{SmallTree}\<%
+\\
+%
+\>[4]\AgdaInductiveConstructor{Lim'}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{ℕ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{SmallTree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{SmallTree}\<%
+\end{code}
+Under this definition, a Brouwer tree is either zero, the successor of another Brouwer tree, or the limit of a countable sequence of Brouwer trees. However, these are quite weak, in that they can only take the limit of countable sequences.
+To represent the limits of uncountable sequences, we can paramterize our definition over some Universe \ala Tarski, then modify the Lim constructor to take a function whose domain is the interpretation of some code.
+
+\begin{code}%
+%
+\>[2]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{ℓ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ℂ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Set}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{El}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Set}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaKeyword{data}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Set}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[4][@{}l@{\AgdaIndent{0}}]%
+\>[6]\AgdaInductiveConstructor{OZ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Tree}\<%
+\\
+%
+\>[6]\AgdaInductiveConstructor{O↑}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSpace{}%
+\AgdaSymbol{->}\AgdaSpace{}%
+\AgdaDatatype{Tree}\<%
+\\
+%
+\>[6]\AgdaInductiveConstructor{OLim}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[16]\AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Tree}\<%
+\end{code}
+Our module is paramterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
+function $\mathit{El}$, which computes the type represented by each code.
+Increasingly larger trees can be obtained by setting $\bC := \AgdaPrimitive{Set} \ \ell$ and
+$\mathit{El} := \mathit{id}$ for increasing $\ell$.
+However, by defining an inductive-recursive universe,
+one can still capture limits over some non-countable types, since
+ $\AgdaDatatype{Tree}$ is in $\AgdaPrimitive{Set}$ whenever $\bC$ is.
+
+
+Brouwer trees are a the quintessential example of a higher-order inductive type.%
+\footnote{Not to be confused with Higher Inductive Types (HITs) from Homotopy Type Theory~\citep{hottbook}}:
+Each tree is built using smaller trees or functions producing smaller trees, which is essentially
+a way of storing a possibly infinite number of smaller trees.
+
+\subsection{Ordering Trees}
+
+\subsection{A Join Operation}

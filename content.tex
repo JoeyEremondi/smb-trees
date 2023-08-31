@@ -1,17 +1,26 @@
 % !TEX root =  main.tex
+\input{Tree}
 
+
+
+
+The usefulness of Brouwer trees is in defining well-founded recursion, but first we need on ordering on trees.
+
+The four constructors order trees such that zero is the smallest tree, successor is monotone, and the limit of a function is both an upper bound on the image of that function, and is the least such upper bound.
+The upper-bound and least constructors are written in a way to ensure that we can prove transitivity of our order, without resorting to taking the transitive closure. This will make it much easier to prove lemas by induction on on ordering derivation. The usual properties are easily recovered.
+
+A strict order can be defined in terms of the successor function. This strict relation is a well quasi-order: it has no infinite descending chains, and hence
+can be used as a decreasing metric
+for recursive functions.
+
+    TODO compare with cubical,
+    TODO look up original trees
 
 \subsubsection{Brouwer Trees}
 \label{model:subsec:brouwer}
 Unfortunately, it was not immediately apparent that any of the
 ``off-the-shelf'' formulations of constructive ordinals satisfied our critera,
 so we built our own formulation. We use a refined version of Brouwer trees:
-\begin{agda}
-  data\ Ord\ : \sType{}\ where\nl
-  \qquad OZ : Ord\nl
-  \qquad O{\uparrow} : Ord -> Ord\nl
-  \qquad OLim : (c : \bC\ \ell) -> (El_{Approx}\ c -> Ord) -> Ord
-\end{agda}
 There is a zero ordinal, a successor operator, and a limit ordinal that is the least upper bound
 of the image for a function from a code's type to ordinals.
 We borrow the trick of taking the limits over types (or in our case, codes) from \citet{ionchyMasters},
