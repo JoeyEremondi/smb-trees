@@ -1,0 +1,364 @@
+% Joey's generic macros
+% shared across documents
+\usepackage{amsmath}
+\usepackage{xparse}
+
+\usepackage{mathpartir}
+\usepackage[capitalise]{cleveref}
+%% Some recommended packages.
+\usepackage{booktabs}   %% For formal tables:
+                        %% http://ctan.org/pkg/booktabs
+% \usepackage{subcaption} %% For complex figures with subfigures/subcaptions
+                        %% http://ctan.org/pkg/subcaption
+\usepackage{csquotes}
+\usepackage{fancyvrb}
+\usepackage{stmaryrd}
+\usepackage{adjustbox}
+\usepackage{xspace}
+\usepackage{relsize}
+% \usepackage{listings}
+\usepackage{comment}
+
+\usepackage{savesym}
+\savesymbol{program}
+\usepackage{amsmath}
+\usepackage{semantic}
+\usepackage{mdframed}
+% \usepackage[dvipsnames]{xcolor}
+% \usepackage{proof-at-the-end}
+% \usepackage{hyperref}
+% \usepackage[capitalise]{cleveref}
+
+\newtheorem{desiderata}{Desiderata}
+\numberwithin{desiderata}{section}
+\crefname{desiderata}{Desideratum}{Desiderata}
+
+\usepackage[geometry]{ifsym}
+
+%%% Proofs in the appendix
+
+% \usepackage{bm}
+
+
+% Custom mathBB
+
+\newcommand\doubleplus{+\kern-1.3ex+\kern0.8ex}
+\newcommand\mdoubleplus{\ensuremath{\mathbin{+\mkern-5mu+}}}
+
+\newcommand\codeFont[1]{\mathtt{#1}}
+
+\NewDocumentCommand\defineMeta{mmmm}{%
+    \expandafter\DeclareDocumentCommand\csname#1#2\endcsname{ E{^_}{{}{}} }{%
+    #3{#4^{#3{##1}}_{#3{##2}}}%
+    }%
+}
+\NewDocumentCommand\sgMeta{mG{#1}}{
+    \defineMeta{g}{#1}{\gradualstyle}{#2}
+    \defineMeta{s}{#1}{\staticstyle}{#2}
+    \defineMeta{r}{#1}{\surfstyle}{#2}
+}
+
+
+\NewDocumentCommand\defineStaticFun{mG{#1}}{%
+    \expandafter\NewDocumentCommand\csname#1\endcsname{od()}{%
+    \staticstyle{\mathtt{#2}\ {\IfNoValueF{##1}{##1}}{\IfNoValueF{##2}{(##2)}} }
+    }%
+}
+
+
+%\sgMeta{x} Gives us \gx and \sx commands
+%properly styled for the gradual and static languages
+%Optional second argument is how to display the varible, defaults to first argument
+\sgMeta{x}
+\sgMeta{y}
+\sgMeta{z}
+\sgMeta{C}
+\sgMeta{D}
+\sgMeta{N}
+\sgMeta{M}
+\sgMeta{ff}{f}
+\sgMeta{pf}{p}
+\sgMeta{P}
+\sgMeta{el}{\overline{e}}
+\sgMeta{X}
+\sgMeta{Y}
+\sgMeta{Z}
+\sgMeta{t}
+\sgMeta{T}
+\sgMeta{s}
+\sgMeta{S}
+\sgMeta{m}
+\sgMeta{n}
+\sgMeta{u}
+\sgMeta{U}
+\sgMeta{v}
+\sgMeta{V}
+\sgMeta{A}
+\sgMeta{B}
+\sgMeta{J}{\text{J}}
+\sgMeta{Nat}{\text{Nat}}
+\sgMeta{Int}{\text{Int}}
+\sgMeta{Bool}{\text{Bool}}
+\sgMeta{Zero}{0}
+\sgMeta{NatElim}{\text{NatElim}}
+\sgMeta{VecElim}{\text{EqElim}}
+\sgMeta{EqElim}{\text{VecElim}}
+\sgMeta{Refl}{\text{Refl}}
+\sgMeta{subst}{\text{subst}}
+
+\sgMeta{G}{\Gamma}
+\sgMeta{ep}{\varepsilon}
+\sgMeta{times}{\times}
+\sgMeta{lambda}{\lambda}
+\sgMeta{Unit}{\mathbf{1}}
+\sgMeta{unit}{()}
+
+\sgMeta{spine}{\seq{e}}
+
+\mathlig{||}{\bnfalt}
+\mathlig{::=}{\bnfdef}
+\mathlig{+::=}{\bnfadd}
+\mathlig{-::=}{\bnfsub}
+\mathlig{|>}{\vartriangleright}
+\mathlig{<|}{\vartriangleleft}
+\mathlig{<=}{\Leftarrow}
+\mathlig{=>}{\Rightarrow}
+% \mathlig{~>}{\leadsto}
+\mathlig{>->}{\rightarrowtail}
+\mathlig{|->}{\mapsto}
+% \mathlig{++}{\mdoubleplus}
+\mathlig{|=>}{\Mapsto}
+\mathlig{==}{=}
+% \mathlig{=-=}{\cong}
+\mathlig{**}{\times}
+\mathlig{<<}{\langle}
+\mathlig{>>}{\rangle}
+
+\mathlig{|=}{\vDash}
+\newcommand{\set}[1]{{\{ #1 \}}}
+\newcommand{\ep}{\varepsilon}
+
+\newcommand{\gmu}{\gradualstyle{\tilde{\mu}}}
+
+
+% \NewDocumentCommand{\stt}{m}{\staticstyle{\ensuremath{\mathtt{#1}}}}
+% \NewDocumentCommand{\gtt}{m}{\gradualstyle{\ensuremath{\mathtt{#1}}}}
+
+\newcommand{\sto}{\staticstyle{\to}}
+\newcommand{\gto}{\gradualstyle{\to}}
+
+% \newcommand\gcode[1]{\gradualstyle{\texttt{#1}}}
+% \newcommand\scode[1]{\staticstyle{\texttt{#1}}}
+\renewcommand{\P}{\mathcal{P}}
+
+\newcommand{\mynote}[3][red]
+    {{\color{#1} \fbox{\bfseries\sffamily\scriptsize#2}
+    {\small$\blacktriangleright$\textsf{\emph{#3}}$\blacktriangleleft$}}~}
+\newcommand{\et}[1]{\mynote{ET}{#1}}
+% \newcommand{\je}[1]{\mynote{JE}{#1}}
+% \newcommand{\et}[1]{}
+% \newcommand{\je}[1]{}
+\newcommand{\ron}[1]{\mynote{RG}{#1}}
+
+% \usepackage{inconsolata}
+\usepackage{mathtools}
+
+\usepackage{pifont}
+\newcommand{\cmark}{{\color{Emerald}\ding{51}}}%
+\newcommand{\xmark}{{\color{RedOrange}\ding{55}}}%
+
+
+\newcommand{\gradualcolor}{\color{RoyalBlue}}
+\newcommand{\surfcolor}{\color{Emerald}}
+\newcommand{\staticcolor}{\color{RedOrange}}
+
+\newcommand{\gradualstyle}[1]{{\ensuremath{\gradualcolor\mathbf{{#1}}}}}
+\newcommand{\surfstyle}[1]{{\ensuremath{\surfcolor\mathit{{#1}}}}}
+\newcommand{\staticstyle}[1]{{\ensuremath{\staticcolor\mathsf{{#1}}}}}
+
+\newcommand{\staticdesc}{\staticstyle{\textsf{red sans-serif font}}\xspace}
+\newcommand{\gradualdesc}{\gradualstyle{\textbf{blue, bold serif font}}\xspace}
+\newcommand{\surfdesc}{\surfstyle{\textit{green, italic serif font}}\xspace}
+
+\newcommand{\g}[1]{\gradualstyle{#1}}
+\newcommand{\s}[1]{\staticstyle{#1}}
+\renewcommand{\r}[1]{\surfstyle{#1}}
+\newcommand{\ix}[1]{\color{black}{\mathit{#1}}}
+
+\NewDocumentCommand{\sType}{m}{{\staticstyle{\textbf{\textsf{Type}}_{#1}}}}
+\NewDocumentCommand{\gType}{m}{{\gradualstyle{\mathbf{Type}_{#1}}}}
+\NewDocumentCommand{\rType}{m}{{\surfstyle{\textbf{\textit{Type}}_{#1}}}}
+
+
+\newcommand{\stepstostar}{\longrightarrow^{*}}
+\newcommand{\stepstoplus}{\longrightarrow^{+}}
+\newcommand{\etasteps}{\longrightarrow^{*}_{\eta}}
+\newcommand{\stepsto}{\longrightarrow}
+
+
+\newcommand{\guarded}{\s{\triangleright}}
+\newcommand{\tguarded}{\s{\blacktriangleright}}
+\newcommand{\gapp}{\s{\circledast}}
+\newcommand{\aeguarded}{\s{\triangleright_{\ae}}}
+\newcommand{\aetguarded}{\s{\blacktriangleright_{\ae}}}
+\newcommand{\aegapp}{\s{\circledast_{\ae}}}
+\newcommand{\LAE}{\s{\mathcal{L}_\ae}}
+
+%https://github.com/wilbowma/dissertation/blob/0454bdb171c95d826561703231930c23b8241d6e/defs.tex
+\newenvironment{bnfgrammar}
+{\begin{displaymath}\begin{array}{lrcl}}
+{\end{array}\end{displaymath}}
+\newcommand{\bnfnewline}{
+  \\[6pt]
+}
+\newcommand{\bnflabel}[1]{\mbox{\textit{#1}}}
+\newcommand{\bnfalt}{\mathbf{\,\,\mid\,\,}}
+\newcommand{\bnfdef}{\mathbf{\ \Coloneqq\ }}
+\newcommand{\defbnf}{\bnfdef} % fd is my vim-escape combo
+\newcommand{\bnfadd}{{\mathbf{\ +\!\!\Coloneqq\ }}}
+\newcommand{\bnfsub}{{\bf - : : =}}
+
+\makeatletter
+\newcommand{\mathboxed}[1]{\text{\fboxsep=.2em\fbox{\m@th$\displaystyle#1$}}}
+\makeatother
+
+\newcommand{\ie}{i.e.\xspace}
+\newcommand{\eg}{e.g.\xspace}
+
+\newcommand{\errsym}{\mho}
+\newcommand\gqm{\gradualstyle{\normalfont{\textbf{?}}}}
+\newcommand\rqm{\surfstyle{\normalfont{\textbf{?}}}}
+\newcommand\rqmat[1]{\surfstyle{\normalfont{\textit{?}}_{@#1}}}
+\newcommand\gqmat[1]{\gradualstyle{\normalfont{\textbf{?}}_{#1}}}
+% \newcommand\qm{\mymathbb{?} }
+\newcommand\err{\gradualstyle{\errsym}}
+\newcommand\errat[1]{\gradualstyle{\errsym}_{\g{#1}}}
+\newcommand\errl{\gradualstyle{\errsym_{\ell}}}
+\newcommand{\bbb}{\mathbb{B}}
+\newcommand{\If}{\mathbf{if}}
+\newcommand{\true}{\mathbf{true}}
+\newcommand{\false}{\mathbf{false}}
+\newcommand{\Type}{\mathbf{Type}}
+
+
+
+\newcommand{\K}{$\mathbf{K}$ }
+\newcommand{\UIP}{$\mathbf{UIP}$ }
+
+\newcommand{\abe}{{\alpha\beta\eta}}
+
+\newcommand{\rrule}{\textsc}
+
+
+\newcommand\blackoline[1]{\colorlet{temp}{.}\color{black}\overrightarrow{\color{temp}#1}\color{temp}}
+\newcommand{\seq}[1]{\blackoline{#1}}
+
+\newcommand{\ala}{\`a la }
+
+\NewDocumentCommand{\tr}{}{\staticstyle{tr}}
+\newcommand{\trUp}{\ensuremath{\tr^{\s\uparrow}}}
+\newcommand{\trDown}{\ensuremath{\tr^{\s\downarrow}}}
+
+% \newcommand{\sqube}{\sqsubseteq}
+% \newcommand{\sqeq}{\sqsupseteq\sqsubseteq}
+\newcommand{\bZero}{{\mymathbbZero}}
+\newcommand{\bOne}{{\mymathbbOne}}
+\newcommand{\bN}{{\mymathbbN}}
+\newcommand{\bC}{{\mymathbbC}}
+\newcommand{\bB}{{\mymathbbB}}
+
+
+% Stolen from Felipe's \AGT paper
+\definecolor{lightgray}{gray}{0.90}
+\newcommand{\Gbox}[1]{\colorbox{lightgray}{$#1$}}
+
+\newcommand{\gbox}[1]{%
+  {\setlength{\fboxsep}{1pt}\colorbox{lightgray}{\tiny$#1$}}}
+
+\usepackage{ulem}
+\newcommand{\change}[1]{#1}
+% \newcommand{\change}[1]{{\color{orange}\uline{#1}}}
+
+\newcommand{\Godel}{G\"{o}del}
+
+
+\newmdenv[
+usetwoside=false,
+topline=false,
+bottomline=false,
+rightline=false,
+leftmargin=0.2in,
+linewidth=0.75pt,
+skipabove=\topsep,
+skipbelow=\topsep,
+nobreak=false
+]{leftrule}
+
+
+% stolen from https://arxiv.org/abs/1911.00583
+\newcommand{\case}[2]{
+  \noindent $\blacktriangleright$ \textbf{Case} \text{#1} \textbf{:}
+  {
+    % \setlength{\parskip}{0.7em}
+    \begin{leftrule}
+      % \vspace{0.35em}
+      #2
+    \end{leftrule}
+  }
+  \noindent \ignorespaces
+}
+
+\newcommand{\lcase}[2]{
+  \noindent $\blacktriangleright$ \textbf{Case} \text{#1} \textbf{:} #2
+}
+
+\newcommand{\mcase}[2]{\case{$#1$}{#2}}
+
+
+\newcommand{\rlcase}[2]{\lcase{\rrule{#1}}{#2}}
+\newcommand{\mlcase}[2]{\lcase{$#1$}{#2}}
+
+\newcommand{\rcase}[2]{\case{\rrule{#1}}{#2}}
+
+
+
+\newsavebox{\saveboxedarray}
+\newenvironment{inferbox}[0]
+{\begin{minipage}{\textwidth}\mprset{center}\begin{mathpar}}
+    {\end{mathpar}\end{minipage}}
+\newenvironment{syntaxcategory}[1]
+{\begin{array}{lcll} \multicolumn{4}{l}{\mbox{\textbf{#1}}}\\}
+   {\end{array}}
+ \newenvironment{boxedarray}[1]
+ {\begin{lrbox}{\saveboxedarray}\begin{math}\begin{array}{#1}}
+                                              {\end{array}\end{math}\end{lrbox}{\usebox{\saveboxedarray}}}
+                                        \reservestyle{\command}{\textsf}
+
+% \newsavebox{\saveboxedarray}
+% \newenvironment{inferbox}[0]
+% {\begin{minipage}{\textwidth}\mprset{center}\begin{mathpar}}
+%     {\end{mathpar}\end{minipage}}
+% \newenvironment{syntaxcategory}[1]
+% {\begin{array}{lcll} \multicolumn{4}{l}{\mbox{\textbf{#1}}}\\}
+%    {\end{array}}
+%  \newenvironment{boxedarray}[1]{}{}
+%                                         \reservestyle{\command}{\textsf}
+
+\newcommand{\myparagrapht}[1]{\noindent{\bf #1}}
+\newcommand{\myparagraph}[1]{\vspace{0.5em}\myparagrapht{#1.}}
+
+
+% \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+%   \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
+
+\usepackage{wrapfig}
+
+\newcommand{\cst}{\cong}
+
+% \newcommand{\qm}{ { \textbf{?}TODO }}
+
+%TODO: define this to link back?
+\newcommand{\defn}[1]{\textit{\gls{#1}}}
+
+
+
