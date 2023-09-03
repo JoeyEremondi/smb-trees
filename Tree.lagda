@@ -329,12 +329,12 @@ quotient types or other advanced features.
         (≤-trans (≤-limiting (λ x₂ → indMax t1 (f x₂)) λ k → indMax-monoR {t1 = t1} (x₁ k)) (≤-reflEq (cong indMax' eq2)))
       indMax-monoR {(↑ t1)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | IndMaxLim-Suc  | IndMaxLim-Suc  = ≤-sucMono (indMax-monoR {t1 = t1} lt)
       indMax-monoR {(↑ t1)} {(↑ t2)} {(Lim _ f)} (≤-cocone f k lt) | IndMaxLim-Suc  | IndMaxLim-R x
-        = {!!}
-        -- ≤-trans (indMax-monoR' {t1 = t1} {t2 = t2} {t2' = f k} lt) (≤-cocone (λ x₁ → indMax (↑ t1) (f x₁)) k (≤-refl _)) --indMax-monoR' {!lt!}
+        = limMax≤R ≤⨟ limMaxMono (≤-refl _)
+        (≤-trans (indMax-monoR' {t1 = t1} {t2 = t2} {t2' = f k} lt) (≤-cocone (λ x₁ → indMax (↑ t1) (f x₁)) k (≤-refl _)) )
 
       indMax-monoR' {t1} {t2} {t2'}  (≤-sucMono lt) = ≤-sucMono ( (indMax-monoR {t1 = t1} lt))
       indMax-monoR' {t1} {t2} {.(Lim _ f)} (≤-cocone f k lt)
-        = {!!} -- ≤-cocone _ k (indMax-monoR' {t1 = t1} lt)
+        = limMax≤R ≤⨟ limMaxMono (≤-refl _) ( ≤-cocone _ k (indMax-monoR' {t1 = t1} lt))
 \end{code}
 
 
