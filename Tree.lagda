@@ -1,13 +1,18 @@
 % !TEX root =  main.tex
 \section{Brouwer Trees: An Introduction}
 \begin{code}[hide]
+  {-# OPTIONS --rewriting #-}
   open import Data.Nat hiding (_≤_)
   open import Relation.Binary.PropositionalEquality
   open import Data.Product
   open import Relation.Nullary
-  open import Iso
   module Tree where
 
+\end{code}
+
+\begin{code}
+
+  open import Iso
 \end{code}
 
 Brouwer trees  are a simple but elegant tool for proving termination of higher-order procedures.
@@ -71,17 +76,17 @@ so we define a relation to order Brouwer trees.
 
 \begin{code}
     data _≤_ : Tree → Tree → Set ℓ where
-      ≤-Z : ∀ {o} → Z ≤ o
-      ≤-sucMono : ∀ {o1 o2}
-        → o1 ≤ o2
-        → ↑ o1 ≤ ↑ o2
-      ≤-cocone : ∀  {o } {c : ℂ} (f : El c  → Tree) (k : El c)
-        → o ≤ f k
-        → o ≤ Lim c f
-      ≤-limiting : ∀   {o } {c : ℂ}
+      ≤-Z : ∀ {t} → Z ≤ t
+      ≤-sucMono : ∀ {t1 t2}
+        → t1 ≤ t2
+        → ↑ t1 ≤ ↑ t2
+      ≤-cocone : ∀  {t} {c : ℂ} (f : El c  → Tree) (k : El c)
+        → t ≤ f k
+        → t ≤ Lim c f
+      ≤-limiting : ∀   {t} {c : ℂ}
         → (f : El c → Tree)
-        → (∀ k → f k ≤ o)
-        → Lim c f ≤ o
+        → (∀ k → f k ≤ t)
+        → Lim c f ≤ t
 
 \end{code}
 The ordering is based on the one presented by \citet{KRAUS2023113843}, but we modify it
@@ -91,9 +96,9 @@ quotient types or other advanced features.
 
 \begin{code}
 
-    ≤-refl : ∀ o → o ≤ o
+    ≤-refl : ∀ t → t ≤ t
     ≤-refl Z = ≤-Z
-    ≤-refl (↑ o) = ≤-sucMono (≤-refl o)
+    ≤-refl (↑ t) = ≤-sucMono (≤-refl t)
     ≤-refl (Lim c f) = ≤-limiting f (λ k → ≤-cocone f k (≤-refl (f k)))
 
 \end{code}
@@ -101,7 +106,7 @@ quotient types or other advanced features.
 \begin{code}
 
 
-    ≤-reflEq : ∀ {o1 o2} → o1 ≡ o2 → o1 ≤ o2
+    ≤-reflEq : ∀ {t1 t2} → t1 ≡ t2 → t1 ≤ t2
     ≤-reflEq refl = ≤-refl _
 
 \end{code}
@@ -109,7 +114,7 @@ quotient types or other advanced features.
 \begin{code}
 
 
-    ≤-trans : ∀ {o1 o2 o3} → o1 ≤ o2 → o2 ≤ o3 → o1 ≤ o3
+    ≤-trans : ∀ {t1 t2 t3} → t1 ≤ t2 → t2 ≤ t3 → t1 ≤ t3
     ≤-trans ≤-Z p23 = ≤-Z
     ≤-trans (≤-sucMono p12) (≤-sucMono p23) = ≤-sucMono (≤-trans p12 p23)
     ≤-trans p12 (≤-cocone f k p23) = ≤-cocone f k (≤-trans p12 p23)
@@ -121,15 +126,15 @@ quotient types or other advanced features.
 \begin{code}
 
 
-    infixr 10 _≤⨟o_
+    infixr 10 _≤⨟_
 
 \end{code}
 
 \begin{code}
 
 
-    _≤⨟o_ :  ∀ {o1 o2 o3} → o1 ≤ o2 → o2 ≤ o3 → o1 ≤ o3
-    lt1 ≤⨟o lt2 = ≤-trans lt1 lt2
+    _≤⨟_ :  ∀ {t1 t2 t3} → t1 ≤ t2 → t2 ≤ t3 → t1 ≤ t3
+    lt1 ≤⨟ lt2 = ≤-trans lt1 lt2
 
 \end{code}
 
@@ -137,16 +142,16 @@ quotient types or other advanced features.
 
 
     _<o_ : Tree → Tree → Set ℓ
-    o1 <o o2 = ↑ o1 ≤ o2
+    t1 <o t2 = ↑ t1 ≤ t2
 
-    ≤↑o : ∀ o → o ≤ ↑ o
-    ≤↑o Z = ≤-Z
-    ≤↑o (↑ o) = ≤-sucMono (≤↑o o)
-    ≤↑o (Lim c f) = ≤-limiting f λ k → ≤-trans (≤↑o (f k)) (≤-sucMono (≤-cocone f k (≤-refl (f k))))
+    ≤↑t : ∀ t → t ≤ ↑ t
+    ≤↑t Z = ≤-Z
+    ≤↑t (↑ t) = ≤-sucMono (≤↑t t)
+    ≤↑t (Lim c f) = ≤-limiting f λ k → ≤-trans (≤↑t (f k)) (≤-sucMono (≤-cocone f k (≤-refl (f k))))
 
 
     <-in-≤ : ∀ {x y} → x <o y → x ≤ y
-    <-in-≤ pf = ≤-trans (≤↑o _) pf
+    <-in-≤ pf = ≤-trans (≤↑t _) pf
 
 
     -- https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html#3168
@@ -159,8 +164,8 @@ quotient types or other advanced features.
     ≤∘<-in-< : ∀ {x y z} → x ≤ y → y <o z → x <o z
     ≤∘<-in-< {x} {y} {z} x≤y y<z = ≤-trans (≤-sucMono x≤y) y<z
 
-    underLim : ∀   {c : ℂ} (k : ℂ) o →  (f : El c → Tree) → (∀ k → o ≤ f k) → o ≤ Lim c f
-    underLim {c = c} k o f all = ≤-trans (≤-cocone (λ _ → o) {!!} (≤-refl o)) (≤-limiting (λ _ → o) (λ k → ≤-cocone f k (all k)))
+    -- underLim : ∀   {c : ℂ} (k : ℂ) t →  (f : El c → Tree) → (∀ k → t ≤ f k) → t ≤ Lim c f
+    -- underLim {c = c} k t f all = ≤-trans (≤-cocone (λ _ → t) {!!} (≤-refl t)) (≤-limiting (λ _ → t) (λ k → ≤-cocone f k (all k)))
 
     extLim : ∀   {c : ℂ} →  (f1 f2 : El c → Tree) → (∀ k → f1 k ≤ f2 k) → Lim c f1 ≤ Lim c f2
     extLim {c = c} f1 f2 all = ≤-limiting f1 (λ k → ≤-cocone f2 k (all k))
@@ -170,8 +175,8 @@ quotient types or other advanced features.
     existsLim {æ1} {æ2} f1 f2 allex = ≤-limiting  f1 (λ k → ≤-cocone f2 (proj₁ (allex k)) (proj₂ (allex k)))
 
 
-    ¬Z<↑o : ∀  o → ¬ ((↑ o) ≤ Z)
-    ¬Z<↑o o ()
+    ¬Z<↑o : ∀  t → ¬ ((↑ t) ≤ Z)
+    ¬Z<↑o t ()
 
 
     open import Induction.WellFounded
@@ -197,350 +202,421 @@ quotient types or other advanced features.
 
 \end{code}
 
-% \begin{code}
+
+\begin{code}
+    if0 : ℕ → Tree → Tree → Tree
+    if0 zero z s = z
+    if0 (suc n) z s = s
+
+    limMax : Tree → Tree → Tree
+    limMax t1 t2 = Lim Cℕ λ k → if0 (Iso.fun CℕIso k) t1 t2
+
+    limMax≤L : ∀ {t1 t2} → t1 ≤ limMax t1 t2
+    limMax≤L {t1} {t2}
+        = ≤-cocone _ (Iso.inv CℕIso 0)
+          (subst
+            (λ x → t1 ≤ if0 x t1 t2)
+            (sym (Iso.rightInv CℕIso 0))
+            (≤-refl t1))
+
+    limMax≤R : ∀ {t1 t2} → t2 ≤ limMax t1 t2
+    limMax≤R {t1} {t2}
+        = ≤-cocone _ (Iso.inv CℕIso 1)
+          (subst
+            (λ x → t2 ≤ if0 x t1 t2)
+            (sym (Iso.rightInv CℕIso 1))
+            (≤-refl t2))
+
+    limMaxIdem : ∀ {t} → limMax t t ≤ t
+    limMaxIdem {t} = ≤-limiting _ helper
+      where
+        helper : ∀ k → if0 (Iso.fun CℕIso k) t t ≤ t
+        helper k with Iso.fun CℕIso k
+        ... | zero = ≤-refl t
+        ... | suc n = ≤-refl t
+
+    limMaxMono : ∀ {t1 t2 t1' t2'} → t1 ≤ t1' → t2 ≤ t2' → limMax t1 t2 ≤ limMax t1' t2'
+    limMaxMono {t1} {t2} {t1'} {t2'} lt1 lt2 = extLim _ _ helper
+      where
+        helper : ∀ k → if0 (Iso.fun CℕIso k) t1 t2 ≤ if0 (Iso.fun CℕIso k) t1' t2'
+        helper k with Iso.fun CℕIso k
+        ... | zero = lt1
+        ... | suc n = lt2
 
 
-%     private
-%       data MaxView : Tree → Tree → Set ℓ where
-%         MaxZ-L : ∀ {o} → MaxView Z o
-%         MaxZ-R : ∀ {o} → MaxView o Z
-%         MaxLim-L : ∀ {o } {c : ℂ} {f : El c → Tree} → MaxView (Lim c f) o
-%         MaxLim-R : ∀ {o } {c : ℂ} {f : El c → Tree}
-%           → (∀   {c' : ℂ} {f' : El c' → Tree} → ¬ (o ≡ Lim  c' f'))
-%           → MaxView o (Lim c f)
-%         MaxLim-Suc : ∀  {o1 o2 } → MaxView (↑ o1) (↑ o2)
+    limMaxLUB : ∀ {t1 t2 t} → t1 ≤ t → t2 ≤ t → limMax t1 t2 ≤ t
+    limMaxLUB lt1 lt2 = limMaxMono lt1 lt2 ≤⨟ limMaxIdem
 
-%       maxView : ∀ o1 o2 → MaxView o1 o2
-%       maxView Z o2 = MaxZ-L
-%       maxView (Lim c f) o2 = MaxLim-L
-%       maxView (↑ o1) Z = MaxZ-R
-%       maxView (↑ o1) (Lim c f) = MaxLim-R λ ()
-%       maxView (↑ o1) (↑ o2) = MaxLim-Suc
-
-%     abstract
-%       max : Tree → Tree → Tree
-%       max' : ∀ {o1 o2} → MaxView o1 o2 → Tree
-
-%       max o1 o2 = max' (maxView o1 o2)
-
-%       max' {.Z} {o2} MaxZ-L = o2
-%       max' {o1} {.Z} MaxZ-R = o1
-%       max' {(Lim c f)} {o2} MaxLim-L = Lim c λ x → max (f x) o2
-%       max' {o1} {(Lim c f)} (MaxLim-R _) = Lim c (λ x → max o1 (f x))
-%       max' {(↑ o1)} {(↑ o2)} MaxLim-Suc = ↑ (max o1 o2)
-
-%       max-≤L : ∀ {o1 o2} → o1 ≤ max o1 o2
-%       max-≤L {o1} {o2} with maxView o1 o2
-%       ... | MaxZ-L = ≤-Z
-%       ... | MaxZ-R = ≤-refl _
-%       ... | MaxLim-L {f = f} = extLim f (λ x → max (f x) o2) (λ k → max-≤L)
-%       ... | MaxLim-R {f = f} _ = underLim {!!} o1 (λ x → max o1 (f x)) (λ k → max-≤L)
-%       ... | MaxLim-Suc = ≤-sucMono max-≤L
-
-
-%       max-≤R : ∀ {o1 o2} → o2 ≤ max o1 o2
-%       max-≤R {o1} {o2} with maxView o1 o2
-%       ... | MaxZ-R = ≤-Z
-%       ... | MaxZ-L = ≤-refl _
-%       ... | MaxLim-R {f = f} _ = extLim f (λ x → max o1 (f x)) (λ k → max-≤R {o1 = o1} {f k})
-%       ... | MaxLim-L {f = f} = underLim {!!} o2 (λ x → max (f x) o2) (λ k → max-≤R {o1 = f k} {o2 = o2})
-%       ... | MaxLim-Suc {o1} {o2} = ≤-sucMono (max-≤R {o1 = o1} {o2 = o2})
-
+\end{code}
 
 
 
-%       max-monoR : ∀ {o1 o2 o2'} → o2 ≤ o2' → max o1 o2 ≤ max o1 o2'
-%       max-monoR' : ∀ {o1 o2 o2'} → o2 <o o2' → max o1 o2 <o max (↑ o1) o2'
+\begin{code}
 
-%       max-monoR {o1} {o2} {o2'} lt with maxView o1 o2 in eq1 | maxView o1 o2' in eq2
-%       ... | MaxZ-L  | v2  = ≤-trans lt (≤-reflEq (cong max' eq2))
-%       ... | MaxZ-R  | v2  = ≤-trans max-≤L (≤-reflEq (cong max' eq2))
-%       ... | MaxLim-L {f = f1} |  MaxLim-L  = extLim _ _ λ k → max-monoR {o1 = f1 k} lt
-%       max-monoR {o1} {(Lim _ f')} {.(Lim _ f)} (≤-cocone f k lt) | MaxLim-R neq  | MaxLim-R neq'
-%         = ≤-limiting (λ x → max o1 (f' x)) (λ y → ≤-cocone (λ x → max o1 (f x)) k (max-monoR {o1 = o1} {o2 = f' y} (≤-trans (≤-cocone _ y (≤-refl _)) lt)))
-%       max-monoR {o1} {.(Lim _ _)} {o2'} (≤-limiting f x₁) | MaxLim-R x  | v2  =
-%         ≤-trans (≤-limiting (λ x₂ → max o1 (f x₂)) λ k → max-monoR {o1 = o1} (x₁ k)) (≤-reflEq (cong max' eq2))
-%       max-monoR {(↑ o1)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | MaxLim-Suc  | MaxLim-Suc  = ≤-sucMono (max-monoR {o1 = o1} lt)
-%       max-monoR {(↑ o1)} {(↑ o2)} {(Lim _ f)} (≤-cocone f k lt) | MaxLim-Suc  | MaxLim-R x
-%         = ≤-trans (max-monoR' {o1 = o1} {o2 = o2} {o2' = f k} lt) (≤-cocone (λ x₁ → max (↑ o1) (f x₁)) k (≤-refl _)) --max-monoR' {!lt!}
+    private
+      data IndMaxView : Tree → Tree → Set ℓ where
+        IndMaxZ-L : ∀ {t} → IndMaxView Z t
+        IndMaxZ-R : ∀ {t} → IndMaxView t Z
+        IndMaxLim-L : ∀ {t} {c : ℂ} {f : El c → Tree} → IndMaxView (Lim c f) t
+        IndMaxLim-R : ∀ {t} {c : ℂ} {f : El c → Tree}
+          → (∀   {c' : ℂ} {f' : El c' → Tree} → ¬ (t ≡ Lim  c' f'))
+          → IndMaxView t (Lim c f)
+        IndMaxLim-Suc : ∀  {t1 t2 } → IndMaxView (↑ t1) (↑ t2)
 
-%       max-monoR' {o1} {o2} {o2'}  (≤-sucMono lt) = ≤-sucMono ( (max-monoR {o1 = o1} lt))
-%       max-monoR' {o1} {o2} {.(Lim _ f)} (≤-cocone f k lt)
-%         = ≤-cocone _ k (max-monoR' {o1 = o1} lt)
+      indMaxView : ∀ t1 t2 → IndMaxView t1 t2
+      indMaxView Z t2 = IndMaxZ-L
+      indMaxView (Lim c f) t2 = IndMaxLim-L
+      indMaxView (↑ t1) Z = IndMaxZ-R
+      indMaxView (↑ t1) (Lim c f) = IndMaxLim-R λ ()
+      indMaxView (↑ t1) (↑ t2) = IndMaxLim-Suc
 
 
-%       max-monoL : ∀ {o1 o1' o2} → o1 ≤ o1' → max o1 o2 ≤ max o1' o2
-%       max-monoL' : ∀ {o1 o1' o2} → o1 <o o1' → max o1 o2 <o max o1' (↑ o2)
-%       max-monoL {o1} {o1'} {o2} lt with maxView o1 o2 in eq1 | maxView o1' o2 in eq2
-%       ... | MaxZ-L | v2 = ≤-trans (max-≤R {o1 = o1'}) (≤-reflEq (cong max' eq2))
-%       ... | MaxZ-R | v2 = ≤-trans lt (≤-trans (max-≤L {o1 = o1'}) (≤-reflEq (cong max' eq2)))
-%       max-monoL {.(Lim _ _)} {.(Lim _ f)} {o2} (≤-cocone f k lt) | MaxLim-L  | MaxLim-L
-%         = ≤-cocone (λ x → max (f x) o2) k (max-monoL lt)
-%       max-monoL {.(Lim _ _)} {o1'} {o2} (≤-limiting f lt) | MaxLim-L |  v2
-%         = ≤-limiting (λ x₁ → max (f x₁) o2) λ k → ≤-trans (max-monoL (lt k)) (≤-reflEq (cong max' eq2))
-%       max-monoL {.Z} {.Z} {.(Lim _ _)} ≤-Z | MaxLim-R neq  | MaxZ-L  = ≤-refl _
-%       max-monoL  {.(Lim _ f)} {.Z} {.(Lim _ _)} (≤-limiting f x) | MaxLim-R neq | MaxZ-L
+    opaque
+      indMax : Tree → Tree → Tree
+      indMax' : ∀ {t1 t2} → IndMaxView t1 t2 → Tree
+
+      indMax t1 t2 = indMax' (indMaxView t1 t2)
+
+      indMax' {.Z} {t2} IndMaxZ-L = t2
+      indMax' {t1} {.Z} IndMaxZ-R = t1
+      indMax' {(Lim c f)} {t2} IndMaxLim-L = limMax t2  (Lim c λ x → indMax (f x) t2)
+      indMax' {t1} {(Lim c f)} (IndMaxLim-R _) = limMax t1 (Lim c (λ x → indMax t1 (f x)))
+      indMax' {(↑ t1)} {(↑ t2)} IndMaxLim-Suc = ↑ (indMax t1 t2)
+
+
+
+      indMax-≤L : ∀ {t1 t2} → t1 ≤ indMax t1 t2
+      indMax-≤L {t1} {t2} with indMaxView t1 t2
+      ... | IndMaxZ-L = ≤-Z
+      ... | IndMaxZ-R = ≤-refl _
+      ... | IndMaxLim-L {f = f}
+        = limMax≤R
+          ≤⨟ limMaxMono (≤-refl _)
+            (extLim f (λ x → indMax (f x) t2) (λ k → indMax-≤L))
+      ... | IndMaxLim-R {f = f} _
+        = limMax≤L
+      ... | IndMaxLim-Suc = ≤-sucMono indMax-≤L
+
+
+      indMax-≤R : ∀ {t1 t2} → t2 ≤ indMax t1 t2
+      indMax-≤R {t1} {t2} with indMaxView t1 t2
+      ... | IndMaxZ-R = ≤-Z
+      ... | IndMaxZ-L = ≤-refl _
+      ... | IndMaxLim-R {f = f} _
+        = limMax≤R
+          ≤⨟ limMaxMono (≤-refl _)
+            (extLim f (λ x → indMax t1 (f x) ) (λ k → indMax-≤R))
+      ... | IndMaxLim-L {f = f} = limMax≤L
+      ... | IndMaxLim-Suc {t1} {t2} = ≤-sucMono (indMax-≤R {t1 = t1} {t2 = t2})
+\end{code}
+
+
+
+\begin{code}
+
+      indMax-monoR : ∀ {t1 t2 t2'} → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1 t2'
+      indMax-monoR' : ∀ {t1 t2 t2'} → t2 <o t2' → indMax t1 t2 <o indMax (↑ t1) t2'
+
+      indMax-monoR {t1} {t2} {t2'} lt with indMaxView t1 t2 in eq1 | indMaxView t1 t2' in eq2
+      ... | IndMaxZ-L  | v2  = ≤-trans lt (≤-reflEq (cong indMax' eq2))
+      ... | IndMaxZ-R  | v2  = ≤-trans indMax-≤L (≤-reflEq (cong indMax' eq2))
+      ... | IndMaxLim-L {f = f1} |  IndMaxLim-L  =
+        limMaxMono lt (extLim _ _ λ k → indMax-monoR {t1 = f1 k} lt)
+      indMax-monoR {t1} {(Lim _ f')} {.(Lim _ f)} (≤-cocone f k lt) | IndMaxLim-R neq  | IndMaxLim-R neq'
+        = limMaxMono (≤-refl _)
+        (≤-limiting (λ x → indMax t1 (f' x)) (λ y → ≤-cocone (λ x → indMax t1 (f x)) k (indMax-monoR {t1 = t1} {t2 = f' y} (≤-trans (≤-cocone _ y (≤-refl _)) lt))))
+      indMax-monoR {t1} {.(Lim _ _)} {t2'} (≤-limiting f x₁) | IndMaxLim-R x  | v2  = limMaxLUB (indMax-≤L ≤⨟ ≤-reflEq (cong indMax' eq2))
+        (≤-trans (≤-limiting (λ x₂ → indMax t1 (f x₂)) λ k → indMax-monoR {t1 = t1} (x₁ k)) (≤-reflEq (cong indMax' eq2)))
+      indMax-monoR {(↑ t1)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | IndMaxLim-Suc  | IndMaxLim-Suc  = ≤-sucMono (indMax-monoR {t1 = t1} lt)
+      indMax-monoR {(↑ t1)} {(↑ t2)} {(Lim _ f)} (≤-cocone f k lt) | IndMaxLim-Suc  | IndMaxLim-R x
+        = {!!}
+        -- ≤-trans (indMax-monoR' {t1 = t1} {t2 = t2} {t2' = f k} lt) (≤-cocone (λ x₁ → indMax (↑ t1) (f x₁)) k (≤-refl _)) --indMax-monoR' {!lt!}
+
+      indMax-monoR' {t1} {t2} {t2'}  (≤-sucMono lt) = ≤-sucMono ( (indMax-monoR {t1 = t1} lt))
+      indMax-monoR' {t1} {t2} {.(Lim _ f)} (≤-cocone f k lt)
+        = {!!} -- ≤-cocone _ k (indMax-monoR' {t1 = t1} lt)
+\end{code}
+
+
+
+
+
+
+
+
+
+
+%       indMax-monoL : ∀ {t1 t1' t2} → t1 ≤ t1' → indMax t1 t2 ≤ indMax t1' t2
+%       indMax-monoL' : ∀ {t1 t1' t2} → t1 <o t1' → indMax t1 t2 <o indMax t1' (↑ t2)
+%       indMax-monoL {t1} {t1'} {t2} lt with indMaxView t1 t2 in eq1 | indMaxView t1' t2 in eq2
+%       ... | IndMaxZ-L | v2 = ≤-trans (indMax-≤R {t1 = t1'}) (≤-reflEq (cong indMax' eq2))
+%       ... | IndMaxZ-R | v2 = ≤-trans lt (≤-trans (indMax-≤L {t1 = t1'}) (≤-reflEq (cong indMax' eq2)))
+%       indMax-monoL {.(Lim _ _)} {.(Lim _ f)} {t2} (≤-cocone f k lt) | IndMaxLim-L  | IndMaxLim-L
+%         = ≤-cocone (λ x → indMax (f x) t2) k (indMax-monoL lt)
+%       indMax-monoL {.(Lim _ _)} {t1'} {t2} (≤-limiting f lt) | IndMaxLim-L |  v2
+%         = ≤-limiting (λ x₁ → indMax (f x₁) t2) λ k → ≤-trans (indMax-monoL (lt k)) (≤-reflEq (cong indMax' eq2))
+%       indMax-monoL {.Z} {.Z} {.(Lim _ _)} ≤-Z | IndMaxLim-R neq  | IndMaxZ-L  = ≤-refl _
+%       indMax-monoL  {.(Lim _ f)} {.Z} {.(Lim _ _)} (≤-limiting f x) | IndMaxLim-R neq | IndMaxZ-L
 %         with () ← neq refl
-%       max-monoL {o1} {.(Lim _ _)} {.(Lim _ _)} (≤-cocone _ k lt) | MaxLim-R {f = f} neq | MaxLim-L {f = f'}
-%         = ≤-limiting (λ x → max o1 (f x)) (λ y → ≤-cocone (λ x → max (f' x) (Lim _ _)) k
-%           (≤-trans (max-monoL lt) (max-monoR {o1 = f' k} (≤-cocone f y (≤-refl _)))))
-%       ... | MaxLim-R neq | MaxLim-R {f = f} neq' = extLim (λ x → max o1 (f x)) (λ x → max o1' (f x)) (λ k → max-monoL lt)
-%       max-monoL {.(↑ _)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | MaxLim-Suc  | MaxLim-Suc
-%         = ≤-sucMono (max-monoL lt)
-%       max-monoL {.(↑ _)} {.(Lim _ f)} {.(↑ _)} (≤-cocone f k lt) | MaxLim-Suc  | MaxLim-L
-%         = ≤-cocone (λ x → max (f x) (↑ _)) k (max-monoL' lt)
+%       indMax-monoL {t1} {.(Lim _ _)} {.(Lim _ _)} (≤-cocone _ k lt) | IndMaxLim-R {f = f} neq | IndMaxLim-L {f = f'}
+%         = ≤-limiting (λ x → indMax t1 (f x)) (λ y → ≤-cocone (λ x → indMax (f' x) (Lim _ _)) k
+%           (≤-trans (indMax-monoL lt) (indMax-monoR {t1 = f' k} (≤-cocone f y (≤-refl _)))))
+%       ... | IndMaxLim-R neq | IndMaxLim-R {f = f} neq' = extLim (λ x → indMax t1 (f x)) (λ x → indMax t1' (f x)) (λ k → indMax-monoL lt)
+%       indMax-monoL {.(↑ _)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | IndMaxLim-Suc  | IndMaxLim-Suc
+%         = ≤-sucMono (indMax-monoL lt)
+%       indMax-monoL {.(↑ _)} {.(Lim _ f)} {.(↑ _)} (≤-cocone f k lt) | IndMaxLim-Suc  | IndMaxLim-L
+%         = ≤-cocone (λ x → indMax (f x) (↑ _)) k (indMax-monoL' lt)
 
-%       max-monoL' {o1} {o1'} {o2} lt with maxView o1 o2 in eq1 | maxView o1' o2 in eq2
-%       max-monoL' {o1} {.(↑ _)} {o2} (≤-sucMono lt) | v1 | v2 = ≤-sucMono (≤-trans (≤-reflEq (cong max' (sym eq1))) (max-monoL lt))
-%       max-monoL' {o1} {.(Lim _ f)} {o2} (≤-cocone f k lt) | v1 | v2
-%         = ≤-cocone _ k (≤-trans (≤-sucMono (≤-reflEq (cong max' (sym eq1)))) (max-monoL' lt))
-
-
-%       max-mono : ∀ {o1 o2 o1' o2'} → o1 ≤ o1' → o2 ≤ o2' → max o1 o2 ≤ max o1' o2'
-%       max-mono {o1' = o1'} lt1 lt2 = ≤-trans (max-monoL lt1) (max-monoR {o1 = o1'} lt2)
-
-%       max-strictMono : ∀ {o1 o2 o1' o2'} → o1 <o o1' → o2 <o o2' → max o1 o2 <o max o1' o2'
-%       max-strictMono lt1 lt2 = max-mono lt1 lt2
+%       indMax-monoL' {t1} {t1'} {t2} lt with indMaxView t1 t2 in eq1 | indMaxView t1' t2 in eq2
+%       indMax-monoL' {t1} {.(↑ _)} {t2} (≤-sucMono lt) | v1 | v2 = ≤-sucMono (≤-trans (≤-reflEq (cong indMax' (sym eq1))) (indMax-monoL lt))
+%       indMax-monoL' {t1} {.(Lim _ f)} {t2} (≤-cocone f k lt) | v1 | v2
+%         = ≤-cocone _ k (≤-trans (≤-sucMono (≤-reflEq (cong indMax' (sym eq1)))) (indMax-monoL' lt))
 
 
-%       max-sucMono : ∀ {o1 o2 o1' o2'} → max o1 o2 ≤ max o1' o2' → max o1 o2 <o max (↑ o1') (↑ o2')
-%       max-sucMono lt = ≤-sucMono lt
+%       indMax-mono : ∀ {t1 t2 t1' t2'} → t1 ≤ t1' → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1' t2'
+%       indMax-mono {t1' = t1'} lt1 lt2 = ≤-trans (indMax-monoL lt1) (indMax-monoR {t1 = t1'} lt2)
+
+%       indMax-strictMono : ∀ {t1 t2 t1' t2'} → t1 <o t1' → t2 <o t2' → indMax t1 t2 <o indMax t1' t2'
+%       indMax-strictMono lt1 lt2 = indMax-mono lt1 lt2
 
 
-%       -- max-Z : ∀ o → max o Z ≡ o
-%       -- max-Z Z = refl
-%       -- max-Z (↑ o) = refl
-%       -- max-Z (Lim c f) = cong (Lim c) {!!} -- cong (Lim c) (funExt (λ x → max-Z (f x)))
-
-%       max-Z : ∀ o → max o Z ≤ o
-%       max-Z Z = ≤-Z
-%       max-Z (↑ o) = ≤-refl (max (↑ o) Z)
-%       max-Z (Lim c f) = extLim (λ x → max (f x) Z) f (λ k → max-Z (f k))
-
-%       max-↑ : ∀ {o1 o2} → max (↑ o1) (↑ o2) ≡ ↑ (max o1 o2)
-%       max-↑ = refl
-
-%       max-≤Z : ∀ o → max o Z ≤ o
-%       max-≤Z Z = ≤-refl _
-%       max-≤Z (↑ o) = ≤-refl _
-%       max-≤Z (Lim c f) = extLim _ _ (λ k → max-≤Z (f k))
-
-%       -- max-oneL : ∀ {o} → max O1 (↑ o) ≤ ↑ o
-%       -- max-oneL  = ≤-refl _
-
-%       -- max-oneR : ∀ {o} → max (↑ o) O1 ≤ ↑ o
-%       -- max-oneR {Z} = ≤-sucMono (≤-refl _)
-%       -- max-oneR {↑ o} = ≤-sucMono (≤-refl _)
-%       -- max-oneR {Lim c f} = ≤-sucMono (substPath (λ x → x ≤ Lim c f) (sym (max-Z (Lim c f))) (≤-refl (Lim c f))) -- rewrite ctop (max-Z (Lim c f))= ≤-refl _
+%       indMax-sucMono : ∀ {t1 t2 t1' t2'} → indMax t1 t2 ≤ indMax t1' t2' → indMax t1 t2 <o indMax (↑ t1') (↑ t2')
+%       indMax-sucMono lt = ≤-sucMono lt
 
 
-%       max-limR : ∀   {c : ℂ} (f : El  c  → Tree) o → max o (Lim c f) ≤ Lim c (λ k → max o (f k))
-%       max-limR f Z = ≤-refl _
-%       max-limR f (↑ o) = extLim _ _ λ k → ≤-refl _
-%       max-limR f (Lim c f₁) = ≤-limiting _ λ k → ≤-trans (max-limR f (f₁ k)) (extLim _ _ (λ k2 → max-monoL {o1 = f₁ k} {o1' = Lim c f₁} {o2 = f k2}  (≤-cocone _ k (≤-refl _))))
+%       -- indMax-Z : ∀ t → indMax t Z ≡ o
+%       -- indMax-Z Z = refl
+%       -- indMax-Z (↑ t) = refl
+%       -- indMax-Z (Lim c f) = cong (Lim c) {!!} -- cong (Lim c) (funExt (λ x → indMax-Z (f x)))
+
+%       indMax-Z : ∀ t → indMax t Z ≤ o
+%       indMax-Z Z = ≤-Z
+%       indMax-Z (↑ t) = ≤-refl (indMax (↑ t) Z)
+%       indMax-Z (Lim c f) = extLim (λ x → indMax (f x) Z) f (λ k → indMax-Z (f k))
+
+%       indMax-↑ : ∀ {t1 t2} → indMax (↑ t1) (↑ t2) ≡ ↑ (indMax t1 t2)
+%       indMax-↑ = refl
+
+%       indMax-≤Z : ∀ t → indMax t Z ≤ o
+%       indMax-≤Z Z = ≤-refl _
+%       indMax-≤Z (↑ t) = ≤-refl _
+%       indMax-≤Z (Lim c f) = extLim _ _ (λ k → indMax-≤Z (f k))
+
+%       -- indMax-oneL : ∀ {t} → indMax T1 (↑ t) ≤ ↑ t
+%       -- indMax-oneL  = ≤-refl _
+
+%       -- indMax-oneR : ∀ {t} → indMax (↑ t) T1 ≤ ↑ t
+%       -- indMax-oneR {Z} = ≤-sucMono (≤-refl _)
+%       -- indMax-oneR {↑ t} = ≤-sucMono (≤-refl _)
+%       -- indMax-oneR {Lim c f} = ≤-sucMono (substPath (λ x → x ≤ Lim c f) (sym (indMax-Z (Lim c f))) (≤-refl (Lim c f))) -- rewrite ctop (indMax-Z (Lim c f))= ≤-refl _
 
 
-%       max-commut : ∀ o1 o2 → max o1 o2 ≤ max o2 o1
-%       max-commut o1 o2 with maxView o1 o2
-%       ... | MaxZ-L = max-≤L
-%       ... | MaxZ-R = ≤-refl _
-%       ... | MaxLim-R {f = f} x = extLim _ _ (λ k → max-commut o1 (f k))
-%       ... | MaxLim-Suc {o1 = o1} {o2 = o2} = ≤-sucMono (max-commut o1 o2)
-%       ... | MaxLim-L {c = c} {f = f} with maxView o2 o1
-%       ... | MaxZ-L = extLim _ _ λ k → max-Z (f k)
-%       ... | MaxLim-R x = extLim _ _ (λ k → max-commut (f k) o2)
-%       ... | MaxLim-L {c = c2} {f = f2} =
-%         ≤-trans (extLim _ _ λ k → max-limR f2 (f k))
+%       indMax-limR : ∀   {c : ℂ} (f : El  c  → Tree) t → indMax t (Lim c f) ≤ Lim c (λ k → indMax t (f k))
+%       indMax-limR f Z = ≤-refl _
+%       indMax-limR f (↑ t) = extLim _ _ λ k → ≤-refl _
+%       indMax-limR f (Lim c f₁) = ≤-limiting _ λ k → ≤-trans (indMax-limR f (f₁ k)) (extLim _ _ (λ k2 → indMax-monoL {t1 = f₁ k} {t1' = Lim c f₁} {t2 = f k2}  (≤-cocone _ k (≤-refl _))))
+
+
+%       indMax-commut : ∀ t1 t2 → indMax t1 t2 ≤ indMax t2 t1
+%       indMax-commut t1 t2 with indMaxView t1 t2
+%       ... | IndMaxZ-L = indMax-≤L
+%       ... | IndMaxZ-R = ≤-refl _
+%       ... | IndMaxLim-R {f = f} x = extLim _ _ (λ k → indMax-commut t1 (f k))
+%       ... | IndMaxLim-Suc {t1 = t1} {t2 = t2} = ≤-sucMono (indMax-commut t1 t2)
+%       ... | IndMaxLim-L {c = c} {f = f} with indMaxView t2 t1
+%       ... | IndMaxZ-L = extLim _ _ λ k → indMax-Z (f k)
+%       ... | IndMaxLim-R x = extLim _ _ (λ k → indMax-commut (f k) t2)
+%       ... | IndMaxLim-L {c = c2} {f = f2} =
+%         ≤-trans (extLim _ _ λ k → indMax-limR f2 (f k))
 %         (≤-trans (≤-limiting _ (λ k → ≤-limiting _ λ k2 → ≤-cocone _ k2 (≤-cocone _ k (≤-refl _))))
-%         (≤-trans (≤-refl (Lim c2 λ k2 → Lim c λ k → max (f k) (f2 k2)))
-%         (extLim _ _ (λ k2 → ≤-limiting _ λ k1 → ≤-trans (max-commut (f k1) (f2 k2)) (max-monoR {o1 = f2 k2} {o2 = f k1} {o2' = Lim c f} (≤-cocone _ k1 (≤-refl _)))))))
+%         (≤-trans (≤-refl (Lim c2 λ k2 → Lim c λ k → indMax (f k) (f2 k2)))
+%         (extLim _ _ (λ k2 → ≤-limiting _ λ k1 → ≤-trans (indMax-commut (f k1) (f2 k2)) (indMax-monoR {t1 = f2 k2} {t2 = f k1} {t2' = Lim c f} (≤-cocone _ k1 (≤-refl _)))))))
 
 
-%       max-assocL : ∀ o1 o2 o3 → max o1 (max o2 o3) ≤ max (max o1 o2) o3
-%       max-assocL o1 o2 o3 with maxView o2 o3 in eq23
-%       ... | MaxZ-L = max-monoL {o1 = o1} {o1' = max o1 Z} {o2 = o3} max-≤L
-%       ... | MaxZ-R = max-≤L
-%       ... | m with maxView o1 o2
-%       ... | MaxZ-L rewrite sym eq23 = ≤-refl _
-%       ... | MaxZ-R rewrite sym eq23 = ≤-refl _
-%       ... | MaxLim-R {f = f} x rewrite sym eq23 = ≤-trans (max-limR (λ x → max (f x) o3) o1) (extLim _ _ λ k → max-assocL o1 (f k) o3) -- f,max-limR f o1
-%       max-assocL .(↑ _) .(↑ _) .Z | MaxZ-R  | MaxLim-Suc = ≤-refl _
-%       max-assocL o1 o2 .(Lim _ _) | MaxLim-R {f = f} x   | MaxLim-Suc = extLim _ _ λ k → max-assocL o1 o2 (f k)
-%       max-assocL (↑ o1) (↑ o2) (↑ o3) | MaxLim-Suc  | MaxLim-Suc = ≤-sucMono (max-assocL o1 o2 o3)
-%       ... | MaxLim-L {f = f} rewrite sym eq23 = extLim _ _ λ k → max-assocL (f k) o2 o3
+%       indMax-assocL : ∀ t1 t2 t3 → indMax t1 (indMax t2 t3) ≤ indMax (indMax t1 t2) t3
+%       indMax-assocL t1 t2 t3 with indMaxView t2 t3 in eq23
+%       ... | IndMaxZ-L = indMax-monoL {t1 = t1} {t1' = indMax t1 Z} {t2 = t3} indMax-≤L
+%       ... | IndMaxZ-R = indMax-≤L
+%       ... | m with indMaxView t1 t2
+%       ... | IndMaxZ-L rewrite sym eq23 = ≤-refl _
+%       ... | IndMaxZ-R rewrite sym eq23 = ≤-refl _
+%       ... | IndMaxLim-R {f = f} x rewrite sym eq23 = ≤-trans (indMax-limR (λ x → indMax (f x) t3) t1) (extLim _ _ λ k → indMax-assocL t1 (f k) t3) -- f,indMax-limR f t1
+%       indMax-assocL .(↑ _) .(↑ _) .Z | IndMaxZ-R  | IndMaxLim-Suc = ≤-refl _
+%       indMax-assocL t1 t2 .(Lim _ _) | IndMaxLim-R {f = f} x   | IndMaxLim-Suc = extLim _ _ λ k → indMax-assocL t1 t2 (f k)
+%       indMax-assocL (↑ t1) (↑ t2) (↑ t3) | IndMaxLim-Suc  | IndMaxLim-Suc = ≤-sucMono (indMax-assocL t1 t2 t3)
+%       ... | IndMaxLim-L {f = f} rewrite sym eq23 = extLim _ _ λ k → indMax-assocL (f k) t2 t3
 
 
 
-%       max-assocR : ∀ o1 o2 o3 →  max (max o1 o2) o3 ≤ max o1 (max o2 o3)
-%       max-assocR o1 o2 o3 = ≤-trans (max-commut (max o1 o2) o3) (≤-trans (max-monoR {o1 = o3} (max-commut o1 o2))
-%         (≤-trans (max-assocL o3 o2 o1) (≤-trans (max-commut (max o3 o2) o1) (max-monoR {o1 = o1} (max-commut o3 o2)))))
+%       indMax-assocR : ∀ t1 t2 t3 →  indMax (indMax t1 t2) t3 ≤ indMax t1 (indMax t2 t3)
+%       indMax-assocR t1 t2 t3 = ≤-trans (indMax-commut (indMax t1 t2) t3) (≤-trans (indMax-monoR {t1 = t3} (indMax-commut t1 t2))
+%         (≤-trans (indMax-assocL t3 t2 t1) (≤-trans (indMax-commut (indMax t3 t2) t1) (indMax-monoR {t1 = t1} (indMax-commut t3 t2)))))
 
 
-%       max-swap4 : ∀ {o1 o1' o2 o2'} → max (max o1 o1') (max o2 o2') ≤ max (max o1 o2) (max o1' o2')
-%       max-swap4 {o1}{o1'}{o2 }{o2'} =
-%         max-assocL (max o1 o1') o2 o2'
-%         ≤⨟o max-monoL {o1 = max (max o1 o1') o2} {o2 = o2'}
-%           (max-assocR o1 o1' o2 ≤⨟o max-monoR {o1 = o1} (max-commut o1' o2) ≤⨟o max-assocL o1 o2 o1')
-%         ≤⨟o max-assocR (max o1 o2) o1' o2'
+%       indMax-swap4 : ∀ {t1 t1' t2 t2'} → indMax (indMax t1 t1') (indMax t2 t2') ≤ indMax (indMax t1 t2) (indMax t1' t2')
+%       indMax-swap4 {t1}{t1'}{t2 }{t2'} =
+%         indMax-assocL (indMax t1 t1') t2 t2'
+%         ≤⨟ indMax-monoL {t1 = indMax (indMax t1 t1') t2} {t2 = t2'}
+%           (indMax-assocR t1 t1' t2 ≤⨟ indMax-monoR {t1 = t1} (indMax-commut t1' t2) ≤⨟ indMax-assocL t1 t2 t1')
+%         ≤⨟ indMax-assocR (indMax t1 t2) t1' t2'
 
-%       max-swap6 : ∀ {o1 o2 o3 o1' o2' o3'} → max (max o1 o1') (max (max o2 o2') (max o3 o3')) ≤ max (max o1 (max o2 o3)) (max o1' (max o2' o3'))
-%       max-swap6 {o1} {o2} {o3} {o1'} {o2'} {o3'} =
-%         max-monoR {o1 = max o1 o1'} (max-swap4 {o1 = o2} {o1' = o2'} {o2 = o3} {o2' = o3'})
-%         ≤⨟o max-swap4 {o1 = o1} {o1' = o1'}
+%       indMax-swap6 : ∀ {t1 t2 t3 t1' t2' t3'} → indMax (indMax t1 t1') (indMax (indMax t2 t2') (indMax t3 t3')) ≤ indMax (indMax t1 (indMax t2 t3)) (indMax t1' (indMax t2' t3'))
+%       indMax-swap6 {t1} {t2} {t3} {t1'} {t2'} {t3'} =
+%         indMax-monoR {t1 = indMax t1 t1'} (indMax-swap4 {t1 = t2} {t1' = t2'} {t2 = t3} {t2' = t3'})
+%         ≤⨟ indMax-swap4 {t1 = t1} {t1' = t1'}
 
-%       max-lim2L :
+%       indMax-lim2L :
 %         ∀
 %         {c1 : ℂ}
 %         (f1 : El  c1 → Tree)
 %         {c2 : ℂ}
 %         (f2 : El  c2 → Tree)
-%         → Lim  c1 (λ k1 → Lim  c2 (λ k2 → max (f1 k1) (f2 k2))) ≤ max (Lim  c1 f1) (Lim  c2 f2)
-%       max-lim2L f1 f2 = ≤-limiting  _ (λ k1 → ≤-limiting  _ λ k2 → max-mono (≤-cocone  f1 k1 (≤-refl _)) (≤-cocone  f2 k2 (≤-refl _)))
+%         → Lim  c1 (λ k1 → Lim  c2 (λ k2 → indMax (f1 k1) (f2 k2))) ≤ indMax (Lim  c1 f1) (Lim  c2 f2)
+%       indMax-lim2L f1 f2 = ≤-limiting  _ (λ k1 → ≤-limiting  _ λ k2 → indMax-mono (≤-cocone  f1 k1 (≤-refl _)) (≤-cocone  f2 k2 (≤-refl _)))
 
-%       max-lim2R :
+%       indMax-lim2R :
 %         ∀
 %         {c1 : ℂ}
 %         (f1 : El  c1 → Tree)
 %         {c2 : ℂ}
 %         (f2 : El  c2 → Tree)
-%         →  max (Lim  c1 f1) (Lim  c2 f2) ≤ Lim  c1 (λ k1 → Lim  c2 (λ k2 → max (f1 k1) (f2 k2)))
-%       max-lim2R f1 f2 = extLim  _ _ (λ k1 → max-limR  _ (f1 k1))
+%         →  indMax (Lim  c1 f1) (Lim  c2 f2) ≤ Lim  c1 (λ k1 → Lim  c2 (λ k2 → indMax (f1 k1) (f2 k2)))
+%       indMax-lim2R f1 f2 = extLim  _ _ (λ k1 → indMax-limR  _ (f1 k1))
 
-%     --Attempt to have an idempotent version of max
+%     --Attempt to have an idempotent version of indMax
 
-%       nmax : Tree → ℕ → Tree
-%       nmax o ℕ.zero = Z
-%       nmax o (ℕ.suc n) = max (nmax o n) o
+%       nindMax : Tree → ℕ → Tree
+%       nindMax t ℕ.zero = Z
+%       nindMax t (ℕ.suc n) = indMax (nindMax t n) o
 
-%       nmax-mono : ∀ {o1 o2 } n → o1 ≤ o2 → nmax o1 n ≤ nmax o2 n
-%       nmax-mono ℕ.zero lt = ≤-Z
-%       nmax-mono {o1 = o1} {o2} (ℕ.suc n) lt = max-mono {o1 = nmax o1 n} {o2 = o1} {o1' = nmax o2 n} {o2' = o2} (nmax-mono n lt) lt
+%       nindMax-mono : ∀ {t1 t2 } n → t1 ≤ t2 → nindMax t1 n ≤ nindMax t2 n
+%       nindMax-mono ℕ.zero lt = ≤-Z
+%       nindMax-mono {t1 = t1} {t2} (ℕ.suc n) lt = indMax-mono {t1 = nindMax t1 n} {t2 = t1} {t1' = nindMax t2 n} {t2' = t2} (nindMax-mono n lt) lt
 
 %     --
-%       max∞ : Tree → Tree
-%       max∞ o = OℕLim (λ n → nmax o n)
+%       indMax∞ : Tree → Tree
+%       indMax∞ t = OℕLim (λ n → nindMax t n)
 
 
-%       max-∞lt1 : ∀ o → max (max∞ o) o ≤ max∞ o
-%       max-∞lt1 o = ≤-limiting  _ λ k → helper (Iso.fun CℕIso k)
+%       indMax-∞lt1 : ∀ t → indMax (indMax∞ o) t ≤ indMax∞ o
+%       indMax-∞lt1 t = ≤-limiting  _ λ k → helper (Iso.fun CℕIso k)
 %         where
-%           helper : ∀ n → max (nmax o n) o ≤ max∞ o
-%           helper n = ≤-cocone  _ (Iso.inv CℕIso (ℕ.suc n)) (subst (λ sn → nmax o (ℕ.suc n) ≤ nmax o sn) (sym (Iso.rightInv CℕIso (suc n))) (≤-refl _))
-%         -- helper (ℕ.suc n) = ≤-cocone  _ (CℕfromNat (ℕ.suc (ℕ.suc n))) (subst (λ sn → max (max (nmax o n) o) o ≤ nmax o sn) (sym (Cℕembed (ℕ.suc n)))
+%           helper : ∀ n → indMax (nindMax t n) t ≤ indMax∞ o
+%           helper n = ≤-cocone  _ (Iso.inv CℕIso (ℕ.suc n)) (subst (λ sn → nindMax t (ℕ.suc n) ≤ nindMax t sn) (sym (Iso.rightInv CℕIso (suc n))) (≤-refl _))
+%         -- helper (ℕ.suc n) = ≤-cocone  _ (CℕfromNat (ℕ.suc (ℕ.suc n))) (subst (λ sn → indMax (indMax (nindMax t n) o) t ≤ nindMax t sn) (sym (Cℕembed (ℕ.suc n)))
 %         --   {!!})
 %         --
 
-%       -- nmax-idem-absorb : ∀ o n → max o o ≤ o → nmax o n ≤ o
-%       -- nmax-idem-absorb o ℕ.zero lt = ≤-Z
-%       -- nmax-idem-absorb o (ℕ.suc n) lt = max-monoL (nmax-idem-absorb o n lt) ≤⨟o lt
-%       -- max∞-idem-absorb : ∀ {o} → max o o ≤ o → max∞ o ≤ o
-%       -- max∞-idem-absorb lt = ≤-limiting  (λ x → nmax _ (CℕtoNat x)) (λ k → nmax-idem-absorb _ (CℕtoNat k) lt)
+%       -- nindMax-idem-absorb : ∀ t n → indMax t o ≤ t → nindMax t n ≤ o
+%       -- nindMax-idem-absorb t ℕ.zero lt = ≤-Z
+%       -- nindMax-idem-absorb t (ℕ.suc n) lt = indMax-monoL (nindMax-idem-absorb t n lt) ≤⨟ lt
+%       -- indMax∞-idem-absorb : ∀ {t} → indMax t o ≤ t → indMax∞ t ≤ o
+%       -- indMax∞-idem-absorb lt = ≤-limiting  (λ x → nindMax _ (CℕtoNat x)) (λ k → nindMax-idem-absorb _ (CℕtoNat k) lt)
 
-%       max-∞ltn : ∀ n o → max (max∞ o) (nmax o n) ≤ max∞ o
-%       max-∞ltn ℕ.zero o = max-≤Z (max∞ o)
-%       max-∞ltn (ℕ.suc n) o =
-%         ≤-trans (max-monoR {o1 = max∞ o} (max-commut (nmax o n) o))
-%         (≤-trans (max-assocL (max∞ o) o (nmax o n))
-%         (≤-trans (max-monoL {o1 = max (max∞ o) o} {o2 = nmax o n} (max-∞lt1 o)) (max-∞ltn n o)))
+%       indMax-∞ltn : ∀ n t → indMax (indMax∞ o) (nindMax t n) ≤ indMax∞ o
+%       indMax-∞ltn ℕ.zero t = indMax-≤Z (indMax∞ o)
+%       indMax-∞ltn (ℕ.suc n) t =
+%         ≤-trans (indMax-monoR {t1 = indMax∞ o} (indMax-commut (nindMax t n) o))
+%         (≤-trans (indMax-assocL (indMax∞ o) t (nindMax t n))
+%         (≤-trans (indMax-monoL {t1 = indMax (indMax∞ o) o} {t2 = nindMax t n} (indMax-∞lt1 o)) (indMax-∞ltn n o)))
 
-%       max∞-idem : ∀ o → max (max∞ o) (max∞ o) ≤ max∞ o
-%       max∞-idem o = ≤-limiting  _ λ k → ≤-trans (max-commut (nmax o (Iso.fun CℕIso k)) (max∞ o)) (max-∞ltn (Iso.fun CℕIso k) o)
-
-
-%       max∞-self : ∀ o → o ≤ max∞ o
-%       max∞-self o = ≤-cocone  _ (Iso.inv CℕIso 1) (subst (λ x → o ≤ nmax o x) (sym (Iso.rightInv CℕIso 1)) (≤-refl _))
-
-%       max∞-idem∞ : ∀ o → max o o ≤ max∞ o
-%       max∞-idem∞ o = ≤-trans (max-mono (max∞-self o) (max∞-self o)) (max∞-idem o)
-
-%       max∞-mono : ∀ {o1 o2} → o1 ≤ o2 → (max∞ o1) ≤ (max∞ o2)
-%       max∞-mono lt = extLim  _ _ λ k → nmax-mono (Iso.fun CℕIso k) lt
+%       indMax∞-idem : ∀ t → indMax (indMax∞ o) (indMax∞ o) ≤ indMax∞ o
+%       indMax∞-idem t = ≤-limiting  _ λ k → ≤-trans (indMax-commut (nindMax t (Iso.fun CℕIso k)) (indMax∞ o)) (indMax-∞ltn (Iso.fun CℕIso k) o)
 
 
+%       indMax∞-self : ∀ t → t ≤ indMax∞ o
+%       indMax∞-self t = ≤-cocone  _ (Iso.inv CℕIso 1) (subst (λ x → t ≤ nindMax t x) (sym (Iso.rightInv CℕIso 1)) (≤-refl _))
 
-%       nmax-≤ : ∀ {o} n → max o o ≤ o → nmax o n ≤ o
-%       nmax-≤ ℕ.zero lt = ≤-Z
-%       nmax-≤ {o = o} (ℕ.suc n) lt = ≤-trans (max-monoL {o1 = nmax o n} {o2 = o} (nmax-≤ n lt)) lt
+%       indMax∞-idem∞ : ∀ t → indMax t o ≤ indMax∞ o
+%       indMax∞-idem∞ t = ≤-trans (indMax-mono (indMax∞-self o) (indMax∞-self o)) (indMax∞-idem o)
 
-%       max∞-≤ : ∀ {o} → max o o ≤ o → max∞ o ≤ o
-%       max∞-≤ lt = ≤-limiting  _ λ k → nmax-≤ (Iso.fun CℕIso k) lt
-
-%       -- Convenient helper for turing < with max∞ into < without
-%       max<-∞ : ∀ {o1 o2 o} → max (max∞ (o1)) (max∞ o2) <o o → max o1 o2 <o o
-%       max<-∞ lt = ≤∘<-in-< (max-mono (max∞-self _) (max∞-self _)) lt
-
-%       max-<Ls : ∀ {o1 o2 o1' o2'} → max o1 o2 <o max (↑ (max o1 o1')) (↑ (max o2 o2'))
-%       max-<Ls {o1} {o2} {o1'} {o2'} = max-sucMono {o1 = o1} {o2 = o2} {o1' = max o1 o1'} {o2' = max o2 o2'}
-%         (max-mono {o1 = o1} {o2 = o2} (max-≤L) (max-≤L))
-
-%       max∞-<Ls : ∀ {o1 o2 o1' o2'} → max o1 o2 <o max (↑ (max (max∞ o1) o1')) (↑ (max (max∞ o2) o2'))
-%       max∞-<Ls {o1} {o2} {o1'} {o2'} =  <∘≤-in-< (max-<Ls {o1} {o2} {o1'} {o2'})
-%         (max-mono {o1 = ↑ (max o1 o1')} {o2 = ↑ (max o2 o2')}
-%           (≤-sucMono (max-monoL (max∞-self o1)))
-%           (≤-sucMono (max-monoL (max∞-self o2))))
+%       indMax∞-mono : ∀ {t1 t2} → t1 ≤ t2 → (indMax∞ t1) ≤ (indMax∞ t2)
+%       indMax∞-mono lt = extLim  _ _ λ k → nindMax-mono (Iso.fun CℕIso k) lt
 
 
-%       max∞-lub : ∀ {o1 o2 o} → o1 ≤ max∞ o → o2 ≤ max∞  o → max o1 o2 ≤ (max∞ o)
-%       max∞-lub {o1 = o1} {o2 = o2} lt1 lt2 = max-mono {o1 = o1} {o2 = o2} lt1 lt2 ≤⨟o max∞-idem _
 
-%       max∞-absorbL : ∀ {o1 o2 o} → o2 ≤ o1 → o1 ≤ max∞ o → max o1 o2 ≤ max∞ o
-%       max∞-absorbL lt12 lt1 = max∞-lub lt1 (lt12 ≤⨟o lt1)
+%       nindMax-≤ : ∀ {t} n → indMax t o ≤ t → nindMax t n ≤ o
+%       nindMax-≤ ℕ.zero lt = ≤-Z
+%       nindMax-≤ {o = o} (ℕ.suc n) lt = ≤-trans (indMax-monoL {t1 = nindMax t n} {t2 = o} (nindMax-≤ n lt)) lt
 
-%       max∞-distL : ∀ {o1 o2} → max (max∞ o1) (max∞ o2) ≤ max∞ (max o1 o2)
-%       max∞-distL {o1} {o2} =
-%         max∞-lub {o1 = max∞ o1} {o2 = max∞ o2} (max∞-mono max-≤L) (max∞-mono (max-≤R {o1 = o1}))
+%       indMax∞-≤ : ∀ {t} → indMax t o ≤ t → indMax∞ t ≤ o
+%       indMax∞-≤ lt = ≤-limiting  _ λ k → nindMax-≤ (Iso.fun CℕIso k) lt
+
+%       -- Convenient helper for turing < with indMax∞ into < without
+%       indMax<-∞ : ∀ {t1 t2 o} → indMax (indMax∞ (t1)) (indMax∞ t2) <o t → indMax t1 t2 <o o
+%       indMax<-∞ lt = ≤∘<-in-< (indMax-mono (indMax∞-self _) (indMax∞-self _)) lt
+
+%       indMax-<Ls : ∀ {t1 t2 t1' t2'} → indMax t1 t2 <o indMax (↑ (indMax t1 t1')) (↑ (indMax t2 t2'))
+%       indMax-<Ls {t1} {t2} {t1'} {t2'} = indMax-sucMono {t1 = t1} {t2 = t2} {t1' = indMax t1 t1'} {t2' = indMax t2 t2'}
+%         (indMax-mono {t1 = t1} {t2 = t2} (indMax-≤L) (indMax-≤L))
+
+%       indMax∞-<Ls : ∀ {t1 t2 t1' t2'} → indMax t1 t2 <o indMax (↑ (indMax (indMax∞ t1) t1')) (↑ (indMax (indMax∞ t2) t2'))
+%       indMax∞-<Ls {t1} {t2} {t1'} {t2'} =  <∘≤-in-< (indMax-<Ls {t1} {t2} {t1'} {t2'})
+%         (indMax-mono {t1 = ↑ (indMax t1 t1')} {t2 = ↑ (indMax t2 t2')}
+%           (≤-sucMono (indMax-monoL (indMax∞-self t1)))
+%           (≤-sucMono (indMax-monoL (indMax∞-self t2))))
 
 
-%       max∞-distR : ∀ {o1 o2} → max∞ (max o1 o2) ≤ max (max∞ o1) (max∞ o2)
-%       max∞-distR {o1} {o2} = ≤-limiting  _ λ k → helper {n = Iso.fun CℕIso k}
+%       indMax∞-lub : ∀ {t1 t2 o} → t1 ≤ indMax∞ t → t2 ≤ indMax∞  t → indMax t1 t2 ≤ (indMax∞ o)
+%       indMax∞-lub {t1 = t1} {t2 = t2} lt1 lt2 = indMax-mono {t1 = t1} {t2 = t2} lt1 lt2 ≤⨟ indMax∞-idem _
+
+%       indMax∞-absorbL : ∀ {t1 t2 o} → t2 ≤ t1 → t1 ≤ indMax∞ t → indMax t1 t2 ≤ indMax∞ o
+%       indMax∞-absorbL lt12 lt1 = indMax∞-lub lt1 (lt12 ≤⨟ lt1)
+
+%       indMax∞-distL : ∀ {t1 t2} → indMax (indMax∞ t1) (indMax∞ t2) ≤ indMax∞ (indMax t1 t2)
+%       indMax∞-distL {t1} {t2} =
+%         indMax∞-lub {t1 = indMax∞ t1} {t2 = indMax∞ t2} (indMax∞-mono indMax-≤L) (indMax∞-mono (indMax-≤R {t1 = t1}))
+
+
+%       indMax∞-distR : ∀ {t1 t2} → indMax∞ (indMax t1 t2) ≤ indMax (indMax∞ t1) (indMax∞ t2)
+%       indMax∞-distR {t1} {t2} = ≤-limiting  _ λ k → helper {n = Iso.fun CℕIso k}
 %         where
-%         helper : ∀ {o1 o2 n} → nmax (max o1 o2) n ≤ max (max∞ o1) (max∞ o2)
-%         helper {o1} {o2} {ℕ.zero} = ≤-Z
-%         helper {o1} {o2} {ℕ.suc n} =
-%           max-monoL {o1 = nmax (max o1 o2) n} (helper {o1 = o1} {o2} {n})
-%           ≤⨟o max-swap4 {max∞ o1} {max∞ o2} {o1} {o2}
-%           ≤⨟o max-mono {o1 = max (max∞ o1) o1} {o2 = max (max∞ o2) o2} {o1' = max∞ o1} {o2' = max∞ o2}
-%             (max∞-lub {o1 = max∞ o1} (≤-refl _) (max∞-self _))
-%             (max∞-lub {o1 = max∞ o2} (≤-refl _) (max∞-self _))
+%         helper : ∀ {t1 t2 n} → nindMax (indMax t1 t2) n ≤ indMax (indMax∞ t1) (indMax∞ t2)
+%         helper {t1} {t2} {ℕ.zero} = ≤-Z
+%         helper {t1} {t2} {ℕ.suc n} =
+%           indMax-monoL {t1 = nindMax (indMax t1 t2) n} (helper {t1 = t1} {t2} {n})
+%           ≤⨟ indMax-swap4 {indMax∞ t1} {indMax∞ t2} {t1} {t2}
+%           ≤⨟ indMax-mono {t1 = indMax (indMax∞ t1) t1} {t2 = indMax (indMax∞ t2) t2} {t1' = indMax∞ t1} {t2' = indMax∞ t2}
+%             (indMax∞-lub {t1 = indMax∞ t1} (≤-refl _) (indMax∞-self _))
+%             (indMax∞-lub {t1 = indMax∞ t2} (≤-refl _) (indMax∞-self _))
 
 
-%       max∞-cocone : ∀  {c : ℂ} (f : El c → Tree) k →
-%         f k ≤ max∞ (Lim  c f)
-%       max∞-cocone f k =  max∞-self _ ≤⨟o max∞-mono (≤-cocone  _ k (≤-refl _))
+%       indMax∞-cocone : ∀  {c : ℂ} (f : El c → Tree) k →
+%         f k ≤ indMax∞ (Lim  c f)
+%       indMax∞-cocone f k =  indMax∞-self _ ≤⨟ indMax∞-mono (≤-cocone  _ k (≤-refl _))
 
-%       -- max* : ∀ {n} → Vec Tree n → Tree
-%       -- max* [] = Z
-%       -- max* (x ∷ os) = max x (max* os)
+%       -- indMax* : ∀ {n} → Vec Tree n → Tree
+%       -- indMax* [] = Z
+%       -- indMax* (x ∷ os) = indMax x (indMax* os)
 
-%       -- max*-≤L : ∀ {n o} {os : Vec Tree n} → o ≤ max* (o ∷ os)
-%       -- max*-≤L = max-≤L
+%       -- indMax*-≤L : ∀ {n o} {os : Vec Tree n} → t ≤ indMax* (o ∷ os)
+%       -- indMax*-≤L = indMax-≤L
 
-%       -- max*-≤R : ∀ {n o} {os : Vec Tree n} → max* os ≤ max* (o ∷ os)
-%       -- max*-≤R {o = o} = max-≤R {o1 = o}
+%       -- indMax*-≤R : ∀ {n o} {os : Vec Tree n} → indMax* os ≤ indMax* (o ∷ os)
+%       -- indMax*-≤R {o = o} = indMax-≤R {t1 = o}
 
-%       -- max*-≤-n : ∀ {n} {os : Vec Tree n} (f : Fin n) → lookup f os ≤ max* os
-%       -- max*-≤-n {os = o ∷ os} Fin.zero = max*-≤L {o = o} {os = os}
-%       -- max*-≤-n {os = o ∷ os} (Fin.suc f) = max*-≤-n f ≤⨟o (max*-≤R {o = o} {os = os})
+%       -- indMax*-≤-n : ∀ {n} {os : Vec Tree n} (f : Fin n) → lookup f os ≤ indMax* os
+%       -- indMax*-≤-n {os = t ∷ os} Fin.zero = indMax*-≤L {o = o} {os = os}
+%       -- indMax*-≤-n {os = t ∷ os} (Fin.suc f) = indMax*-≤-n f ≤⨟ (indMax*-≤R {o = o} {os = os})
 
-%       -- max*-swap : ∀ {n} {os1 os2 : Vec Tree n} → max* (zipWith max os1 os2) ≤ max (max* os1) (max* os2)
-%       -- max*-swap {n = ℕ.zero} {[]} {[]} = ≤-Z
-%       -- max*-swap {n = ℕ.suc n} {o1 ∷ os1} {o2 ∷ os2} = max-monoR {o1 = max o1 o2} (max*-swap {n = n}) ≤⨟o max-swap4 {o1 = o1} {o1' = o2} {o2 = max* os1} {o2' = max* os2}
+%       -- indMax*-swap : ∀ {n} {os1 os2 : Vec Tree n} → indMax* (zipWith indMax os1 os2) ≤ indMax (indMax* os1) (indMax* os2)
+%       -- indMax*-swap {n = ℕ.zero} {[]} {[]} = ≤-Z
+%       -- indMax*-swap {n = ℕ.suc n} {t1 ∷ os1} {t2 ∷ os2} = indMax-monoR {t1 = indMax t1 t2} (indMax*-swap {n = n}) ≤⨟ indMax-swap4 {t1 = t1} {t1' = t2} {t2 = indMax* os1} {t2' = indMax* os2}
 
-%       -- max*-mono : ∀ {n} {os1 os2 : Vec Tree n} → foldr (λ (o1 , o2) rest → (o1 ≤ o2) × rest) Unit (zipWith _,_ os1 os2) → max* os1 ≤ max* os2
-%       -- max*-mono {ℕ.zero} {[]} {[]} lt = ≤-Z
-%       -- max*-mono {ℕ.suc n} {o1 ∷ os1} {o2 ∷ os2} (lt , rest) = max-mono {o1 = o1} {o1' = o2} lt (max*-mono {os1 = os1} {os2 = os2} rest)
+%       -- indMax*-mono : ∀ {n} {os1 os2 : Vec Tree n} → foldr (λ (t1 , t2) rest → (t1 ≤ t2) × rest) Unit (zipWith _,_ os1 os2) → indMax* os1 ≤ indMax* os2
+%       -- indMax*-mono {ℕ.zero} {[]} {[]} lt = ≤-Z
+%       -- indMax*-mono {ℕ.suc n} {t1 ∷ os1} {t2 ∷ os2} (lt , rest) = indMax-mono {t1 = t1} {t1' = t2} lt (indMax*-mono {os1 = os1} {os2 = os2} rest)
 
 %     -- orec : ∀  (P : Tree → Set ℓ)
 %     --   → ((x : Tree) → (rec : (y : Tree) → (_ : ∥ y <o x ∥₁) → P y ) → P x)
-%     --   → ∀ {o} → P o
+%     --   → ∀ {t} → P o
 %     -- orec P f = induction (λ x rec → f x rec) _
 %     --   where open WFI (ordWFProp)
 
 
 %     -- oPairRec : ∀  (P : Tree → Tree → Set ℓ)
 %     --   → ((x1 x2 : Tree) → (rec : (y1 y2 : Tree) → (_ : (y1 , y2) <oPair (x1 , x2)) → P y1 y2 ) → P x1 x2)
-%     --   → ∀ {o1 o2} → P o1 o2
+%     --   → ∀ {t1 t2} → P t1 t2
 %     -- oPairRec P f = induction (λ (x1 , x2) rec → f x1 x2 λ y1 y2 → rec (y1 , y2)) _
 %     --   where open WFI (oPairWF)
-
 % \end{code}
