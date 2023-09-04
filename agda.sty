@@ -558,7 +558,6 @@
 
 % Keys used by the code environment.
 \define@boolkey[Agda]{code}{hide}[true]{}
-\define@boolkey[Agda]{code}{signature}[true]{}
 \define@boolkey[Agda]{code}{inline}[true]{}
 \define@boolkey[Agda]{code}{inline*}[true]{%
   \setboolean{Agda@InlineStar}{true}}
@@ -595,17 +594,6 @@
 %
 % The implementation is based on plainhscode in lhs2TeX's
 % polycode.fmt, written by Andres Löh.
-
-%Joey's hack to only print signatures of some things
-
-\def\getline#1\par{%
-\gdef\theline{#1}#1%
-}
-
-\newenvironment{anewenvironment}{%
-  \getline%
-}{}
-
 \NewEnviron{code}[1][]{%
   % Process the options. Complain about unknown options.
   \setkeys[Agda]{code}[number]{#1}%
@@ -672,11 +660,7 @@
           \restorecolumns}}{}%
       %
       % The code.
-      \ifAgda@code@signature%
-        \begin{anewenvironment}\BODY\end{anewenvironment}\theline%
-  \else%
       \BODY%
-  \fi%
     \end{pboxed}%
     %
     \ifthenelse{\boolean{Agda@Number}}{%
