@@ -24,7 +24,7 @@ of the image for a function from a code's type to ordinals.
 We borrow the trick of taking the limits over types (or in our case, codes) from \citet{ionchyMasters},
 since this lets us easily model the sizes of dependent functions and pairs.
 The ordering on these trees is defined following \citet{KrausFX21}:
-\begin{agda}
+\begin{flalign*}
   data\ \_\le_o\_ : Ord -> Ord -> \sType{}\ where\nl
   \qquad {\le_o}Z : (o : Ord) -> OZ \le_o o  \nl
   \qquad {\le_o}sucMono : (o_1 : Ord) -> (o_2 : Ord) -> o_1 \le_o o_2 -> O{\uparrow}\  o_1 \le_o O{\uparrow}\  o_2  \nl
@@ -35,20 +35,20 @@ The ordering on these trees is defined following \citet{KrausFX21}:
     \nl\qquad\qquad -> ((k : El_{Approx}\ c) -> f\ k \le_o o) -> OLim\ c\ f \le_o o\\\nl
     %
     o_1 <_o o_2 = O{\uparrow}\ o_1 \le_o o_2
-  \end{agda}
+  \end{flalign*}
   That is, zero is the smallest ordinal, the successor is monotone,
   and the limit is actually the least upper bound of the function's image.
 Unlike \citet{KrausFX21}, we do not include transitivity as a rule, but we can prove
 it as a theorem.
 The maximum function on ordinals is defined as follows:
-\begin{agda}
+\begin{flalign*}
   max_o : Ord -> Ord -> Ord\nl
   max_o\ OZ\ o = o \nl
   max_o\ o\ OZ = o \nl
   max_o\ (O{\uparrow}\ o_1)\ (O{\uparrow}\ o_2) = O{\uparrow}\ (max_o\ o_1\ o_2)\nl
   max_o\ (OLim\ c\ f)\ o = OLim\ c\ (\lambda k \ldotp max_o\ (f\ k)\ o)\nl
   max_o\ o\ (OLim\ c\ f) = OLim\ c\ (\lambda k \ldotp max_o\ o\ (f\ k))
-\end{agda}
+\end{flalign*}
 Long but straightforward proofs show that $max_{o}$ is monotone
 and computes and upper bound of its inputs.
 It reduces when given $\s{O{\uparrow}}$ for both inputs, so it is strictly monotone.
@@ -62,18 +62,18 @@ would not be strictly monotone.
 We solve the problems with $\s{max_{o}}$ using a type of sizes, which include only the subset of
 ordinals that are idempotent with respect to the maximum. We can then
 define a type of sizes with the same interface as ordinals.
-\begin{agda}
+\begin{flalign*}
   Size : \sType{} \nl
   Size = (o : Ord) \times (max_o\ o\ o \le_o o)\\\nl
 %
-  \_\sansbigvee\_ : Size -> Size -> Size\nl
-  s_1 \sansbigvee s_2 = (max_o\ (fst\ s_1)\ (fst\ s_2), \ldots)\\\nl
+  \_\bigvee\_ : Size -> Size -> Size\nl
+  s_1 \bigvee s_2 = (max_o\ (fst\ s_1)\ (fst\ s_2), \ldots)\\\nl
   %
   SZ : Size\nl
   SZ = (OZ , {\le_o}Z)\\\nl
   S{\uparrow} : Size -> Size\nl
   S{\uparrow}\ s =  (O{\uparrow}\ (fst\ s), {\le_s}sucMono\ (snd\ s))
-\end{agda}
+\end{flalign*}
 Critically, the sizes are closed under the maximum operation: if $\s{max_{o}\ o_{1}\ o_{1} \le_{o}\ o_{1}}$
 and $\s{max_{o}\ o_{2}\ o_{2} \le_{o}\ o_{2}}$, then
 $\s{max_{o}\ (max_{o}\ o_{1}\ o_{2})\ (max_{o}\ o_{1}\ o_{2}) \le (max_{o}\ o_{1}\ o_{2})}$.
@@ -87,7 +87,7 @@ The natural numbers can be defined as an inductive type, but in our Agda develop
 extra code constructor.
 Having numbers lets us take the maximum of an ordinal with itself infinitely many times, resulting in an ordinal
 that is as large as the original but idempotent with respect to $\s{max_{o}}$.
-\begin{agda}
+\begin{flalign*}
   nmax : Ord -> \bN -> Ord \nl
   nmax\ o\ Z\ = OZ\nl
   nmax\ o\ (S\ n) = omax\ (nmax\ o\ n)\ o\\ \nl
@@ -99,7 +99,7 @@ that is as large as the original but idempotent with respect to $\s{max_{o}}$.
   %
   SLim : (c : \bC\ \ell) -> (El_{Approx}\ c -> Size) -> Size\nl
   SLim\ c\ f = (max\infty\ (OLim\ c\ (\lambda k \ldotp fst\ (f\ k))) ,\ max\infty Idem )
-\end{agda}
+\end{flalign*}
 
 Sizes satisfy all the same inequalities as raw ordinals,
 listed in \cref{model:fig:size-order}.
@@ -109,7 +109,7 @@ Monotonicity, idempotence, and transitivity of $\s{\le_{s}}$ together imply
 that $\s\bigvee$ is a least upper bound,
 and strict monotonicity follows from the strict monotonicity of $\s{max_{o}}$.
 \begin{figure}
-  \begin{agda}
+  \begin{flalign*}
     \_\le_s\_ : Size -> Size -> Size\nl
     s_1 \le_s s_2 = (fst\ s_1) \le_o (fst\ s_2)\\\nl
     %
@@ -126,13 +126,13 @@ and strict monotonicity follows from the strict monotonicity of $\s{max_{o}}$.
     {\le_s}limiting : (s : Size) -> (c : \bC\ \ell) -> (f : El_{Approx}\ c -> Size)
     \nl\qquad -> ((k : El_{Approx}\ c) -> f\ k \le_s s) -> SLim\ c\ f \le_s s\\\nl
     %
-    \sansbigvee\le : (s_1 : Size) -> (s_2 : Size) -> (s_1 \le_s s_1 \sansbigvee s_2) \times (s_2 \le_2 s_1 \sansbigvee s_2)\nl
-    \sansbigvee mono : (s_1 : size) -> (s_2 : Size) -> (s'_1 : Size) -> (s'_2 : Size) \nl
-    \qquad -> (s_1 \le_s s'_1) -> (s_2 \le_s s'_2) -> (s_1 \sansbigvee s_2) \le_s (s'_1 \sansbigvee s'_2)\nl
-    \sansbigvee idem : (s : Size) -> (s \sansbigvee s) \le_s s\nl
-    \sansbigvee lub : (s_1 : size) -> (s_2 : size) -> (s : Size) \nl
-    \qquad -> (s_1 \le_s s) -> (s_2 \le_s s) -> (s_1 \sansbigvee s_2 \le_s s)
-  \end{agda}
+    \bigvee\le : (s_1 : Size) -> (s_2 : Size) -> (s_1 \le_s s_1 \bigvee s_2) \times (s_2 \le_2 s_1 \bigvee s_2)\nl
+    \bigvee mono : (s_1 : size) -> (s_2 : Size) -> (s'_1 : Size) -> (s'_2 : Size) \nl
+    \qquad -> (s_1 \le_s s'_1) -> (s_2 \le_s s'_2) -> (s_1 \bigvee s_2) \le_s (s'_1 \bigvee s'_2)\nl
+    \bigvee idem : (s : Size) -> (s \bigvee s) \le_s s\nl
+    \bigvee lub : (s_1 : size) -> (s_2 : size) -> (s : Size) \nl
+    \qquad -> (s_1 \le_s s) -> (s_2 \le_s s) -> (s_1 \bigvee s_2 \le_s s)
+  \end{flalign*}
   \caption{Ordering on Sizes}
   \label{model:fig:size-order}
 \end{figure}

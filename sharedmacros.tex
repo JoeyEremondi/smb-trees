@@ -154,8 +154,8 @@
 \newcommand{\mynote}[3][red]
     {{\color{#1} \fbox{\bfseries\sffamily\scriptsize#2}
     {\small$\blacktriangleright$\textsf{\emph{#3}}$\blacktriangleleft$}}~}
-\newcommand{\et}[1]{\mynote{ET}{#1}}
-% \newcommand{\je}[1]{\mynote{JE}{#1}}
+% \newcommand{\et}[1]{\mynote{ET}{#1}}
+\newcommand{\je}[1]{\mynote{JE}{#1}}
 % \newcommand{\et}[1]{}
 % \newcommand{\je}[1]{}
 \newcommand{\ron}[1]{\mynote{RG}{#1}}
@@ -230,7 +230,7 @@
 \newcommand\rqm{\surfstyle{\normalfont{\textbf{?}}}}
 \newcommand\rqmat[1]{\surfstyle{\normalfont{\textit{?}}_{@#1}}}
 \newcommand\gqmat[1]{\gradualstyle{\normalfont{\textbf{?}}_{#1}}}
-% \newcommand\qm{\mymathbb{?} }
+% \newcommand\qm{\mathbb{?} }
 \newcommand\err{\gradualstyle{\errsym}}
 \newcommand\errat[1]{\gradualstyle{\errsym}_{\g{#1}}}
 \newcommand\errl{\gradualstyle{\errsym_{\ell}}}
@@ -261,11 +261,11 @@
 
 % \newcommand{\sqube}{\sqsubseteq}
 % \newcommand{\sqeq}{\sqsupseteq\sqsubseteq}
-\newcommand{\bZero}{{\mymathbbZero}}
-\newcommand{\bOne}{{\mymathbbOne}}
-\newcommand{\bN}{{\mymathbbN}}
-\newcommand{\bC}{{\mymathbbC}}
-\newcommand{\bB}{{\mymathbbB}}
+\newcommand{\bZero}{{\mathbb{0}}}
+\newcommand{\bOne}{{\mathbb{1}}}
+\newcommand{\bN}{{\mathbb{N}}}
+\newcommand{\bC}{{\mathbb{C}}}
+\newcommand{\bB}{{\mathbb{B}}}
 
 
 % Stolen from Felipe's \AGT paper
@@ -359,6 +359,3 @@ nobreak=false
 
 %TODO: define this to link back?
 \newcommand{\defn}[1]{\textit{\gls{#1}}}
-
-
-

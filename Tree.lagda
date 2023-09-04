@@ -2,17 +2,13 @@
 \section{Brouwer Trees: An Introduction}
 \begin{code}[hide]
   {-# OPTIONS --rewriting #-}
-  open import Data.Nat hiding (_≤_)
+  open import Data.Nat hiding (_≤_ ; _<_)
   open import Relation.Binary.PropositionalEquality
   open import Data.Product
   open import Relation.Nullary
+  open import Iso
   module Tree where
 
-\end{code}
-
-\begin{code}
-
-  open import Iso
 \end{code}
 
 Brouwer trees  are a simple but elegant tool for proving termination of higher-order procedures.
@@ -41,7 +37,7 @@ We then generalize limits to any function whose domain is the interpretation of 
       Lim : ∀  (c : ℂ ) → (f : El c → Tree) → Tree
 \end{code}
 
-\begin{code}[hiding]
+\begin{code}[hide]
 \end{code}
 
 
@@ -71,7 +67,7 @@ a way of storing a possibly infinite number of smaller trees.
 
 Our ultimate goal is to have a well-founded ordering%
 \footnote{Technically, this is a well-founded quasi-ordering because there are pairs of
-  trees which are related by both $\leq$ and $\qeq$, but which are not propositionally equal.},
+  trees which are related by both $\leq$ and $\geq$, but which are not propositionally equal.},
 so we define a relation to order Brouwer trees.
 
 \begin{code}
@@ -88,120 +84,144 @@ so we define a relation to order Brouwer trees.
         → (∀ k → f k ≤ t)
         → Lim c f ≤ t
 
+      \end{code}
+
+      This relation is reflexive:
+\begin{code}
+    ≤-refl : ∀ t → t ≤ t
+    ≤-refl Z = ≤-Z
+    ≤-refl (↑ t) = ≤-sucMono (≤-refl t)
+    ≤-refl (Lim c f)
+      = ≤-limiting f (λ k → ≤-cocone f k (≤-refl (f k)))
 \end{code}
-The ordering is based on the one presented by \citet{KRAUS2023113843}, but we modify it
+\begin{code}[hide]
+    ≤-reflEq : ∀ {t1 t2} → t1 ≡ t2 → t1 ≤ t2
+    ≤-reflEq refl = ≤-refl _
+\end{code}
+
+      Crucially, it is also transitive, making the relation a preorder.
+We modify our the order relation from that of \citet{KRAUS2023113843}
 so that transitivity can be proven constructively, rather than adding it as a constructor
 for the relation. This allows us to prove well-foundedness of the relation without needing
 quotient types or other advanced features.
 
 \begin{code}
-
-    ≤-refl : ∀ t → t ≤ t
-    ≤-refl Z = ≤-Z
-    ≤-refl (↑ t) = ≤-sucMono (≤-refl t)
-    ≤-refl (Lim c f) = ≤-limiting f (λ k → ≤-cocone f k (≤-refl (f k)))
-
-\end{code}
-
-\begin{code}
-
-
-    ≤-reflEq : ∀ {t1 t2} → t1 ≡ t2 → t1 ≤ t2
-    ≤-reflEq refl = ≤-refl _
-
-\end{code}
-
-\begin{code}
-
-
     ≤-trans : ∀ {t1 t2 t3} → t1 ≤ t2 → t2 ≤ t3 → t1 ≤ t3
     ≤-trans ≤-Z p23 = ≤-Z
-    ≤-trans (≤-sucMono p12) (≤-sucMono p23) = ≤-sucMono (≤-trans p12 p23)
-    ≤-trans p12 (≤-cocone f k p23) = ≤-cocone f k (≤-trans p12 p23)
-    ≤-trans (≤-limiting f x) p23 = ≤-limiting f (λ k → ≤-trans (x k) p23)
-    ≤-trans (≤-cocone f k p12) (≤-limiting .f x) = ≤-trans p12 (x k)
-
+    ≤-trans (≤-sucMono p12) (≤-sucMono p23)
+      = ≤-sucMono (≤-trans p12 p23)
+    ≤-trans p12 (≤-cocone f k p23)
+      = ≤-cocone f k (≤-trans p12 p23)
+    ≤-trans (≤-limiting f x) p23
+      = ≤-limiting f (λ k → ≤-trans (x k) p23)
+    ≤-trans (≤-cocone f k p12) (≤-limiting .f x)
+      = ≤-trans p12 (x k)
 \end{code}
 
-\begin{code}
-
+\begin{code}[hide]
+    extLim : ∀   {c : ℂ}
+      →  (f1 f2 : El c → Tree)
+      → (∀ k → f1 k ≤ f2 k)
+      → Lim c f1 ≤ Lim c f2
+    extLim {c = c} f1 f2 all
+      = ≤-limiting f1 (λ k → ≤-cocone f2 k (all k))
 
     infixr 10 _≤⨟_
-
 \end{code}
 
+We create an infix version of transitivity for more readable construction of proofs:
 \begin{code}
-
-
     _≤⨟_ :  ∀ {t1 t2 t3} → t1 ≤ t2 → t2 ≤ t3 → t1 ≤ t3
     lt1 ≤⨟ lt2 = ≤-trans lt1 lt2
-
 \end{code}
 
+\subsubsection{Strict Ordering}
+
+We can define a strictly-less-than relation in terms of our less-than relation
+and the successor constructor:
 \begin{code}
+    _<_ : Tree → Tree → Set ℓ
+    t1 < t2 = ↑ t1 ≤ t2
+  \end{code}
 
+  That is, a $t_{1}$ is strictly smaller than $t_{2}$ if the tree one-size larger than $t_{1}$ is as small as $t_{2}$.
+  This relation has the properties one expects of a strictly-less-than
+  relation: it is a transitive  sub-relation of the less-than relation,
+  and no tree is strictly smaller than zero.
+  \je{TODO more?}
 
-    _<o_ : Tree → Tree → Set ℓ
-    t1 <o t2 = ↑ t1 ≤ t2
-
+\begin{code}
     ≤↑t : ∀ t → t ≤ ↑ t
     ≤↑t Z = ≤-Z
     ≤↑t (↑ t) = ≤-sucMono (≤↑t t)
-    ≤↑t (Lim c f) = ≤-limiting f λ k → ≤-trans (≤↑t (f k)) (≤-sucMono (≤-cocone f k (≤-refl (f k))))
+    ≤↑t (Lim c f)
+      = ≤-limiting f λ k →
+        (≤↑t (f k))
+        ≤⨟ (≤-sucMono (≤-cocone f k (≤-refl (f k))))
+  \end{code}
 
-
-    <-in-≤ : ∀ {x y} → x <o y → x ≤ y
+\begin{code}
+    <-in-≤ : ∀ {x y} → x < y → x ≤ y
     <-in-≤ pf = ≤-trans (≤↑t _) pf
 
-
-    -- https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html#3168
-    -- TODO: proper credit
-    <∘≤-in-< : ∀ {x y z} → x <o y → y ≤ z → x <o z
+    <∘≤-in-< : ∀ {x y z} → x < y → y ≤ z → x < z
     <∘≤-in-< x<y y≤z = ≤-trans x<y y≤z
 
-    -- https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html#3168
-    -- TODO: proper credit
-    ≤∘<-in-< : ∀ {x y z} → x ≤ y → y <o z → x <o z
+    ≤∘<-in-< : ∀ {x y z} → x ≤ y → y < z → x < z
     ≤∘<-in-< {x} {y} {z} x≤y y<z = ≤-trans (≤-sucMono x≤y) y<z
 
+    ¬<Z : ∀ t → ¬(t < Z)
+    ¬<Z t ()
+  \end{code}
+
+
+  \begin{code}[hide]
     -- underLim : ∀   {c : ℂ} (k : ℂ) t →  (f : El c → Tree) → (∀ k → t ≤ f k) → t ≤ Lim c f
     -- underLim {c = c} k t f all = ≤-trans (≤-cocone (λ _ → t) {!!} (≤-refl t)) (≤-limiting (λ _ → t) (λ k → ≤-cocone f k (all k)))
-
-    extLim : ∀   {c : ℂ} →  (f1 f2 : El c → Tree) → (∀ k → f1 k ≤ f2 k) → Lim c f1 ≤ Lim c f2
-    extLim {c = c} f1 f2 all = ≤-limiting f1 (λ k → ≤-cocone f2 k (all k))
+  \end{code}
 
 
+
+
+
+
+\begin{code}[hide]
     existsLim : ∀  {c1 : ℂ} {c2 : ℂ} →  (f1 : El c1  → Tree) (f2 : El  c2  → Tree) → (∀ k1 → Σ[ k2 ∈ El  c2 ] f1 k1 ≤ f2 k2) → Lim  c1 f1 ≤ Lim  c2 f2
     existsLim {æ1} {æ2} f1 f2 allex = ≤-limiting  f1 (λ k → ≤-cocone f2 (proj₁ (allex k)) (proj₂ (allex k)))
+\end{code}
 
+\subsection{Well Founded Induction}
 
-    ¬Z<↑o : ∀  t → ¬ ((↑ t) ≤ Z)
-    ¬Z<↑o t ()
-
+\begin{code}
 
     open import Induction.WellFounded
-    access : ∀ {x} → Acc _<o_ x → WfRec _<o_ (Acc _<o_) x
+    access : ∀ {x} → Acc _<_ x → WfRec _<_ (Acc _<_) x
     access (acc r) = r
 
-    -- https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html#3168
-    -- TODO: proper credit
-    smaller-accessible : (x : Tree) → Acc _<o_ x → ∀ y → y ≤ x → Acc _<o_ y
-    smaller-accessible x isAcc y x<y = acc (λ y' y'<y → access isAcc y' (<∘≤-in-< y'<y x<y))
+    smaller-accessible : (x : Tree)
+      → Acc _<_ x → ∀ y → y ≤ x → Acc _<_ y
+    smaller-accessible x isAcc y x<y
+      = acc (λ y' y'<y → access isAcc y' (<∘≤-in-< y'<y x<y))
 
-    -- https://cj-xu.github.io/agda/constructive-ordinals-in-hott/BrouwerTree.Code.Results.html#3168
-    -- TODO: proper credit
-    ordWF : WellFounded _<o_
+    ordWF : WellFounded _<_
     ordWF Z = acc λ _ ()
-    ordWF (↑ x) = acc (λ { y (≤-sucMono y≤x) → smaller-accessible x (ordWF x) y y≤x})
+    ordWF (↑ x)
+      = acc (λ { y (≤-sucMono y≤x)
+        → smaller-accessible x (ordWF x) y y≤x})
     ordWF (Lim c f) = acc helper
       where
-        helper : (y : Tree) → (y <o Lim c f) → Acc _<o_ y
-        helper y (≤-cocone .f k y<fk) = smaller-accessible (f k) (ordWF (f k)) y (<-in-≤ y<fk)
-
-
+        helper : (y : Tree) → (y < Lim c f)
+          → Acc _<_ y
+        helper y (≤-cocone .f k y<fk)
+          = smaller-accessible (f k)
+            (ordWF (f k)) y (<-in-≤ y<fk)
 
 \end{code}
 
+
+\section{First Attempts at a Join}
+
+\subsection{Limit-based Maximum}
 
 \begin{code}
     if0 : ℕ → Tree → Tree → Tree
@@ -211,6 +231,13 @@ quotient types or other advanced features.
     limMax : Tree → Tree → Tree
     limMax t1 t2 = Lim Cℕ λ k → if0 (Iso.fun CℕIso k) t1 t2
 
+
+\end{code}
+
+This version of the maximum has several of the properties we want from a
+maximum function: it is monotone, and is a true least-upper-bound of its inputs.
+
+\begin{code}[signature]
     limMax≤L : ∀ {t1 t2} → t1 ≤ limMax t1 t2
     limMax≤L {t1} {t2}
         = ≤-cocone _ (Iso.inv CℕIso 0)
@@ -219,6 +246,9 @@ quotient types or other advanced features.
             (sym (Iso.rightInv CℕIso 0))
             (≤-refl t1))
 
+\end{code}
+
+\begin{code}[signature]
     limMax≤R : ∀ {t1 t2} → t2 ≤ limMax t1 t2
     limMax≤R {t1} {t2}
         = ≤-cocone _ (Iso.inv CℕIso 1)
@@ -227,6 +257,9 @@ quotient types or other advanced features.
             (sym (Iso.rightInv CℕIso 1))
             (≤-refl t2))
 
+\end{code}
+
+\begin{code}[signature]
     limMaxIdem : ∀ {t} → limMax t t ≤ t
     limMaxIdem {t} = ≤-limiting _ helper
       where
@@ -234,7 +267,9 @@ quotient types or other advanced features.
         helper k with Iso.fun CℕIso k
         ... | zero = ≤-refl t
         ... | suc n = ≤-refl t
+\end{code}
 
+\begin{code}[signature]
     limMaxMono : ∀ {t1 t2 t1' t2'} → t1 ≤ t1' → t2 ≤ t2' → limMax t1 t2 ≤ limMax t1' t2'
     limMaxMono {t1} {t2} {t1'} {t2'} lt1 lt2 = extLim _ _ helper
       where
@@ -246,10 +281,17 @@ quotient types or other advanced features.
 
     limMaxLUB : ∀ {t1 t2 t} → t1 ≤ t → t2 ≤ t → limMax t1 t2 ≤ t
     limMaxLUB lt1 lt2 = limMaxMono lt1 lt2 ≤⨟ limMaxIdem
+  \end{code}
 
-\end{code}
+  \begin{code}
+    limMaxCommut : ∀ {t1 t2} → limMax t1 t2 ≤ limMax t2 t1
+    limMaxCommut = limMaxLUB limMax≤R limMax≤L
+    \end{code}
+
+  \subsubsection{Limitation: Strict Monotonicity}
 
 
+\subsection{Recursive Maximum}
 
 \begin{code}
 
@@ -310,12 +352,9 @@ quotient types or other advanced features.
       ... | IndMaxLim-Suc {t1} {t2} = ≤-sucMono (indMax-≤R {t1 = t1} {t2 = t2})
 \end{code}
 
-
-
-\begin{code}
-
+\begin{code}[signature]
       indMax-monoR : ∀ {t1 t2 t2'} → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1 t2'
-      indMax-monoR' : ∀ {t1 t2 t2'} → t2 <o t2' → indMax t1 t2 <o indMax (↑ t1) t2'
+      indMax-monoR' : ∀ {t1 t2 t2'} → t2 < t2' → indMax t1 t2 < indMax (↑ t1) t2'
 
       indMax-monoR {t1} {t2} {t2'} lt with indMaxView t1 t2 in eq1 | indMaxView t1 t2' in eq2
       ... | IndMaxZ-L  | v2  = ≤-trans lt (≤-reflEq (cong indMax' eq2))
@@ -337,50 +376,57 @@ quotient types or other advanced features.
         = limMax≤R ≤⨟ limMaxMono (≤-refl _) ( ≤-cocone _ k (indMax-monoR' {t1 = t1} lt))
 \end{code}
 
+\begin{code}
+      indMax-monoL : ∀ {t1 t1' t2} → t1 ≤ t1' → indMax t1 t2 ≤ indMax t1' t2
+      indMax-monoL' : ∀ {t1 t1' t2} → t1 < t1' → indMax t1 t2 < indMax t1' (↑ t2)
+      indMax-monoL {t1} {t1'} {t2} lt with indMaxView t1 t2 in eq1 | indMaxView t1' t2 in eq2
+      ... | IndMaxZ-L | v2 = ≤-trans (indMax-≤R {t1 = t1'}) (≤-reflEq (cong indMax' eq2))
+      ... | IndMaxZ-R | v2 = ≤-trans lt (≤-trans (indMax-≤L {t1 = t1'}) (≤-reflEq (cong indMax' eq2)))
+      indMax-monoL {.(Lim _ _)} {.(Lim _ f)} {t2} (≤-cocone f k lt) | IndMaxLim-L  | IndMaxLim-L
+        = limMaxMono (≤-refl _) (≤-cocone _ k (limMax≤R ≤⨟ indMax-monoL lt )) --≤-cocone (λ x → indMax (f x) t2) k (indMax-monoL lt)
+      indMax-monoL {.(Lim _ _)} {t1'} {t2} (≤-limiting f lt) | IndMaxLim-L |  v2
+        = limMaxLUB
+          (indMax-≤R ≤⨟ ≤-reflEq (cong indMax' eq2))
+          (≤-limiting (λ x₁ → indMax (f x₁) t2) λ k → ≤-trans (indMax-monoL (lt k)) (≤-reflEq (cong indMax' eq2)))
+      indMax-monoL {.Z} {.Z} {.(Lim _ _)} ≤-Z | IndMaxLim-R neq  | IndMaxZ-L
+        = limMaxLUB ≤-Z (≤-refl _)
+      indMax-monoL  {.(Lim _ f)} {.Z} {.(Lim _ _)} (≤-limiting f x) | IndMaxLim-R neq | IndMaxZ-L
+        with () ← neq refl
+      indMax-monoL {t1} {.(Lim _ _)} {.(Lim _ _)} (≤-cocone _ k lt) | IndMaxLim-R {f = f} neq | IndMaxLim-L {f = f'}
+        =  limMaxCommut ≤⨟ {!lim!}
+        -- limMaxLUB
+        --   ( lt  ≤⨟ ≤-cocone _ k indMax-≤L ≤⨟ limMax≤R)
+        --   (≤-limiting _ λ k → {!!})
+        -- ≤-limiting (λ x → indMax t1 (f x)) (λ y → ≤-cocone (λ x → indMax (f' x) (Lim _ _)) k
+          -- (≤-trans (indMax-monoL lt) (indMax-monoR {t1 = f' k} (≤-cocone f y (≤-refl _)))))
+      ... | IndMaxLim-R neq | IndMaxLim-R {f = f} neq' = {!!}
+      -- extLim (λ x → indMax t1 (f x)) (λ x → indMax t1' (f x)) (λ k → indMax-monoL lt)
+      indMax-monoL {.(↑ _)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | IndMaxLim-Suc  | IndMaxLim-Suc
+        = ≤-sucMono (indMax-monoL lt)
+      indMax-monoL {.(↑ _)} {.(Lim _ f)} {.(↑ _)} (≤-cocone f k lt) | IndMaxLim-Suc  | IndMaxLim-L
+        = {!!} -- ≤-cocone (λ x → indMax (f x) (↑ _)) k (indMax-monoL' lt)
+
+      indMax-monoL' {t1} {t1'} {t2} lt with indMaxView t1 t2 in eq1 | indMaxView t1' t2 in eq2
+      indMax-monoL' {t1} {.(↑ _)} {t2} (≤-sucMono lt) | v1 | v2 = ≤-sucMono (≤-trans (≤-reflEq (cong indMax' (sym eq1))) (indMax-monoL lt))
+      indMax-monoL' {t1} {.(Lim _ f)} {t2} (≤-cocone f k lt) | v1 | v2
+        = {!!} -- ≤-cocone _ k (≤-trans (≤-sucMono (≤-reflEq (cong indMax' (sym eq1)))) (indMax-monoL' lt))
+\end{code}
+\subsubsection{Limitation: Idempotence}
 
 
 
 
 
-
-
-
-
-%       indMax-monoL : ∀ {t1 t1' t2} → t1 ≤ t1' → indMax t1 t2 ≤ indMax t1' t2
-%       indMax-monoL' : ∀ {t1 t1' t2} → t1 <o t1' → indMax t1 t2 <o indMax t1' (↑ t2)
-%       indMax-monoL {t1} {t1'} {t2} lt with indMaxView t1 t2 in eq1 | indMaxView t1' t2 in eq2
-%       ... | IndMaxZ-L | v2 = ≤-trans (indMax-≤R {t1 = t1'}) (≤-reflEq (cong indMax' eq2))
-%       ... | IndMaxZ-R | v2 = ≤-trans lt (≤-trans (indMax-≤L {t1 = t1'}) (≤-reflEq (cong indMax' eq2)))
-%       indMax-monoL {.(Lim _ _)} {.(Lim _ f)} {t2} (≤-cocone f k lt) | IndMaxLim-L  | IndMaxLim-L
-%         = ≤-cocone (λ x → indMax (f x) t2) k (indMax-monoL lt)
-%       indMax-monoL {.(Lim _ _)} {t1'} {t2} (≤-limiting f lt) | IndMaxLim-L |  v2
-%         = ≤-limiting (λ x₁ → indMax (f x₁) t2) λ k → ≤-trans (indMax-monoL (lt k)) (≤-reflEq (cong indMax' eq2))
-%       indMax-monoL {.Z} {.Z} {.(Lim _ _)} ≤-Z | IndMaxLim-R neq  | IndMaxZ-L  = ≤-refl _
-%       indMax-monoL  {.(Lim _ f)} {.Z} {.(Lim _ _)} (≤-limiting f x) | IndMaxLim-R neq | IndMaxZ-L
-%         with () ← neq refl
-%       indMax-monoL {t1} {.(Lim _ _)} {.(Lim _ _)} (≤-cocone _ k lt) | IndMaxLim-R {f = f} neq | IndMaxLim-L {f = f'}
-%         = ≤-limiting (λ x → indMax t1 (f x)) (λ y → ≤-cocone (λ x → indMax (f' x) (Lim _ _)) k
-%           (≤-trans (indMax-monoL lt) (indMax-monoR {t1 = f' k} (≤-cocone f y (≤-refl _)))))
-%       ... | IndMaxLim-R neq | IndMaxLim-R {f = f} neq' = extLim (λ x → indMax t1 (f x)) (λ x → indMax t1' (f x)) (λ k → indMax-monoL lt)
-%       indMax-monoL {.(↑ _)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | IndMaxLim-Suc  | IndMaxLim-Suc
-%         = ≤-sucMono (indMax-monoL lt)
-%       indMax-monoL {.(↑ _)} {.(Lim _ f)} {.(↑ _)} (≤-cocone f k lt) | IndMaxLim-Suc  | IndMaxLim-L
-%         = ≤-cocone (λ x → indMax (f x) (↑ _)) k (indMax-monoL' lt)
-
-%       indMax-monoL' {t1} {t1'} {t2} lt with indMaxView t1 t2 in eq1 | indMaxView t1' t2 in eq2
-%       indMax-monoL' {t1} {.(↑ _)} {t2} (≤-sucMono lt) | v1 | v2 = ≤-sucMono (≤-trans (≤-reflEq (cong indMax' (sym eq1))) (indMax-monoL lt))
-%       indMax-monoL' {t1} {.(Lim _ f)} {t2} (≤-cocone f k lt) | v1 | v2
-%         = ≤-cocone _ k (≤-trans (≤-sucMono (≤-reflEq (cong indMax' (sym eq1)))) (indMax-monoL' lt))
 
 
 %       indMax-mono : ∀ {t1 t2 t1' t2'} → t1 ≤ t1' → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1' t2'
 %       indMax-mono {t1' = t1'} lt1 lt2 = ≤-trans (indMax-monoL lt1) (indMax-monoR {t1 = t1'} lt2)
 
-%       indMax-strictMono : ∀ {t1 t2 t1' t2'} → t1 <o t1' → t2 <o t2' → indMax t1 t2 <o indMax t1' t2'
+%       indMax-strictMono : ∀ {t1 t2 t1' t2'} → t1 < t1' → t2 < t2' → indMax t1 t2 < indMax t1' t2'
 %       indMax-strictMono lt1 lt2 = indMax-mono lt1 lt2
 
 
-%       indMax-sucMono : ∀ {t1 t2 t1' t2'} → indMax t1 t2 ≤ indMax t1' t2' → indMax t1 t2 <o indMax (↑ t1') (↑ t2')
+%       indMax-sucMono : ∀ {t1 t2 t1' t2'} → indMax t1 t2 ≤ indMax t1' t2' → indMax t1 t2 < indMax (↑ t1') (↑ t2')
 %       indMax-sucMono lt = ≤-sucMono lt
 
 
@@ -543,14 +589,14 @@ quotient types or other advanced features.
 %       indMax∞-≤ lt = ≤-limiting  _ λ k → nindMax-≤ (Iso.fun CℕIso k) lt
 
 %       -- Convenient helper for turing < with indMax∞ into < without
-%       indMax<-∞ : ∀ {t1 t2 o} → indMax (indMax∞ (t1)) (indMax∞ t2) <o t → indMax t1 t2 <o o
+%       indMax<-∞ : ∀ {t1 t2 o} → indMax (indMax∞ (t1)) (indMax∞ t2) < t → indMax t1 t2 < o
 %       indMax<-∞ lt = ≤∘<-in-< (indMax-mono (indMax∞-self _) (indMax∞-self _)) lt
 
-%       indMax-<Ls : ∀ {t1 t2 t1' t2'} → indMax t1 t2 <o indMax (↑ (indMax t1 t1')) (↑ (indMax t2 t2'))
+%       indMax-<Ls : ∀ {t1 t2 t1' t2'} → indMax t1 t2 < indMax (↑ (indMax t1 t1')) (↑ (indMax t2 t2'))
 %       indMax-<Ls {t1} {t2} {t1'} {t2'} = indMax-sucMono {t1 = t1} {t2 = t2} {t1' = indMax t1 t1'} {t2' = indMax t2 t2'}
 %         (indMax-mono {t1 = t1} {t2 = t2} (indMax-≤L) (indMax-≤L))
 
-%       indMax∞-<Ls : ∀ {t1 t2 t1' t2'} → indMax t1 t2 <o indMax (↑ (indMax (indMax∞ t1) t1')) (↑ (indMax (indMax∞ t2) t2'))
+%       indMax∞-<Ls : ∀ {t1 t2 t1' t2'} → indMax t1 t2 < indMax (↑ (indMax (indMax∞ t1) t1')) (↑ (indMax (indMax∞ t2) t2'))
 %       indMax∞-<Ls {t1} {t2} {t1'} {t2'} =  <∘≤-in-< (indMax-<Ls {t1} {t2} {t1'} {t2'})
 %         (indMax-mono {t1 = ↑ (indMax t1 t1')} {t2 = ↑ (indMax t2 t2')}
 %           (≤-sucMono (indMax-monoL (indMax∞-self t1)))
@@ -608,14 +654,14 @@ quotient types or other advanced features.
 %       -- indMax*-mono {ℕ.suc n} {t1 ∷ os1} {t2 ∷ os2} (lt , rest) = indMax-mono {t1 = t1} {t1' = t2} lt (indMax*-mono {os1 = os1} {os2 = os2} rest)
 
 %     -- orec : ∀  (P : Tree → Set ℓ)
-%     --   → ((x : Tree) → (rec : (y : Tree) → (_ : ∥ y <o x ∥₁) → P y ) → P x)
+%     --   → ((x : Tree) → (rec : (y : Tree) → (_ : ∥ y < x ∥₁) → P y ) → P x)
 %     --   → ∀ {t} → P o
 %     -- orec P f = induction (λ x rec → f x rec) _
 %     --   where open WFI (ordWFProp)
 
 
 %     -- oPairRec : ∀  (P : Tree → Tree → Set ℓ)
-%     --   → ((x1 x2 : Tree) → (rec : (y1 y2 : Tree) → (_ : (y1 , y2) <oPair (x1 , x2)) → P y1 y2 ) → P x1 x2)
+%     --   → ((x1 x2 : Tree) → (rec : (y1 y2 : Tree) → (_ : (y1 , y2) <Pair (x1 , x2)) → P y1 y2 ) → P x1 x2)
 %     --   → ∀ {t1 t2} → P t1 t2
 %     -- oPairRec P f = induction (λ (x1 , x2) rec → f x1 x2 λ y1 y2 → rec (y1 , y2)) _
 %     --   where open WFI (oPairWF)

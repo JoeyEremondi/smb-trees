@@ -147,35 +147,33 @@
 
 % \usepackage{fontspec}
 % \usepackage{inconsolata}
-\usepackage[tt=false, type1=true]{libertine}
-\usepackage[libertine]{newtxmath}
-\usepackage{sansmath}
-% \DeclareMathAlphabet{\mathbbm}{U}{bbm}{m}{n}
-% \DeclareMathAlphabet{\mymathbb}{U}{bbold}{m}{n}
-\DeclareSymbolFont{mymathbb}{U}{bbold}{m}{n}
-\SetMathAlphabet{\mathsfsl}{sans}{\sansmathencoding}{\sfdefault}{m}{n}
-\SetMathAlphabet{\mathsf}{sans}{\sansmathencoding}{\sfdefault}{m}{n}
-\SetMathAlphabet{\mathrm}{sans}{\sansmathencoding}{\rmdefault}{m}{n}
-\SetMathAlphabet{\mathbf}{sans}{\sansmathencoding}{\rmdefault}{m}{n}
-% \DeclareMathAlphabet{\mathbb}{U}{bbold}{m}{n}
-% \SetMathAlphabet{\mathbb}{sans}{U}{bbold}{m}{n}
-% \SetMathAlphabet{\mathbb}{normal}{U}{bbold}{m}{n}
-% \SetMathAlphabet{\mathbb}{bold}{U}{bbold}{m}{n}
-% \SetSymbolFont{largesymbols}{sans}{OMX}{bbold}{m}{n}
-% \SetSymbolFont{numbers}{mymathbb}{OMX}{bbold}{m}{n}
-\SetSymbolFont{largesymbols}{sans}{OMX}{libertine}{m}{n}
-\DeclareMathDelimiter{(}{\mathopen} {operators}{"28}{largesymbols}{"00}
-\DeclareMathDelimiter{)}{\mathclose}{operators}{"29}{largesymbols}{"01}
-\DeclareMathSymbol{\sansbigvee}{1}{largesymbols}{'137}
-\DeclareMathSymbol{\mymathbbOne}{3}{mymathbb}{"31}
-\DeclareMathSymbol{\mymathbbOne}{3}{mymathbb}{"31}
-\DeclareMathSymbol{\mymathbbZero}{3}{mymathbb}{"30}
-\DeclareMathSymbol{\mymathbbN}{3}{mymathbb}{'116}
-\DeclareMathSymbol{\mymathbbB}{3}{mymathbb}{"42}
-\DeclareMathSymbol{\mymathbbC}{3}{mymathbb}{"43}
-\DeclareMathSymbol{\mymathbbColon}{3}{mymathbb}{'072}
-\DeclareMathSymbol{\mymathbbSemiColon}{3}{mymathbb}{'073}
-  \usepackage{fonttable}
+% \usepackage{sansmath}
+% % \DeclareMathAlphabet{\mathbbm}{U}{bbm}{m}{n}
+% % \DeclareMathAlphabet{\mymathbb}{U}{bbold}{m}{n}
+% \DeclareSymbolFont{mymathbb}{U}{bbold}{m}{n}
+% \SetMathAlphabet{\mathsfsl}{sans}{\sansmathencoding}{\sfdefault}{m}{n}
+% \SetMathAlphabet{\mathsf}{sans}{\sansmathencoding}{\sfdefault}{m}{n}
+% \SetMathAlphabet{\mathrm}{sans}{\sansmathencoding}{\rmdefault}{m}{n}
+% \SetMathAlphabet{\mathbf}{sans}{\sansmathencoding}{\rmdefault}{m}{n}
+% % \DeclareMathAlphabet{\mathbb}{U}{bbold}{m}{n}
+% % \SetMathAlphabet{\mathbb}{sans}{U}{bbold}{m}{n}
+% % \SetMathAlphabet{\mathbb}{normal}{U}{bbold}{m}{n}
+% % \SetMathAlphabet{\mathbb}{bold}{U}{bbold}{m}{n}
+% % \SetSymbolFont{largesymbols}{sans}{OMX}{bbold}{m}{n}
+% % \SetSymbolFont{numbers}{mymathbb}{OMX}{bbold}{m}{n}
+% \SetSymbolFont{largesymbols}{sans}{OMX}{libertine}{m}{n}
+% \DeclareMathDelimiter{(}{\mathopen} {operators}{"28}{largesymbols}{"00}
+% \DeclareMathDelimiter{)}{\mathclose}{operators}{"29}{largesymbols}{"01}
+% \DeclareMathSymbol{\sansbigvee}{1}{largesymbols}{'137}
+% \DeclareMathSymbol{\mymathbbOne}{3}{mymathbb}{"31}
+% \DeclareMathSymbol{\mymathbbOne}{3}{mymathbb}{"31}
+% \DeclareMathSymbol{\mymathbbZero}{3}{mymathbb}{"30}
+% \DeclareMathSymbol{\mymathbbN}{3}{mymathbb}{'116}
+% \DeclareMathSymbol{\mymathbbB}{3}{mymathbb}{"42}
+% \DeclareMathSymbol{\mymathbbC}{3}{mymathbb}{"43}
+% \DeclareMathSymbol{\mymathbbColon}{3}{mymathbb}{'072}
+% \DeclareMathSymbol{\mymathbbSemiColon}{3}{mymathbb}{'073}
+%   \usepackage{fonttable}
 % \usepackage{sansmath} %TODO: re-enable
 \usepackage{scalerel}
 \usepackage{float}
@@ -274,23 +272,6 @@
 
 
 
-\usepackage{environ}
-\NewEnviron{agda}{%
-  \staticcolor
-  \begin{sansmath}
-  \begin{flalign*}
-    & \BODY
-  \end{flalign*}
-  \end{sansmath}
-}
-
-
-\NewEnviron{agdafont}{%
-  \staticcolor
-  \begin{sansmath}
-    \BODY
-  \end{sansmath}
-}
 
 \newcommand{\nl}{\\&}
 \let\oldAE\AE
