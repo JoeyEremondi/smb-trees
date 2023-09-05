@@ -1,0 +1,42 @@
+% !TEX root =  main.tex
+\section{Introduction}
+Dependently typed languages, such as Agda~\citep{TODO}, Coq~\citep{coqart},
+Idris~\citep{TODO} and Lean~\citep{TODO}, bridge the gap between theorem
+proving and programming.
+
+Functions defined in dependently typed languages are typically required to be
+\textit{total}: they must provably halt in all inputs. Since the halting problem
+is undecidable, recursively-defined functions must be written in such a way that the type checker
+can mechanically deduce termination.
+Some functions only make recursive calls to structurally-smaller arguments,
+so their termination is apparent to the compiler. However, some functions
+cannot be easily expressed using structural recursion.
+For such functions, the programmer must instead use \textit{well founded recursion}, showing that there is some ordering, with no infinitely-descending
+chains, for which each recursive call is strictly smaller according to this ordering. For example, the typical quicksort algorithm is not structurally recursive, but can use well founded recursion on the length of the lists being sorted.
+
+While numeric orderings work for first-order data.
+
+There are many formulations of ordinals, each with their own advantages and disadvantages.
+
+
+\subsection{Contributions}
+
+This work defines \textit{inflationary Brouwer Trees}, henceforth IB-trees,
+a new presentation of ordinals that hit a sort of sweet-spot for defining functions by
+well founded recursion. Specifically, IB-trees:
+
+\begin{itemize}
+  \item are strictly orderd by a well founded relation;
+  \item have a maximum operator which computes a least-upper bound;
+  \item are \textit{strictly-monotone} with respect to the maximum: if $a < b$ and $c < d$, then $\max\ a\ c < \max\ b\ d$;
+  \item support taking the limits of arbitrary sequences.
+\end{itemize}
+
+In algebraic terminology, IB-trees are a bounded join-semilattice with an inflationary
+endomorphism~\citep{TODO}, a well-founded strict order, and suprema of infinite sequences indexed by types from some universe.
+
+\subsection{Relevance}
+
+\subsubsection{Well Founded Recursion}
+
+\subsubsection{Sized Types}
