@@ -1,0 +1,330 @@
+% !TEX root =  main.tex
+
+\section{A Strictly-Monotone, Idempotent Join}
+
+\begin{code}[hide]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Data.Nat}\AgdaSpace{}%
+\AgdaKeyword{hiding}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Relation.Binary.PropositionalEquality}\<%
+\\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Data.Product}\<%
+\\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Data.Maybe}\<%
+\\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Relation.Nullary}\<%
+\\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Iso}\<%
+\end{code}
+
+\begin{code}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{Idem}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{ℓ}\AgdaSymbol{\}}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaSymbol{(}\AgdaBound{ℂ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Set}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaBound{El}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Set}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaBound{Cℕ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{CℕIso}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{Iso}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{Cℕ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaDatatype{ℕ}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{Raw}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{RawTree}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Maybe}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaBound{Cℕ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{maybeNatIso}\AgdaSpace{}%
+\AgdaBound{CℕIso}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaComment{--\ open\ IndMaxInhab\ (λ\ \AgdaUnderscore{}\ →\ nothing)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ record\ Tree\ :\ Set\ ℓ\ where}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ constructor\ MkJIB}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ field}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ \ \ sTree\ :\ Tree}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ \ \ sIdem\ :\ indMax\ sTree\ sTree\ ≤\ sTree}\<%
+\\
+\>[0]\AgdaComment{--\ open\ Tree}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ record\ \AgdaUnderscore{}≤'\AgdaUnderscore{}\ (s1\ s2\ :\ Tree)\ :\ Set\ ℓ\ where}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ constructor\ mk≤}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ inductive}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ field}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ \ \ get≤\ :\ sTree\ s1\ ≤\ sTree\ s2}\<%
+\\
+\>[0]\AgdaComment{--\ open\ \AgdaUnderscore{}≤'\AgdaUnderscore{}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ opaque}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ unfolding\ indMax}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ max\ :\ Tree\ →\ Tree\ →\ Tree}\<%
+\\
+\>[0]\AgdaComment{--\ \ \ max\ s1\ s2\ =\ MkJIB\ (indMax\ (sTree\ s1)\ (sTree\ s2))\ (indMax-swap4\ ≤⨟\ indMax-mono\ (sIdem\ s1)\ (sIdem\ s2))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ SZ\ :\ Tree}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ SZ\ =\ MkJIB\ Z\ Raw.≤-Z}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ S↑\ :\ Tree\ →\ Tree}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ S↑\ (MkJIB\ o\ pf)\ =\ MkJIB\ (↑\ o)\ (\ subst\ (λ\ x\ →\ x\ ≤\ ↑\ o)\ (sym\ indMax-↑)\ (≤-sucMono\ pf)\ )}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ ≤↑'\ :\ ∀\ s\ →\ s\ ≤'\ S↑\ s}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ ≤↑'\ s\ =\ \ mk≤\ (≤↑t\ \AgdaUnderscore{})}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ \AgdaUnderscore{}<'\AgdaUnderscore{}\ :\ Tree\ →\ Tree\ →\ Set\ ℓ}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \AgdaUnderscore{}<'\AgdaUnderscore{}\ s1\ s2\ =\ (S↑\ s1)\ ≤'\ s2}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ SLim\ :\ ∀\ \ \ (c\ :\ ℂ)\ →\ (f\ :\ El\ c\ →\ Tree)\ →\ Tree}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ SLim\ c\ f\ =}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \ \ MkJIB}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \ \ (indMax∞\ (Lim\ c\ (maybe′\ (λ\ x\ →\ sTree\ (f\ x))\ Z)))}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \ \ (indMax∞-idem\ \AgdaUnderscore{})}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --MkJIB\ (indMax∞\ (Lim\ c\ (λ\ x\ →\ sTree\ (f\ x))))\ (\ indMax∞-idem\ (Lim\ c\ (λ\ x\ →\ sTree\ (f\ x)))\ )}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-Z\ :\ ∀\ \{s\}\ →\ SZ\ ≤'\ s}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-Z\ =\ \ mk≤\ ≤-Z}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-sucMono\ :\ ∀\ \{s1\ s2\}\ →\ s1\ ≤'\ s2\ →\ S↑\ s1\ ≤'\ S↑\ s2}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-sucMono\ (mk≤\ lt)\ =\ mk≤\ (≤-sucMono\ lt)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ infixr\ 10\ \AgdaUnderscore{}≤⨟'\AgdaUnderscore{}}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \AgdaUnderscore{}≤⨟'\AgdaUnderscore{}\ :\ ∀\ \{s1\ s2\ s3\}\ →\ s1\ ≤'\ s2\ →\ s2\ ≤'\ s3\ →\ s1\ ≤'\ s3}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \AgdaUnderscore{}≤⨟'\AgdaUnderscore{}\ (mk≤\ lt1)\ (mk≤\ lt2)\ =\ mk≤\ (≤-trans\ lt1\ lt2)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-refl\ :\ ∀\ \{s\}\ →\ s\ ≤'\ s}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-refl\ =\ \ mk≤\ (≤-refl\ \AgdaUnderscore{})}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-cocone\ :\ ∀\ \ \ \{c\ :\ ℂ\}\ →\ \{f\ :\ El\ c\ →\ Tree\}}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \ \ →\ ∀\ k\ →\ f\ k\ ≤'\ SLim\ c\ f}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-cocone\ \{c\ =\ c\}\ \{f\ =\ f\}\ k\ =\ mk≤\ (≤-cocone\ \AgdaUnderscore{}\ (just\ k)\ (≤-refl\ \AgdaUnderscore{})\ ≤⨟\ indMax∞-self\ (Lim\ c\ \AgdaUnderscore{}))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-limiting\ :\ ∀\ \ \ \{c\ :\ ℂ\}\ →\ \{f\ :\ El\ c\ →\ Tree\}}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \ \ →\ \{s\ :\ Tree\}}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ \ \ →\ (∀\ k\ →\ f\ k\ ≤'\ s)\ →\ SLim\ c\ f\ ≤'\ s}\<%
+\\
+\>[0]\AgdaComment{--\ --\ \ \ ≤'-limiting\ \{f\ =\ f\}\ \{s\ =\ MkJIB\ o\ idem\}\ lt\ =\ mk≤\ (≤-trans\ (indMax∞-mono\ (≤-limiting\ \AgdaUnderscore{}\ λ\ k\ →\ get≤\ (lt\ k)))\ \ (indMax∞-≤\ idem))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ ≤'-extLim\ :\ ∀\ \ \{c\ :\ ℂ\}\ →\ \{f1\ f2\ :\ El\ c\ →\ Tree\}}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ \ \ →\ (∀\ k\ →\ f1\ k\ ≤'\ f2\ k)}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ \ \ →\ SLim\ c\ f1\ ≤'\ SLim\ c\ f2}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ ≤'-extLim\ \{f1\ =\ f1\}\ \{f2\}\ lt\ =\ mk≤\ (\ indMax∞-mono\ (extLim\ (λ\ x\ →\ sTree\ (f1\ x))\ (λ\ x\ →\ sTree\ (f2\ x))\ λ\ k\ →\ get≤\ (lt\ k)))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ ≤'-extExists\ :\ ∀\ \ \{c\ :\ ℂ\}\ →\ \{f1\ f2\ :\ El\ c\ →\ Tree\}}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ \ \ →\ (∀\ k1\ →\ Σ[\ k2\ ∈\ El\ c\ ]\ f1\ k1\ ≤'\ f2\ k2)}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ \ \ →\ SLim\ c\ f1\ ≤'\ SLim\ c\ f2}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ ≤'-extExists\ \{f1\ =\ f1\}\ \{f2\}\ lt\ =\ ≤'-limiting\ (λ\ k1\ →\ proj₂\ (lt\ k1)\ ≤⨟\ ≤'-cocone\ (proj₁\ (lt\ k1)))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ ¬Z<↑\ :\ ∀\ \ s\ →\ ¬\ ((S↑\ s)\ ≤'\ SZ)}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ ¬Z<↑\ s\ pf\ =\ ¬<Z\ (sTree\ s)\ (get≤\ pf)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-≤L\ :\ ∀\ \{s1\ s2\}\ →\ s1\ ≤'\ max\ s1\ s2}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-≤L\ =\ mk≤\ indMax-≤L}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-≤R\ :\ ∀\ \{s1\ s2\}\ →\ s2\ ≤'\ max\ s1\ s2}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-≤R\ =\ \ mk≤\ indMax-≤R}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-mono\ :\ ∀\ \{s1\ s1'\ s2\ s2'\}\ →\ s1\ ≤'\ s1'\ →\ s2\ ≤'\ s2'\ →}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ \ \ max\ s1\ s2\ ≤'\ max\ s1'\ s2'}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-mono\ lt1\ lt2\ =\ mk≤\ (indMax-mono\ (get≤\ lt1)\ (get≤\ lt2))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-monoR\ :\ ∀\ \{s1\ s2\ s2'\}\ →\ s2\ ≤'\ s2'\ →\ max\ s1\ s2\ ≤'\ max\ s1\ s2'}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-monoR\ \{s1\}\ \{s2\}\ \{s2'\}\ lt\ =\ max-mono\ \{s1\ =\ s1\}\ \{s1'\ =\ s1\}\ \{s2\ =\ s2\}\ \{s2'\ =\ s2'\}\ (≤'-refl\ \{s1\})\ lt}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-monoL\ :\ ∀\ \{s1\ s1'\ s2\}\ →\ s1\ ≤'\ s1'\ →\ max\ s1\ s2\ ≤'\ max\ s1'\ s2}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-monoL\ \{s1\}\ \{s1'\}\ \{s2\}\ lt\ =\ max-mono\ \{s1\}\ \{s1'\}\ \{s2\}\ \{s2\}\ lt\ (≤'-refl\ \{s2\})}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-idem\ :\ ∀\ \{s\}\ →\ max\ s\ s\ ≤'\ s}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-idem\ \{s\ =\ MkJIB\ o\ pf\}\ =\ mk≤\ pf}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-commut\ :\ ∀\ s1\ s2\ →\ max\ s1\ s2\ ≤'\ max\ s2\ s1}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-commut\ s1\ s2\ =\ \ mk≤\ (indMax-commut\ (sTree\ s1)\ (sTree\ s2))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-assocL\ :\ ∀\ s1\ s2\ s3\ →\ max\ s1\ (max\ s2\ s3)\ ≤'\ max\ (max\ s1\ s2)\ s3}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-assocL\ s1\ s2\ s3\ =\ mk≤\ (indMax-assocL\ \AgdaUnderscore{}\ \AgdaUnderscore{}\ \AgdaUnderscore{})}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-assocR\ :\ ∀\ s1\ s2\ s3\ →\ \ max\ (max\ s1\ s2)\ s3\ ≤'\ max\ s1\ (max\ s2\ s3)}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-assocR\ s1\ s2\ s3\ =\ mk≤\ (indMax-assocR\ \AgdaUnderscore{}\ \AgdaUnderscore{}\ \AgdaUnderscore{})}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-swap4\ :\ ∀\ \{s1\ s1'\ s2\ s2'\}\ →\ max\ (max\ s1\ s1')\ (max\ s2\ s2')\ ≤'\ max\ (max\ s1\ s2)\ (max\ s1'\ s2')}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-swap4\ =\ \ mk≤\ indMax-swap4}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-strictMono\ :\ ∀\ \{s1\ s1'\ s2\ s2'\}\ →\ s1\ <'\ s1'\ →\ s2\ <'\ s2'\ →\ max\ s1\ s2\ <'\ max\ s1'\ s2'}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-strictMono\ lt1\ lt2\ =\ mk≤\ (indMax-strictMono\ (get≤\ lt1)\ (get≤\ lt2))}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-sucMono\ :\ ∀\ \{s1\ s2\ s1'\ s2'\}\ →\ max\ s1\ s2\ ≤'\ max\ s1'\ s2'\ →\ max\ s1\ s2\ <'\ max\ (S↑\ s1')\ (S↑\ s2')}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \ \ max-sucMono\ lt\ =\ \ mk≤\ (indMax-sucMono\ (get≤\ lt))}\<%
+\\
+\>[0]\AgdaComment{--\ --\ --\ \textbackslash{}end\{code\}}\<%
