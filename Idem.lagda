@@ -18,126 +18,136 @@ module Idem {ℓ}
     (Cℕ : ℂ) (CℕIso : Iso (El Cℕ) ℕ ) where
 
 module Raw where
-  open import RawTree ℂ (λ c → Maybe (El c)) Cℕ (maybeNatIso CℕIso)
--- open IndMaxInhab (λ _ → nothing)
+  open import RawTree ℂ (λ c → Maybe (El c)) Cℕ (maybeNatIso CℕIso) public
+  \end{code}
+
+\begin{code}[hide]
+open import IndMax ℂ (λ c → Maybe (El c)) Cℕ (maybeNatIso CℕIso) (λ c → nothing)
+open import InfinityMax ℂ (λ c → Maybe (El c)) Cℕ (maybeNatIso CℕIso) (λ c → nothing)
+\end{code}
+
+\begin{code}
 
 
 
--- record Tree : Set ℓ where
---   constructor MkJIB
---   field
---     sTree : Tree
---     sIdem : indMax sTree sTree ≤ sTree
--- open Tree
+record Tree : Set ℓ where
+  constructor MkTree
+  field
+    sTree : Raw.Tree
+    sIdem : (indMax sTree sTree) Raw.≤ sTree
+open Tree
 
 
--- record _≤'_ (s1 s2 : Tree) : Set ℓ where
---   constructor mk≤
---   inductive
---   field
---     get≤ : sTree s1 ≤ sTree s2
--- open _≤'_
+record _≤_ (s1 s2 : Tree) : Set ℓ where
+  constructor mk≤
+  inductive
+  field
+    get≤ : (sTree s1) Raw.≤ (sTree s2)
+open _≤_
 
--- opaque
---   unfolding indMax
---   max : Tree → Tree → Tree
---   max s1 s2 = MkJIB (indMax (sTree s1) (sTree s2)) (indMax-swap4 ≤⨟ indMax-mono (sIdem s1) (sIdem s2))
-
-
--- --   SZ : Tree
--- --   SZ = MkJIB Z Raw.≤-Z
+opaque
+  unfolding indMax
+  max : Tree → Tree → Tree
+  max s1 s2 = MkTree (indMax (sTree s1) (sTree s2)) (indMax-swap4 Raw.≤⨟ indMax-mono (sIdem s1) (sIdem s2))
 
 
--- --   S↑ : Tree → Tree
--- --   S↑ (MkJIB o pf) = MkJIB (↑ o) ( subst (λ x → x ≤ ↑ o) (sym indMax-↑) (≤-sucMono pf) )
-
--- --   ≤↑' : ∀ s → s ≤' S↑ s
--- --   ≤↑' s =  mk≤ (≤↑t _)
-
--- --   _<'_ : Tree → Tree → Set ℓ
--- --   _<'_ s1 s2 = (S↑ s1) ≤' s2
+  SZ : Tree
+  SZ = MkTree Raw.Z Raw.≤-Z
 
 
+  S↑ : Tree → Tree
+  S↑ (MkTree o pf) = MkTree (Raw.↑ o) ( subst (λ x → x Raw.≤ Raw.↑ o) (sym indMax-↑) (Raw.≤-sucMono pf) )
+
+  ≤↑' : ∀ s → s ≤ S↑ s
+  ≤↑' s =  mk≤ (Raw.≤↑t _)
+
+  _<'_ : Tree → Tree → Set ℓ
+  _<'_ s1 s2 = (S↑ s1) ≤ s2
 
 
--- --   SLim : ∀   (c : ℂ) → (f : El c → Tree) → Tree
--- --   SLim c f =
--- --     MkJIB
--- --     (indMax∞ (Lim c (maybe′ (λ x → sTree (f x)) Z)))
--- --     (indMax∞-idem _)
--- -- --MkJIB (indMax∞ (Lim c (λ x → sTree (f x)))) ( indMax∞-idem (Lim c (λ x → sTree (f x))) )
 
 
--- --   ≤'-Z : ∀ {s} → SZ ≤' s
--- --   ≤'-Z =  mk≤ ≤-Z
-
--- --   ≤'-sucMono : ∀ {s1 s2} → s1 ≤' s2 → S↑ s1 ≤' S↑ s2
--- --   ≤'-sucMono (mk≤ lt) = mk≤ (≤-sucMono lt)
-
--- --   infixr 10 _≤⨟'_
--- --   _≤⨟'_ : ∀ {s1 s2 s3} → s1 ≤' s2 → s2 ≤' s3 → s1 ≤' s3
--- --   _≤⨟'_ (mk≤ lt1) (mk≤ lt2) = mk≤ (≤-trans lt1 lt2)
+  SLim : ∀   (c : ℂ) → (f : El c → Tree) → Tree
+  SLim c f =
+    MkTree
+    (indMax∞ (Raw.Lim c (maybe′ (λ x → sTree (f x)) Raw.Z)))
+    (indMax∞-idem _)
+--MkTree (indMax∞ (Lim c (λ x → sTree (f x)))) ( indMax∞-idem (Lim c (λ x → sTree (f x))) )
 
 
--- --   ≤'-refl : ∀ {s} → s ≤' s
--- --   ≤'-refl =  mk≤ (≤-refl _)
+  ≤-Z : ∀ {s} → SZ ≤ s
+  ≤-Z =  mk≤ Raw.≤-Z
 
--- --   ≤'-cocone : ∀   {c : ℂ} → {f : El c → Tree}
--- --     → ∀ k → f k ≤' SLim c f
--- --   ≤'-cocone {c = c} {f = f} k = mk≤ (≤-cocone _ (just k) (≤-refl _) ≤⨟ indMax∞-self (Lim c _))
+  ≤-sucMono : ∀ {s1 s2} → s1 ≤ s2 → S↑ s1 ≤ S↑ s2
+  ≤-sucMono (mk≤ lt) = mk≤ (Raw.≤-sucMono lt)
 
--- --   ≤'-limiting : ∀   {c : ℂ} → {f : El c → Tree}
--- --     → {s : Tree}
--- --     → (∀ k → f k ≤' s) → SLim c f ≤' s
--- --   ≤'-limiting {f = f} {s = MkJIB o idem} lt = mk≤ (≤-trans (indMax∞-mono (≤-limiting _ λ k → get≤ (lt k)))  (indMax∞-≤ idem))
+  infixr 10 _≤⨟_
+  _≤⨟_ : ∀ {s1 s2 s3} → s1 ≤ s2 → s2 ≤ s3 → s1 ≤ s3
+  _≤⨟_ (mk≤ lt1) (mk≤ lt2) = mk≤ (Raw.≤-trans lt1 lt2)
 
--- -- --   ≤'-extLim : ∀  {c : ℂ} → {f1 f2 : El c → Tree}
--- -- --     → (∀ k → f1 k ≤' f2 k)
--- -- --     → SLim c f1 ≤' SLim c f2
--- -- --   ≤'-extLim {f1 = f1} {f2} lt = mk≤ ( indMax∞-mono (extLim (λ x → sTree (f1 x)) (λ x → sTree (f2 x)) λ k → get≤ (lt k)))
 
--- -- --   ≤'-extExists : ∀  {c : ℂ} → {f1 f2 : El c → Tree}
--- -- --     → (∀ k1 → Σ[ k2 ∈ El c ] f1 k1 ≤' f2 k2)
--- -- --     → SLim c f1 ≤' SLim c f2
--- -- --   ≤'-extExists {f1 = f1} {f2} lt = ≤'-limiting (λ k1 → proj₂ (lt k1) ≤⨟ ≤'-cocone (proj₁ (lt k1)))
+  ≤-refl : ∀ {s} → s ≤ s
+  ≤-refl =  mk≤ (Raw.≤-refl _)
 
--- -- --   ¬Z<↑ : ∀  s → ¬ ((S↑ s) ≤' SZ)
--- -- --   ¬Z<↑ s pf = ¬<Z (sTree s) (get≤ pf)
+  ≤-cocone : ∀   {c : ℂ} → {f : El c → Tree}
+    → ∀ k → f k ≤ SLim c f
+  ≤-cocone {c = c} {f = f} k = mk≤ (Raw.≤-cocone _ (just k) (Raw.≤-refl _) Raw.≤⨟ indMax∞-self (Raw.Lim c _))
 
--- -- --   max-≤L : ∀ {s1 s2} → s1 ≤' max s1 s2
--- -- --   max-≤L = mk≤ indMax-≤L
+  ≤-limiting : ∀   {c : ℂ} → {f : El c → Tree}
+    → {s : Tree}
+    → (∀ k → f k ≤ s) → SLim c f ≤ s
+  ≤-limiting {f = f} {s = MkTree o idem} lt
+    = mk≤ (
+        indMax∞-mono (Raw.≤-limiting _ (maybe (λ k → get≤ (lt k)) Raw.≤-Z))
+        Raw.≤⨟ (indMax∞-≤ idem) )
 
--- -- --   max-≤R : ∀ {s1 s2} → s2 ≤' max s1 s2
--- -- --   max-≤R =  mk≤ indMax-≤R
+  ≤-extLim : ∀  {c : ℂ} → {f1 f2 : El c → Tree}
+    → (∀ k → f1 k ≤ f2 k)
+    → SLim c f1 ≤ SLim c f2
+  ≤-extLim lt = ≤-limiting (λ k → lt k ≤⨟ ≤-cocone k)
 
--- -- --   max-mono : ∀ {s1 s1' s2 s2'} → s1 ≤' s1' → s2 ≤' s2' →
--- -- --     max s1 s2 ≤' max s1' s2'
--- -- --   max-mono lt1 lt2 = mk≤ (indMax-mono (get≤ lt1) (get≤ lt2))
+  ≤-extExists : ∀  {c : ℂ} → {f1 f2 : El c → Tree}
+    → (∀ k1 → Σ[ k2 ∈ El c ] f1 k1 ≤ f2 k2)
+    → SLim c f1 ≤ SLim c f2
+  ≤-extExists {f1 = f1} {f2} lt = ≤-limiting (λ k1 → proj₂ (lt k1) ≤⨟ ≤-cocone (proj₁ (lt k1)))
 
--- -- --   max-monoR : ∀ {s1 s2 s2'} → s2 ≤' s2' → max s1 s2 ≤' max s1 s2'
--- -- --   max-monoR {s1} {s2} {s2'} lt = max-mono {s1 = s1} {s1' = s1} {s2 = s2} {s2' = s2'} (≤'-refl {s1}) lt
+  ¬Z<↑ : ∀  s → ¬ ((S↑ s) ≤ SZ)
+  ¬Z<↑ s pf = Raw.¬<Z (sTree s) (get≤ pf)
 
--- -- --   max-monoL : ∀ {s1 s1' s2} → s1 ≤' s1' → max s1 s2 ≤' max s1' s2
--- -- --   max-monoL {s1} {s1'} {s2} lt = max-mono {s1} {s1'} {s2} {s2} lt (≤'-refl {s2})
+  max-≤L : ∀ {s1 s2} → s1 ≤ max s1 s2
+  max-≤L = mk≤ indMax-≤L
 
--- -- --   max-idem : ∀ {s} → max s s ≤' s
--- -- --   max-idem {s = MkJIB o pf} = mk≤ pf
+  max-≤R : ∀ {s1 s2} → s2 ≤ max s1 s2
+  max-≤R =  mk≤ indMax-≤R
 
--- -- --   max-commut : ∀ s1 s2 → max s1 s2 ≤' max s2 s1
--- -- --   max-commut s1 s2 =  mk≤ (indMax-commut (sTree s1) (sTree s2))
+  max-mono : ∀ {s1 s1' s2 s2'} → s1 ≤ s1' → s2 ≤ s2' →
+    max s1 s2 ≤ max s1' s2'
+  max-mono lt1 lt2 = mk≤ (indMax-mono (get≤ lt1) (get≤ lt2))
 
--- -- --   max-assocL : ∀ s1 s2 s3 → max s1 (max s2 s3) ≤' max (max s1 s2) s3
--- -- --   max-assocL s1 s2 s3 = mk≤ (indMax-assocL _ _ _)
+  max-monoR : ∀ {s1 s2 s2'} → s2 ≤ s2' → max s1 s2 ≤ max s1 s2'
+  max-monoR {s1} {s2} {s2'} lt = max-mono {s1 = s1} {s1' = s1} {s2 = s2} {s2' = s2'} (≤-refl {s1}) lt
 
--- -- --   max-assocR : ∀ s1 s2 s3 →  max (max s1 s2) s3 ≤' max s1 (max s2 s3)
--- -- --   max-assocR s1 s2 s3 = mk≤ (indMax-assocR _ _ _)
+  max-monoL : ∀ {s1 s1' s2} → s1 ≤ s1' → max s1 s2 ≤ max s1' s2
+  max-monoL {s1} {s1'} {s2} lt = max-mono {s1} {s1'} {s2} {s2} lt (≤-refl {s2})
 
--- -- --   max-swap4 : ∀ {s1 s1' s2 s2'} → max (max s1 s1') (max s2 s2') ≤' max (max s1 s2) (max s1' s2')
--- -- --   max-swap4 =  mk≤ indMax-swap4
+  max-idem : ∀ {s} → max s s ≤ s
+  max-idem {s = MkTree o pf} = mk≤ pf
 
--- -- --   max-strictMono : ∀ {s1 s1' s2 s2'} → s1 <' s1' → s2 <' s2' → max s1 s2 <' max s1' s2'
--- -- --   max-strictMono lt1 lt2 = mk≤ (indMax-strictMono (get≤ lt1) (get≤ lt2))
+  max-commut : ∀ s1 s2 → max s1 s2 ≤ max s2 s1
+  max-commut s1 s2 =  mk≤ (indMax-commut (sTree s1) (sTree s2))
 
--- -- --   max-sucMono : ∀ {s1 s2 s1' s2'} → max s1 s2 ≤' max s1' s2' → max s1 s2 <' max (S↑ s1') (S↑ s2')
--- -- --   max-sucMono lt =  mk≤ (indMax-sucMono (get≤ lt))
--- -- -- \end{code}
+  max-assocL : ∀ s1 s2 s3 → max s1 (max s2 s3) ≤ max (max s1 s2) s3
+  max-assocL s1 s2 s3 = mk≤ (indMax-assocL _ _ _)
+
+  max-assocR : ∀ s1 s2 s3 →  max (max s1 s2) s3 ≤ max s1 (max s2 s3)
+  max-assocR s1 s2 s3 = mk≤ (indMax-assocR _ _ _)
+
+  max-swap4 : ∀ {s1 s1' s2 s2'} → max (max s1 s1') (max s2 s2') ≤ max (max s1 s2) (max s1' s2')
+  max-swap4 =  mk≤ indMax-swap4
+
+  max-strictMono : ∀ {s1 s1' s2 s2'} → s1 <' s1' → s2 <' s2' → max s1 s2 <' max s1' s2'
+  max-strictMono lt1 lt2 = mk≤ (indMax-strictMono (get≤ lt1) (get≤ lt2))
+
+  max-sucMono : ∀ {s1 s2 s1' s2'} → max s1 s2 ≤ max s1' s2' → max s1 s2 <' max (S↑ s1') (S↑ s2')
+  max-sucMono lt =  mk≤ (indMax-sucMono (get≤ lt))
+\end{code}

@@ -3,7 +3,7 @@
 
 
 
-\subsection{Recursive Maximum}
+\subsection{Well-Behaved Trees}
 
 
 \begin{code}[hide]
