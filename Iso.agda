@@ -22,3 +22,17 @@ record Iso {ℓ ℓ'} (A : Set ℓ) (B : Set ℓ') : Set (ℓ ⊔ ℓ') where
     inv : B → A
     rightInv : section fun inv
     leftInv  : retract fun inv
+
+
+open import Data.Nat
+open import Data.Maybe
+
+maybeNatIso : ∀ {ℓ} {A : Set ℓ} → Iso A ℕ → Iso (Maybe A) ℕ
+Iso.fun (maybeNatIso theIso) nothing = 0
+Iso.fun (maybeNatIso theIso) (just x) = ℕ.suc ( Iso.fun theIso x )
+Iso.inv (maybeNatIso theIso) ℕ.zero = nothing
+Iso.inv (maybeNatIso theIso) (ℕ.suc n) = just (Iso.inv theIso n)
+Iso.rightInv (maybeNatIso theIso) ℕ.zero = refl
+Iso.rightInv (maybeNatIso theIso) (ℕ.suc n) = cong ℕ.suc (Iso.rightInv theIso n)
+Iso.leftInv (maybeNatIso theIso) (just x) = cong just (Iso.leftInv theIso x)
+Iso.leftInv (maybeNatIso theIso) nothing = refl
