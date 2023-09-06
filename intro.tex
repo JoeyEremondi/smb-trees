@@ -1,5 +1,7 @@
 % !TEX root =  main.tex
 \section{Introduction}
+
+\subsection{Recursion and Dependent Types}
 Dependently typed languages, such as Agda~\citep{TODO}, Coq~\citep{coqart},
 Idris~\citep{TODO} and Lean~\citep{TODO}, bridge the gap between theorem
 proving and programming.
@@ -14,9 +16,11 @@ cannot be easily expressed using structural recursion.
 For such functions, the programmer must instead use \textit{well founded recursion}, showing that there is some ordering, with no infinitely-descending
 chains, for which each recursive call is strictly smaller according to this ordering. For example, the typical quicksort algorithm is not structurally recursive, but can use well founded recursion on the length of the lists being sorted.
 
-While numeric orderings work for first-order data.
+\subsection{Ordinals}
 
-There are many formulations of ordinals, each with their own advantages and disadvantages.
+While numeric orderings work for first-order data, they cannot f
+
+There are many formulations of ordinals in dependent type theory, each with their own advantages and disadvantages.
 
 
 \subsection{Contributions}
@@ -26,17 +30,47 @@ a new presentation of ordinals that hit a sort of sweet-spot for defining functi
 well founded recursion. Specifically, IB-trees:
 
 \begin{itemize}
-  \item are strictly orderd by a well founded relation;
+  \item are strictly ordered by a well founded relation;
   \item have a maximum operator which computes a least-upper bound;
   \item are \textit{strictly-monotone} with respect to the maximum: if $a < b$ and $c < d$, then $\max\ a\ c < \max\ b\ d$;
-  \item support taking the limits of arbitrary sequences.
+  \item can compute the limits of arbitrary sequences;
+  \item are light in axiomatic requirements: they are defined without using axiom K,
+        univalence, quotient types, or higher inductive types.
 \end{itemize}
 
 In algebraic terminology, IB-trees are a bounded join-semilattice with an inflationary
 endomorphism~\citep{TODO}, a well-founded strict order, and suprema of infinite sequences indexed by types from some universe.
 
-\subsection{Relevance}
+\subsection{Uses for IB-trees}
 
 \subsubsection{Well Founded Recursion}
 
-\subsubsection{Sized Types}
+Having a maximum operator for ordinals is particularly useful when traversing over multiple higher order
+data structures in parallel, where neither argument takes priority over the other.
+
+Recently
+
+\subsubsection{Syntactic Models and Sized Types}
+
+An alternate way view of our contribution is as a tool for modelling sized types~\citep{TODO}.
+The implementation of sized types in Agda has been shown to be unsound~\citep{TODO}, due to the interaction
+between propositional equality and the top size $\infty$ satisfying $\infty < \infty$.
+\Citep{Chan2022} defines a dependently typed language with sized types that does not have a top size, proving it consistent
+using a syntactic model based on Brouwer trees.
+
+IB-trees provide the capability to extend existing syntactic models to sized types
+with a maximum operator.
+This brings the capability of consistent sized types closder to feature parity with Agda,
+which has a maximum operator for its sizes~\citep{TODO}, while still maintaining logical consistency.
+
+Even without sizes integrated into types, IB-trees are useful for creating syntactic models of dependently typed languages and defining terms by well founded recursion in these models.
+The ability to take the limit of arbitrary sequences of types makes it very easy to assign an ordinal size
+to encodings of dependent function or pair types: for $\Pi(x : A)\ldotp B$, if  $A$ has size $t_{A}$,
+and $B[x]$ has size $t_{B}[x]$ for each $x$, then the function type has size (using our notation from \cref{TODO})
+$\up (\max\ t_{A} (Lim\ A (\lambda x \ldotp B[x]))$:
+strictly larger than both the size of $A$ and the
+limit of size of $B$ for any $x : A$.
+The strict monotonicity property of IB-trees let us compare function types:
+if $A_{1}$ is strictly smaller than $A_{2}$, and for every $x$ $B_{1}[x]$ is strictly smaller than $B_{2}[y]$ for some $y$, then strict monotonicity guarantees that $\Pi(x:A_{1})\ldotp B_{1}[x]$
+is strictly smaller than $$
+\subsection{Comparison to Other Ordinal Notations}

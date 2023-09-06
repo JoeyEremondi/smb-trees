@@ -17,9 +17,6 @@
 
 \begin{code}
 
-    if0 : ℕ → Tree → Tree → Tree
-    if0 zero z s = z
-    if0 (suc n) z s = s
 
     limMax : Tree → Tree → Tree
     limMax t1 t2 = ℕLim λ n → if0 n t1 t2

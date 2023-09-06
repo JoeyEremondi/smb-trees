@@ -75,7 +75,7 @@
     indMax∞-≤ : ∀ {t} → indMax t t ≤ t → indMax∞ t ≤ t
     indMax∞-≤ lt = ≤-limiting  _ λ k → nindMax-≤ (Iso.fun CℕIso k) lt
 
-    -- Convenient helper for turing < with indMax∞ into < without
+    -- Convenient helper for turning < with indMax∞ into < without
     indMax<-∞ : ∀ {t1 t2 t} → indMax (indMax∞ (t1)) (indMax∞ t2) < t → indMax t1 t2 < t
     indMax<-∞ lt = ≤∘<-in-< (indMax-mono (indMax∞-self _) (indMax∞-self _)) lt
 

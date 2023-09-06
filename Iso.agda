@@ -36,3 +36,9 @@ Iso.rightInv (maybeNatIso theIso) ℕ.zero = refl
 Iso.rightInv (maybeNatIso theIso) (ℕ.suc n) = cong ℕ.suc (Iso.rightInv theIso n)
 Iso.leftInv (maybeNatIso theIso) (just x) = cong just (Iso.leftInv theIso x)
 Iso.leftInv (maybeNatIso theIso) nothing = refl
+
+
+if0 : ∀ {ℓ} {A : Set ℓ} →  ℕ →  A → A → A
+if0 zero z s = z
+if0 (suc n) z s = s
+

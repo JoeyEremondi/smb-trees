@@ -63,7 +63,7 @@ _<_ : Tree → Tree → Set ℓ
 _<_ s1 s2 = (↑ s1) ≤ s2
 
 opaque
-  unfolding indMax Z ↑
+  unfolding indMax Z ↑ indMaxView
   max : Tree → Tree → Tree
   max s1 s2 = MkTree (indMax (sTree s1) (sTree s2)) (indMax-swap4 Raw.≤⨟ indMax-mono (sIdem s1) (sIdem s2))
 
@@ -72,6 +72,7 @@ opaque
     MkTree
     (indMax∞ (Raw.Lim c (maybe′ (λ x → sTree (f x)) Raw.Z)))
     (indMax∞-idem _)
+
 --MkTree (indMax∞ (Lim c (λ x → sTree (f x)))) ( indMax∞-idem (Lim c (λ x → sTree (f x))) )
 
 
@@ -89,14 +90,14 @@ opaque
   ≤-refl : ∀ {s} → s ≤ s
   ≤-refl =  mk≤ (Raw.≤-refl _)
 
-  ≤-cocone : ∀   {c : ℂ} → {f : El c → Tree}
+  ≤-limUpperBound : ∀   {c : ℂ} → {f : El c → Tree}
     → ∀ k → f k ≤ Lim c f
-  ≤-cocone {c = c} {f = f} k = mk≤ (Raw.≤-cocone _ (just k) (Raw.≤-refl _) Raw.≤⨟ indMax∞-self (Raw.Lim c _))
+  ≤-limUpperBound {c = c} {f = f} k = mk≤ (Raw.≤-cocone _ (just k) (Raw.≤-refl _) Raw.≤⨟ indMax∞-self (Raw.Lim c _))
 
-  ≤-limiting : ∀   {c : ℂ} → {f : El c → Tree}
+  ≤-limLeast : ∀   {c : ℂ} → {f : El c → Tree}
     → {s : Tree}
     → (∀ k → f k ≤ s) → Lim c f ≤ s
-  ≤-limiting {f = f} {s = MkTree o idem} lt
+  ≤-limLeast {f = f} {s = MkTree o idem} lt
     = mk≤ (
         indMax∞-mono (Raw.≤-limiting _ (maybe (λ k → get≤ (lt k)) Raw.≤-Z))
         Raw.≤⨟ (indMax∞-≤ idem) )
@@ -104,12 +105,14 @@ opaque
   ≤-extLim : ∀  {c : ℂ} → {f1 f2 : El c → Tree}
     → (∀ k → f1 k ≤ f2 k)
     → Lim c f1 ≤ Lim c f2
-  ≤-extLim lt = ≤-limiting (λ k → lt k ≤⨟ ≤-cocone k)
+  ≤-extLim lt = ≤-limLeast (λ k → lt k ≤⨟ ≤-limUpperBound k)
 
-  ≤-extExists : ∀  {c : ℂ} → {f1 f2 : El c → Tree}
-    → (∀ k1 → Σ[ k2 ∈ El c ] f1 k1 ≤ f2 k2)
-    → Lim c f1 ≤ Lim c f2
-  ≤-extExists {f1 = f1} {f2} lt = ≤-limiting (λ k1 → proj₂ (lt k1) ≤⨟ ≤-cocone (proj₁ (lt k1)))
+  ≤-extExists : ∀  {c1 c2 : ℂ} → {f1 : El c1 → Tree} {f2 : El c2 → Tree}
+    → (∀ k1 → Σ[ k2 ∈ El c2 ] f1 k1 ≤ f2 k2)
+    → Lim c1 f1 ≤ Lim c2 f2
+  ≤-extExists {f1 = f1} {f2} lt = ≤-limLeast (λ k1 → proj₂ (lt k1) ≤⨟ ≤-limUpperBound (proj₁ (lt k1)))
+
+  --≤-limLeast (λ k1 → proj₂ (lt k1) ≤⨟ ≤-limUpperBound (proj₁ (lt k1)))
 
   ¬Z<↑ : ∀  s → ¬ ((↑ s) ≤ Z)
   ¬Z<↑ s pf = Raw.¬<Z (sTree s) (get≤ pf)
@@ -153,4 +156,75 @@ opaque
 
   max-sucMono : ∀ {s1 s2 s1' s2'} → max s1 s2 ≤ max s1' s2' → max s1 s2 < max (↑ s1') (↑ s2')
   max-sucMono lt =  mk≤ (indMax-sucMono (get≤ lt))
+
+
+
+ℕLim : (ℕ → Tree) → Tree
+ℕLim f = Lim Cℕ  (λ cn → f (Iso.fun CℕIso cn))
+
+max' : Tree → Tree → Tree
+max' t1 t2 = ℕLim (λ n → if0 n t1 t2)
+
+max'-≤L : ∀ {t1 t2} → t1 ≤ max' t1 t2
+max'-≤L {t1} {t2}
+    = subst (λ x → t1 ≤ if0 x t1 t2) (sym (Iso.rightInv CℕIso 0)) ≤-refl ≤⨟
+      ≤-limUpperBound  (Iso.inv CℕIso 0)
+
+max'-≤R : ∀ {t1 t2} → t2 ≤ max' t1 t2
+max'-≤R {t1} {t2}
+    = subst (λ x → t2 ≤ if0 x t1 t2) (sym (Iso.rightInv CℕIso 1)) ≤-refl ≤⨟
+      ≤-limUpperBound  (Iso.inv CℕIso 1)
+
+
+max'-Idem : ∀ {t} → max' t t ≤ t
+max'-Idem {t} = ≤-limLeast  helper
+    where
+    helper : ∀ k → if0 (Iso.fun CℕIso k) t t ≤ t
+    helper k with Iso.fun CℕIso k
+    ... | zero = ≤-refl
+    ... | suc n = ≤-refl
+
+max'-Mono : ∀ {t1 t2 t1' t2'}
+    → t1 ≤ t1' → t2 ≤ t2'
+    → max' t1 t2 ≤ max' t1' t2'
+max'-Mono {t1} {t2} {t1'} {t2'} lt1 lt2 = ≤-extLim  helper
+    where
+    helper : ∀ k → if0 (Iso.fun CℕIso k) t1 t2 ≤ if0 (Iso.fun CℕIso k) t1' t2'
+    helper k with Iso.fun CℕIso k
+    ... | zero = lt1
+    ... | suc n = lt2
+
+
+max'-LUB : ∀ {t1 t2 t} → t1 ≤ t → t2 ≤ t → max' t1 t2 ≤ t
+max'-LUB lt1 lt2 = max'-Mono lt1 lt2 ≤⨟ max'-Idem
+
+
+
+max≤max' : ∀ {t1 t2} → max t1 t2 ≤ max' t1 t2
+max≤max' = max-LUB max'-≤L max'-≤R
+
+
+max'≤max : ∀ {t1 t2} → max' t1 t2 ≤ max t1 t2
+max'≤max = max'-LUB max-≤L max-≤R
+
+
+maxLimDist : ∀ {t c f} → max (↑ t) (Lim c f) ≤ Lim c (λ k → max (↑ t) (f k))
+maxLimDist {t = t} {c} {f}
+  = max≤max' ≤⨟ ≤-limLeast (λ n → {!!}) ≤⨟ ≤-extLim (λ _ → max'≤max)
+  where
+    helper : ∀ kn →
+      if0 (Iso.fun CℕIso kn) t (Lim c f) ≤ Lim c (λ z → max' t (f z))
+    helper kn with Iso.fun CℕIso kn
+    ... | zero = {!≤-cocone!}
+    ... | suc n = {!!}
+
+--   <-Lim : ∀  {c : ℂ} → {f : El c → Tree}
+--     → Lim c f < Lim c (λ k → ↑ (f k))
+--   <-Lim {f = f} = max-≤L {s2 = Lim _ (λ k → ↑ (f k))} ≤⨟ {!≤-limLeast!} ≤⨟ max-idem
+
+-- <-extExists : ∀  {c : ℂ} → {f1 f2 : El c → Tree}
+--     → (∀ k1 → Σ[ k2 ∈ El c ] f1 k1 < f2 k2)
+--     → Lim c f1 < Lim c f2
+-- <-extExists {f1 = f1} {f2} lt = {!!} --
+
 \end{code}
