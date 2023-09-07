@@ -208,23 +208,4 @@ max'≤max : ∀ {t1 t2} → max' t1 t2 ≤ max t1 t2
 max'≤max = max'-LUB max-≤L max-≤R
 
 
-maxLimDist : ∀ {t c f} → max (↑ t) (Lim c f) ≤ Lim c (λ k → max (↑ t) (f k))
-maxLimDist {t = t} {c} {f}
-  = max≤max' ≤⨟ ≤-limLeast (λ n → {!!}) ≤⨟ ≤-extLim (λ _ → max'≤max)
-  where
-    helper : ∀ kn →
-      if0 (Iso.fun CℕIso kn) t (Lim c f) ≤ Lim c (λ z → max' t (f z))
-    helper kn with Iso.fun CℕIso kn
-    ... | zero = {!≤-cocone!}
-    ... | suc n = {!!}
-
---   <-Lim : ∀  {c : ℂ} → {f : El c → Tree}
---     → Lim c f < Lim c (λ k → ↑ (f k))
---   <-Lim {f = f} = max-≤L {s2 = Lim _ (λ k → ↑ (f k))} ≤⨟ {!≤-limLeast!} ≤⨟ max-idem
-
--- <-extExists : ∀  {c : ℂ} → {f1 f2 : El c → Tree}
---     → (∀ k1 → Σ[ k2 ∈ El c ] f1 k1 < f2 k2)
---     → Lim c f1 < Lim c f2
--- <-extExists {f1 = f1} {f2} lt = {!!} --
-
 \end{code}

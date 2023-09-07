@@ -1,5 +1,4 @@
 % !TEX root =  main.tex
-\section{Brouwer Trees: An Introduction}
 \begin{code}[hide]
   open import Data.Nat hiding (_≤_ ; _<_)
   open import Relation.Binary.PropositionalEquality
@@ -19,17 +18,6 @@ To represent the limits of uncountable sequences, we can paramterize our definit
     (Cℕ : ℂ) (CℕIso : Iso (El Cℕ) ℕ ) where
 \end{code}
 
-We then generalize limits to any function whose domain is the interpretation of some code.
-\begin{code}
-    data Tree : Set ℓ where
-      Z : Tree
-      ↑ : Tree → Tree
-      Lim : ∀  (c : ℂ ) → (f : El c → Tree) → Tree
-\end{code}
-
-\begin{code}[hide]
-\end{code}
-
 
 Our module is paramterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
 function $\mathit{El}$, which computes the type represented by each code.
@@ -41,9 +29,16 @@ However, by defining an inductive-recursive universe,
 one can still capture limits over some non-countable types, since
  $\AgdaDatatype{Tree}$ is in $\AgdaPrimitive{Set}$ whenever $\bC$ is.
 
+We then generalize limits to any function whose domain is the interpretation of some code.
+\begin{code}
+    data Tree : Set ℓ where
+      Z : Tree
+      ↑ : Tree → Tree
+      Lim : ∀  (c : ℂ ) → (f : El c → Tree) → Tree
+\end{code}
+
 The small limit constructor can be recovered from the natural-number code
 \begin{code}
-
     ℕLim : (ℕ → Tree) → Tree
     ℕLim f = Lim Cℕ  (λ cn → f (Iso.fun CℕIso cn))
 \end{code}
@@ -137,6 +132,7 @@ and the successor constructor:
   That is, a $t_{1}$ is strictly smaller than $t_{2}$ if the tree one-size larger than $t_{1}$ is as small as $t_{2}$.
   This relation has the properties one expects of a strictly-less-than
   relation: it is a transitive  sub-relation of the less-than relation,
+  every tree is strictly less than its successor,
   and no tree is strictly smaller than zero.
   \je{TODO more?}
 
@@ -172,25 +168,42 @@ and the successor constructor:
 
 
 
-
 \begin{code}[hide]
     existsLim : ∀  {c1 : ℂ} {c2 : ℂ} →  (f1 : El c1  → Tree) (f2 : El  c2  → Tree) → (∀ k1 → Σ[ k2 ∈ El  c2 ] f1 k1 ≤ f2 k2) → Lim  c1 f1 ≤ Lim  c2 f2
     existsLim {æ1} {æ2} f1 f2 allex = ≤-limiting  f1 (λ k → ≤-cocone f2 (proj₁ (allex k)) (proj₂ (allex k)))
+
+    open import Induction.WellFounded
 \end{code}
 
 \subsection{Well Founded Induction}
 
+Recall the definition of a constructive well founded relation:
+
+\input{WFTypeset}
+
+Following the construction of \citet{KRAUS2023113843},
+we can show that the strict ordering on Brouwer trees is
+well founded.
+First, we prove a helper lemma: if a value is accessible,
+then all (not necessarily strictly) smaller terms
+are are also accessible.
+%
 \begin{code}
-
-    open import Induction.WellFounded
-    access : ∀ {x} → Acc _<_ x → WfRec _<_ (Acc _<_) x
-    access (acc r) = r
-
     smaller-accessible : (x : Tree)
       → Acc _<_ x → ∀ y → y ≤ x → Acc _<_ y
-    smaller-accessible x isAcc y x<y
-      = acc (λ y' y'<y → access isAcc y' (<∘≤-in-< y'<y x<y))
-
+    smaller-accessible x (acc r) y x<y
+      = acc (λ y' y'<y → r y' (<∘≤-in-< y'<y x<y))
+\end{code}
+Then we use structural reduction to show that all terms are accesible.
+The key observations are that zero is trivially accessible,
+since no trees are strictly smaller than it,
+and that the only way to derive
+ $\uparrow t \le \AgdaSymbol{(}\AgdaInductiveConstructor{Lim}\AgdaSpace{}\
+\AgdaBound{c}\AgdaSpace{}\ 
+\AgdaBound{f}\AgdaSymbol{)}$ is with $\AgdaInductiveConstructor{≤-cocone}$,
+yielding a concrete index $k$ for which $\uparrow t \le f\ k$,
+on which we can recur.
+\begin{code}
     ordWF : WellFounded _<_
     ordWF Z = acc λ _ ()
     ordWF (↑ x)

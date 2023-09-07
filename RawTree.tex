@@ -1,5 +1,4 @@
 % !TEX root =  main.tex
-\section{Brouwer Trees: An Introduction}
 \begin{code}[hide]%
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
@@ -70,6 +69,17 @@ To represent the limits of uncountable sequences, we can paramterize our definit
 \AgdaKeyword{where}\<%
 \end{code}
 
+
+Our module is paramterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
+function $\mathit{El}$, which computes the type represented by each code.
+We require that there be a code whose interpretation is isomorphic to the natural numbers,
+as this is essential to our construction in \cref{sec:TODO}.
+Increasingly larger trees can be obtained by setting $\bC := \AgdaPrimitive{Set} \ \ell$ and
+$\mathit{El} := \mathit{id}$ for increasing $\ell$.
+However, by defining an inductive-recursive universe,
+one can still capture limits over some non-countable types, since
+ $\AgdaDatatype{Tree}$ is in $\AgdaPrimitive{Set}$ whenever $\bC$ is.
+
 We then generalize limits to any function whose domain is the interpretation of some code.
 \begin{code}%
 %
@@ -111,26 +121,9 @@ We then generalize limits to any function whose domain is the interpretation of 
 \AgdaDatatype{Tree}\<%
 \end{code}
 
-\begin{code}[hide]%
-\>[0]\<%
-\end{code}
-
-
-Our module is paramterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
-function $\mathit{El}$, which computes the type represented by each code.
-We require that there be a code whose interpretation is isomorphic to the natural numbers,
-as this is essential to our construction in \cref{sec:TODO}.
-Increasingly larger trees can be obtained by setting $\bC := \AgdaPrimitive{Set} \ \ell$ and
-$\mathit{El} := \mathit{id}$ for increasing $\ell$.
-However, by defining an inductive-recursive universe,
-one can still capture limits over some non-countable types, since
- $\AgdaDatatype{Tree}$ is in $\AgdaPrimitive{Set}$ whenever $\bC$ is.
-
 The small limit constructor can be recovered from the natural-number code
 \begin{code}%
-\>[0]\<%
-\\
-\>[0][@{}l@{\AgdaIndent{1}}]%
+%
 \>[4]\AgdaFunction{ℕLim}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{ℕ}\AgdaSpace{}%
@@ -403,12 +396,12 @@ quotient types or other advanced features.
 \AgdaBound{p23}\AgdaSymbol{)}\<%
 \\
 %
-\>[4]\AgdaCatchallClause{\AgdaFunction{≤-trans}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{p12}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaSymbol{(}}\AgdaCatchallClause{\AgdaInductiveConstructor{≤-cocone}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{f}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{k}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{p23}}\AgdaCatchallClause{\AgdaSymbol{)}}\<%
+\>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaBound{p12}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaBound{p23}\AgdaSymbol{)}\<%
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
@@ -420,11 +413,11 @@ quotient types or other advanced features.
 \AgdaBound{p23}\AgdaSymbol{)}\<%
 \\
 %
-\>[4]\AgdaCatchallClause{\AgdaFunction{≤-trans}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaSymbol{(}}\AgdaCatchallClause{\AgdaInductiveConstructor{≤-limiting}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{f}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{x}}\AgdaCatchallClause{\AgdaSymbol{)}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{p23}}\<%
+\>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p23}\<%
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
@@ -587,6 +580,7 @@ and the successor constructor:
   That is, a $t_{1}$ is strictly smaller than $t_{2}$ if the tree one-size larger than $t_{1}$ is as small as $t_{2}$.
   This relation has the properties one expects of a strictly-less-than
   relation: it is a transitive  sub-relation of the less-than relation,
+  every tree is strictly less than its successor,
   and no tree is strictly smaller than zero.
   \je{TODO more?}
 
@@ -765,7 +759,6 @@ and the successor constructor:
 
 
 
-
 \begin{code}[hide]%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[4]\AgdaFunction{existsLim}\AgdaSpace{}%
@@ -835,43 +828,29 @@ and the successor constructor:
 \AgdaSymbol{(}\AgdaField{proj₂}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{allex}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{)))}\<%
-\end{code}
-
-\subsection{Well Founded Induction}
-
-\begin{code}%
-\>[0]\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 %
 \>[4]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Induction.WellFounded}\<%
-\\
+\end{code}
+
+\subsection{Well Founded Induction}
+
+Recall the definition of a constructive well founded relation:
+
+\input{WFTypeset}
+
+Following the construction of \citet{KRAUS2023113843},
+we can show that the strict ordering on Brouwer trees is
+well founded.
+First, we prove a helper lemma: if a value is accessible,
+then all (not necessarily strictly) smaller terms
+are are also accessible.
 %
-\>[4]\AgdaFunction{access}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaDatatype{Acc}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{WfRec}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaDatatype{Acc}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\>[4]\AgdaFunction{access}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{acc}\AgdaSpace{}%
-\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{r}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\begin{code}%
 %
 \>[4]\AgdaFunction{smaller-accessible}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -899,7 +878,8 @@ and the successor constructor:
 %
 \>[4]\AgdaFunction{smaller-accessible}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{isAcc}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{acc}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaBound{x<y}\<%
 \\
@@ -910,15 +890,22 @@ and the successor constructor:
 \AgdaBound{y'}\AgdaSpace{}%
 \AgdaBound{y'<y}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{access}\AgdaSpace{}%
-\AgdaBound{isAcc}\AgdaSpace{}%
+\AgdaBound{r}\AgdaSpace{}%
 \AgdaBound{y'}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{<∘≤-in-<}\AgdaSpace{}%
 \AgdaBound{y'<y}\AgdaSpace{}%
 \AgdaBound{x<y}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+Then we use structural reduction to show that all terms are accesible.
+The key observations are that zero is trivially accessible,
+since no trees are strictly smaller than it,
+and that the only way to derive
+ $\uparrow t \le \AgdaSymbol{(}\AgdaInductiveConstructor{Lim}\AgdaSpace{}\
+\AgdaBound{c}\AgdaSpace{}\ 
+\AgdaBound{f}\AgdaSymbol{)}$ is with $\AgdaInductiveConstructor{≤-cocone}$,
+yielding a concrete index $k$ for which $\uparrow t \le f\ k$,
+on which we can recur.
+\begin{code}%
 %
 \>[4]\AgdaFunction{ordWF}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -941,14 +928,14 @@ and the successor constructor:
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[6]\AgdaSymbol{=}%
-\>[566I]\AgdaInductiveConstructor{acc}\AgdaSpace{}%
+\>[549I]\AgdaInductiveConstructor{acc}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{≤-sucMono}\AgdaSpace{}%
 \AgdaBound{y≤x}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[566I]%
+\>[.][@{}l@{}]\<[549I]%
 \>[8]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{smaller-accessible}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
@@ -998,11 +985,11 @@ and the successor constructor:
 \\
 \>[8][@{}l@{\AgdaIndent{0}}]%
 \>[10]\AgdaSymbol{=}%
-\>[602I]\AgdaFunction{smaller-accessible}\AgdaSpace{}%
+\>[585I]\AgdaFunction{smaller-accessible}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[602I]%
+\>[.][@{}l@{}]\<[585I]%
 \>[12]\AgdaSymbol{(}\AgdaFunction{ordWF}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{))}\AgdaSpace{}%

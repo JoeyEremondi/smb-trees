@@ -25,9 +25,9 @@ There are many formulations of ordinals in dependent type theory, each with thei
 
 \subsection{Contributions}
 
-This work defines \textit{inflationary Brouwer Trees}, henceforth IB-trees,
+This work defines \textit{strictly monotone Brouwer Trees}, henceforth SMB-trees,
 a new presentation of ordinals that hit a sort of sweet-spot for defining functions by
-well founded recursion. Specifically, IB-trees:
+well founded recursion. Specifically, SMB-trees:
 
 \begin{itemize}
   \item are strictly ordered by a well founded relation;
@@ -38,17 +38,41 @@ well founded recursion. Specifically, IB-trees:
         univalence, quotient types, or higher inductive types.
 \end{itemize}
 
-In algebraic terminology, IB-trees are a bounded join-semilattice with an inflationary
-endomorphism~\citep{TODO}, a well-founded strict order, and suprema of infinite sequences indexed by types from some universe.
 
-\subsection{Uses for IB-trees}
+\subsection{Uses for SMB-trees}
 
 \subsubsection{Well Founded Recursion}
 
 Having a maximum operator for ordinals is particularly useful when traversing over multiple higher order
 data structures in parallel, where neither argument takes priority over the other.
+In such a case, a lexicographic ordering cannot be used.
 
-Recently
+
+As an example, consider a unification algorithm over some encoding of types, and suppose that $\alpha$-renaming or some other restriction prevents
+structural recursion from being used.
+To solve a unification problem $ \Sigma(x : A)\ldotp B = \Sigma(x : C)\ldotp D$
+we must recursively
+solve $A = C$ and $\forall x \ldotp B[x] = D[x]$.
+However, the type of $x$ in the latter equation depends on the solution
+to the first equation, which is bounded by the size of the maximum of the sizes
+of both $A$ and $C$.
+So for each recursive call to be on a smaller size,
+the size of $a = c$ and $b = d$ must both be strictly smaller than
+$(a,b)=(c,d)$. In a lexicographic ordering where the size of the left-hand size
+dominates, we know that $a$ is strictly smaller than $(a,b)$, but we have no
+guarantees that TODO.
+Conversely, if we order unification problems by the size of the maximum of their
+two sides.
+
+
+This style of well founded induction was used to prove termination
+in a syntactic model of gradual dependent types~\citep{TODO}. There, Brouwer trees
+were used to establish termination of recursive procedures for
+combining the type information in two imprecise types.
+The decreasing metric was the maximum size of the codes for the types being combined. Brouwer trees' arbitrary limits were used to assign sizes
+to dependent function and product types, and the strict monotonicity of the
+maximum operator was essential for proving that recursive calls were on
+strictly smaller arguments.
 
 \subsubsection{Syntactic Models and Sized Types}
 
@@ -58,19 +82,50 @@ between propositional equality and the top size $\infty$ satisfying $\infty < \i
 \Citep{Chan2022} defines a dependently typed language with sized types that does not have a top size, proving it consistent
 using a syntactic model based on Brouwer trees.
 
-IB-trees provide the capability to extend existing syntactic models to sized types
+SMB-trees provide the capability to extend existing syntactic models to sized types
 with a maximum operator.
 This brings the capability of consistent sized types closder to feature parity with Agda,
 which has a maximum operator for its sizes~\citep{TODO}, while still maintaining logical consistency.
 
-Even without sizes integrated into types, IB-trees are useful for creating syntactic models of dependently typed languages and defining terms by well founded recursion in these models.
-The ability to take the limit of arbitrary sequences of types makes it very easy to assign an ordinal size
-to encodings of dependent function or pair types: for $\Pi(x : A)\ldotp B$, if  $A$ has size $t_{A}$,
-and $B[x]$ has size $t_{B}[x]$ for each $x$, then the function type has size (using our notation from \cref{TODO})
-$\up (\max\ t_{A} (Lim\ A (\lambda x \ldotp B[x]))$:
-strictly larger than both the size of $A$ and the
-limit of size of $B$ for any $x : A$.
-The strict monotonicity property of IB-trees let us compare function types:
-if $A_{1}$ is strictly smaller than $A_{2}$, and for every $x$ $B_{1}[x]$ is strictly smaller than $B_{2}[y]$ for some $y$, then strict monotonicity guarantees that $\Pi(x:A_{1})\ldotp B_{1}[x]$
-is strictly smaller than $$
-\subsection{Comparison to Other Ordinal Notations}
+\subsubsection{Algebraic Reasoning}
+Another advantage of SMB-trees is that they allow Brouwer trees to
+be interpreted using algebraic tools.
+SMB-trees can be described as
+In algebraic terminology, SMB-trees satisfy the following algebraic laws, up to the equivalence relation defined by $s \approx t := s \le t \le s $
+\begin{itemize}
+  \item Join-semlattice: the binary $\max$ is associative, commutative, and idempotent
+  \item Bounded: there is a least tree $Z$ such that $\max\ t\ Z \approx t$
+  \item Inflationary endomorphism: there is a successor operator $\uparrow$
+        such that ${\max\ (\uparrow t)\ t \approx \uparrow t}$
+        and\\ ${\up (\max\ s\ t) = \max (\uparrow s)\ (\uparrow t)}$
+\end{itemize}
+
+\Citet{BEZEM20221} describe a polynomial time algorithm for solving equations in such an algebra,
+and describe its usefulness for solving constraints involving universe levels
+in dependent type checking. While equations involving limits of infinite sequences
+are undecidable, the inflationary laws could be used to automatically discharge some equations involving sizes. This algebraic presentation is particularly
+amenable to solving equations using free extensions of algebras~\citep{corbyn:proof-synthesis,TODO}.
+
+% Even without sizes integrated into types, SMB-trees are useful for creating syntactic models of dependently typed languages and defining terms by well founded recursion in these models.
+% The ability to take the limit of arbitrary sequences of types makes it very easy to assign an ordinal size
+% to encodings of dependent function or pair types: for $\Pi(x : A)\ldotp B$, if  $A$ has size $t_{A}$,
+% and $B[x]$ has size $t_{B}[x]$ for each $x$, then the function type has size (using our notation from \cref{TODO})
+% $\up (\max\ t_{A} (Lim\ A (\lambda x \ldotp B[x]))$:
+% strictly larger than both the size of $A$ and the
+% limit of size of $B$ for any $x : A$.
+% The strict monotonicity property of SMB-trees let us compare function types:
+% if $A_{1}$ is strictly smaller than $A_{2}$, and for every $x$ $B_{1}[x]$ is strictly smaller than $B_{2}[y]$ for some $y$, then strict monotonicity guarantees that $\Pi(x:A_{1})\ldotp B_{1}[x]$
+% is strictly smaller than $$
+
+\subsection{Implementation}
+
+We have implemented SMB-trees in Agda 2.6.4.
+Our library specifically avoids Agda-specific features
+such as cubcal type theory or Axiom K, so we expect
+that the library can be easily ported to other proof assistants.
+
+This paper is written as a literate Agda document, and the definitions
+given in the paper are valid Agda code.
+Several definitions are presented with their body omitted due to
+space restrictions. The full implementation can be found in the supplementary
+materials section of this submission.
