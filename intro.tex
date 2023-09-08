@@ -95,16 +95,16 @@ In algebraic terminology, SMB-trees satisfy the following algebraic laws, up to 
 \begin{itemize}
   \item Join-semlattice: the binary $\max$ is associative, commutative, and idempotent
   \item Bounded: there is a least tree $Z$ such that $\max\ t\ Z \approx t$
-  \item Inflationary endomorphism: there is a successor operator $\uparrow$
-        such that ${\max\ (\uparrow t)\ t \approx \uparrow t}$
-        and\\ ${\up (\max\ s\ t) = \max (\uparrow s)\ (\uparrow t)}$
+  \item Inflationary endomorphism: there is a successor operator $\up$
+        such that ${\max\ (\up t)\ t \approx \up t}$
+        and\\ ${\up (\max\ s\ t) = \max (\up s)\ (\up t)}$
 \end{itemize}
 
 \Citet{BEZEM20221} describe a polynomial time algorithm for solving equations in such an algebra,
 and describe its usefulness for solving constraints involving universe levels
 in dependent type checking. While equations involving limits of infinite sequences
 are undecidable, the inflationary laws could be used to automatically discharge some equations involving sizes. This algebraic presentation is particularly
-amenable to solving equations using free extensions of algebras~\citep{corbyn:proof-synthesis,TODO}.
+amenable to solving equations using free extensions of algebras~\citep{corbyn:proof-synthesis,allais2023frex}.
 
 % Even without sizes integrated into types, SMB-trees are useful for creating syntactic models of dependently typed languages and defining terms by well founded recursion in these models.
 % The ability to take the limit of arbitrary sequences of types makes it very easy to assign an ordinal size

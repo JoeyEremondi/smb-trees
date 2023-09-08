@@ -1,4 +1,5 @@
 % !TEX root =  main.tex
+\input{agdaMacros}
 \input{intro}
 
 
@@ -8,6 +9,13 @@
 
 
 \section{First Attempts at a Join}
+In this section, we present two faulty implmentations of a join operator
+for trees. The first uses limits to define the join, but does not satisfy
+strict monotonicity. The second is defined inductively. Its satisfies
+strict monotonicity, but fails to be the least of all upper bounds,
+and requires us to assume that limits are only taken over non-empty types.
+In \cref{TODO}, we define SMB-trees a refinement of Brouwer trees that combines
+the benefits of both versions of the maximum.
   \input{LimMax}
   \input{IndMax}
 

@@ -5,6 +5,17 @@
 
 \subsection{Recursive Maximum}
 
+In our next attempt at defining a maximum operator, we
+obtain strict monotonicity by making $\max\ (\up t_1) \ (\up t_2) = \up (\max\ t_1\ t_2)$
+hold definitionally. Then, provided $\max$ is monotone, it will also be
+strictly monotone.
+
+To do this, we compute the maximum of two trees recursively,
+pattern matching on the operands. We use a \textit{view}~\citep{TODO}
+datatype to identify the cases we are matching on: we are matching on two arguments,
+which each have three possible constructors, but several cases overlap.
+Using a view type lets us avoid enumerating all nine possibilities when defining
+the maximum and proving its properties.
 
 \begin{code}[hide]
   open import Data.Nat hiding (_≤_ ; _<_)
@@ -12,6 +23,11 @@
   open import Data.Product
   open import Relation.Nullary
   open import Iso
+\end{code}
+
+To begin, we parameterize our definition over a function
+yielding some element for any code's type.
+\begin{code}
   module IndMax {ℓ}
     (ℂ : Set ℓ)
     (El : ℂ → Set ℓ)
@@ -20,6 +36,7 @@
     open import RawTree ℂ El Cℕ CℕIso
 \end{code}
 
+We then define our view type:
 \begin{code}
     private
         data IndMaxView : Tree → Tree → Set ℓ where
@@ -34,18 +51,26 @@
     opaque
 
         indMaxView : ∀ t1 t2 → IndMaxView t1 t2
+\end{code}
+Our view type has five cases. The first two handle when either input
+is zero, and the second two handle when either input is a limit.
+The final case is when both inputs are successors.
+$\agdaFunction{indMaxView}$ computes the view for any pair of trees.
+
+\begin{code}[hide]
         indMaxView Z t2 = IndMaxZ-L
         indMaxView (Lim c f) t2 = IndMaxLim-L
         indMaxView (↑ t1) Z = IndMaxZ-R
         indMaxView (↑ t1) (Lim c f) = IndMaxLim-R λ ()
         indMaxView (↑ t1) (↑ t2) = IndMaxLim-Suc
+\end{code}
 
-
+The maximum is then defined by pattern matching on the view for its arguments:
+\begin{code}
         indMax : Tree → Tree → Tree
         indMax' : ∀ {t1 t2} → IndMaxView t1 t2 → Tree
 
         indMax t1 t2 = indMax' (indMaxView t1 t2)
-
         indMax' {.Z} {t2} IndMaxZ-L = t2
         indMax' {t1} {.Z} IndMaxZ-R = t1
         indMax' {(Lim c f)} {t2} IndMaxLim-L
@@ -53,9 +78,19 @@
         indMax' {t1} {(Lim c f)} (IndMaxLim-R _)
             = Lim c (λ x → indMax t1 (f x))
         indMax' {(↑ t1)} {(↑ t2)} IndMaxLim-Suc = ↑ (indMax t1 t2)
-
-
   \end{code}
+The maximum of zero and $t$ is always $t$, and the maximum of $t$ and the limit of $f$
+is the limit of the function computing the maximum between $t$ and $f\ x$.
+Finally, the maximum of two successors is the successor of the two maxima,
+giving the definitional equality we need for strict monotonicity.
+
+This definition only works when limits of all codes are inhabited.
+The $\limiting$ constructor means that
+$\Lim\ c\ f \le \AgdaInductiveConstructor{Z}$ whenever $\AgdaBound{El}\ c$
+is uninhabited. So $\max\ \up\AgdaInductiveConstructor{Z}\ \Lim\ c\ f$
+will not actually be an upper bound for  $\up\AgdaInductiveConstructor{Z}$
+if $c$ has no inhabitants.
+In \cref{TODO} we show how to circumvent this restriction.
 
   \begin{code}
 

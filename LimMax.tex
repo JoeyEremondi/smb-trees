@@ -2,6 +2,12 @@
 
 \subsection{Limit-based Maximum}
 
+Since the limit constructor finds the least upper bound
+of the image of a function, it should be possible to define
+the maximum of two trees as a special case of general limits.
+Indeed, we can compute the maximum of $t_1$ and $t_2$ as the limit
+of the function that produces $t_1$ when given $0$ and $t_2$ otherwise.
+
 \begin{code}[hide]%
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
@@ -75,25 +81,21 @@
 \end{code}
 
 \begin{code}%
-\>[0]\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[4]\AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{Tree}\AgdaSpace{}%
+\AgdaPostulate{Tree}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaDatatype{Tree}\AgdaSpace{}%
+\AgdaPostulate{Tree}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaDatatype{Tree}\<%
+\AgdaPostulate{Tree}\<%
 \\
 %
 \>[4]\AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ℕLim}\AgdaSpace{}%
+\AgdaPostulate{ℕLim}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -101,17 +103,14 @@
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\<%
 \end{code}
 
 This version of the maximum has several of the properties we want from a
-maximum function: it is monotone, and is a true least-upper-bound of its inputs.
+maximum function: it is monotone, idempotent,
+commutative, and is a true least-upper-bound of its inputs.
 
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
+%
 \>[4]\AgdaFunction{limMax≤L}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
@@ -119,7 +118,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\<%
@@ -131,7 +130,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaSymbol{=}%
-\>[69I]\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\>[69I]\AgdaPostulate{≤-cocone}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{Iso.inv}\AgdaSpace{}%
 \AgdaBound{CℕIso}\AgdaSpace{}%
@@ -145,7 +144,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaFunction{if0}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
@@ -158,7 +157,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaNumber{0}\AgdaSymbol{))}\<%
 \\
 %
-\>[12]\AgdaSymbol{(}\AgdaFunction{≤-refl}\AgdaSpace{}%
+\>[12]\AgdaSymbol{(}\AgdaPostulate{≤-refl}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSymbol{))}\<%
 \\
 \>[0]\<%
@@ -173,7 +172,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\<%
@@ -185,7 +184,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaSymbol{=}%
-\>[98I]\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
+\>[98I]\AgdaPostulate{≤-cocone}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{Iso.inv}\AgdaSpace{}%
 \AgdaBound{CℕIso}\AgdaSpace{}%
@@ -199,7 +198,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaFunction{if0}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
@@ -212,7 +211,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaNumber{1}\AgdaSymbol{))}\<%
 \\
 %
-\>[12]\AgdaSymbol{(}\AgdaFunction{≤-refl}\AgdaSpace{}%
+\>[12]\AgdaSymbol{(}\AgdaPostulate{≤-refl}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSymbol{))}\<%
 \\
 \>[0]\<%
@@ -228,14 +227,14 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \\
 %
 \>[4]\AgdaFunction{limMaxIdem}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\AgdaPostulate{≤-limiting}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaFunction{helper}\<%
 \\
@@ -254,7 +253,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \\
 %
@@ -270,7 +269,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaSymbol{|}\AgdaSpace{}%
 \AgdaInductiveConstructor{zero}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaPostulate{≤-refl}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \\
 %
@@ -279,7 +278,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≤-refl}\AgdaSpace{}%
+\AgdaPostulate{≤-refl}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \end{code}
 
@@ -296,11 +295,11 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaBound{t1'}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaBound{t2'}\<%
 \\
 %
@@ -308,7 +307,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1'}\AgdaSpace{}%
 \AgdaBound{t2'}\<%
@@ -322,7 +321,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaBound{lt1}\AgdaSpace{}%
 \AgdaBound{lt2}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{extLim}\AgdaSpace{}%
+\AgdaPostulate{extLim}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaFunction{helper}\<%
@@ -342,7 +341,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaFunction{if0}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{Iso.fun}\AgdaSpace{}%
 \AgdaBound{CℕIso}\AgdaSpace{}%
@@ -386,17 +385,17 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \\
 %
@@ -407,7 +406,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaFunction{limMaxMono}\AgdaSpace{}%
 \AgdaBound{lt1}\AgdaSpace{}%
 \AgdaBound{lt2}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≤⨟}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤⨟}}\AgdaSpace{}%
 \AgdaFunction{limMaxIdem}\<%
 \end{code}
 
@@ -422,7 +421,7 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
 \AgdaBound{t1}\<%
@@ -436,3 +435,15 @@ maximum function: it is monotone, and is a true least-upper-bound of its inputs.
 \end{code}
 
   \subsubsection{Limitation: Strict Monotonicity}
+
+The one crucial property that this formulation lacks is that it is not
+strictly monotone: we cannot deduce $\max\ t_1\ t_1 < \max\ t'_1 \ t'_2 $
+from $t_1 < t'_1$ and $t_2 < t'_2$. This is because the only way to construct a
+proof that $\up t \le \Lim\ c\ f$
+is using the $\cocone$ constructor. So we would need to prove that
+$\up (\max\ t_{1} \ t_{2}) \le t'_{1}$ or that
+$\up (\max\ t_{1} \ t_{2}) \le t'_{2}$, which cannot be deduced from the
+premises alone.
+%
+What we want is to have $\up \max\ (t_{1}) \ t_{2} \le \max (\up t_{1})\ (\up t_{2})$, so that strict monotonicity is a direct consequence of ordinary
+monotonicity of the maximum. This is not possible when defining the constructor as a limit.
