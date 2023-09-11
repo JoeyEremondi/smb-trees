@@ -33,7 +33,11 @@ yielding some element for any code's type.
     (El : ℂ → Set ℓ)
     (Cℕ : ℂ) (CℕIso : Iso (El Cℕ) ℕ )
     (default : (c : ℂ) → El c) where
+\end{code}
+\begin{code}[hide]
     open import RawTree ℂ El Cℕ CℕIso
+    underLim : ∀   {c : ℂ}  {t} →  {f : El c → Tree} → (∀ k → t ≤ f k) → t ≤ Lim c f
+    underLim {c = c}  {t} {f} all = ≤-trans (≤-cocone (λ _ → t) (default c) (≤-refl t)) (≤-limiting (λ _ → t) (λ k → ≤-cocone f k (all k)))
 \end{code}
 
 We then define our view type:
@@ -92,11 +96,10 @@ will not actually be an upper bound for  $\up\AgdaInductiveConstructor{Z}$
 if $c$ has no inhabitants.
 In \cref{TODO} we show how to circumvent this restriction.
 
+Under the assumption that all code are inhabited, we obtain several
+of our desired properties for a maximum: it is an upper bound,
+it is monotone and strictly monotonicity, and it is associative and commutative.
   \begin{code}
-
-
-    underLim : ∀   {c : ℂ}  {t} →  {f : El c → Tree} → (∀ k → t ≤ f k) → t ≤ Lim c f
-    underLim {c = c}  {t} {f} all = ≤-trans (≤-cocone (λ _ → t) (default c) (≤-refl t)) (≤-limiting (λ _ → t) (λ k → ≤-cocone f k (all k)))
 
     opaque
         unfolding indMax indMax'
@@ -169,7 +172,6 @@ In \cref{TODO} we show how to circumvent this restriction.
 \end{code}
 
 
-\subsubsection{Limitation: Idempotence}
 
 
 
@@ -273,8 +275,17 @@ In \cref{TODO} we show how to circumvent this restriction.
             (f2 : El  c2 → Tree)
             →  indMax (Lim  c1 f1) (Lim  c2 f2) ≤ Lim  c1 (λ k1 → Lim  c2 (λ k2 → indMax (f1 k1) (f2 k2)))
         indMax-lim2R f1 f2 = extLim  _ _ (λ k1 → indMax-limR  _ (f1 k1))
-
-
-
 \end{code}
 
+
+\subsubsection{Limitation: Idempotence}
+
+The problem with an inductive definition of the maximum
+is that we cannot prove that it is idempotent. Since $\max$ is associative
+and commutative, proving idempotence is equivalent to proving that it computes
+a true least-upper-bound.
+
+The difficulty lies in showing that
+$\max\ (\Lim\ c\ f)\ (\Lim\ c\ f)\le (\Lim\ c\ f)$.
+By our definition, $\max\ (\Lim\ c\ f)\ (\Lim\ c\ f)$
+reduces to $(\Lim\ c\ \lambda x \to (\Lim\ c\ \lambda y \to \max\ (f\ x)\ (f\ y)))$.

@@ -38,11 +38,11 @@ record Tree : Set ℓ where
 open Tree
 
 
-record _≤_ (s1 s2 : Tree) : Set ℓ where
+record _≤_ (t1 t2 : Tree) : Set ℓ where
   constructor mk≤
   inductive
   field
-    get≤ : (sTree s1) Raw.≤ (sTree s2)
+    get≤ : (sTree t1) Raw.≤ (sTree t2)
 open _≤_
 
 opaque
@@ -55,17 +55,17 @@ opaque
   ↑ : Tree → Tree
   ↑ (MkTree o pf) = MkTree (Raw.↑ o) ( subst (λ x → x Raw.≤ Raw.↑ o) (sym indMax-↑) (Raw.≤-sucMono pf) )
 
-  ≤↑ : ∀ s → s ≤ ↑ s
-  ≤↑ s =  mk≤ (Raw.≤↑t _)
+  ≤↑ : ∀ t → t ≤ ↑ t
+  ≤↑ t =  mk≤ (Raw.≤↑t _)
 
 
 _<_ : Tree → Tree → Set ℓ
-_<_ s1 s2 = (↑ s1) ≤ s2
+_<_ t1 t2 = (↑ t1) ≤ t2
 
 opaque
   unfolding indMax Z ↑ indMaxView
   max : Tree → Tree → Tree
-  max s1 s2 = MkTree (indMax (sTree s1) (sTree s2)) (indMax-swap4 Raw.≤⨟ indMax-mono (sIdem s1) (sIdem s2))
+  max t1 t2 = MkTree (indMax (sTree t1) (sTree t2)) (indMax-swap4 Raw.≤⨟ indMax-mono (sIdem t1) (sIdem t2))
 
   Lim : ∀   (c : ℂ) → (f : El c → Tree) → Tree
   Lim c f =
@@ -76,18 +76,18 @@ opaque
 --MkTree (indMax∞ (Lim c (λ x → sTree (f x)))) ( indMax∞-idem (Lim c (λ x → sTree (f x))) )
 
 
-  ≤-Z : ∀ {s} → Z ≤ s
+  ≤-Z : ∀ {t} → Z ≤ t
   ≤-Z =  mk≤ Raw.≤-Z
 
-  ≤-sucMono : ∀ {s1 s2} → s1 ≤ s2 → ↑ s1 ≤ ↑ s2
+  ≤-sucMono : ∀ {t1 t2} → t1 ≤ t2 → ↑ t1 ≤ ↑ t2
   ≤-sucMono (mk≤ lt) = mk≤ (Raw.≤-sucMono lt)
 
   infixr 10 _≤⨟_
-  _≤⨟_ : ∀ {s1 s2 s3} → s1 ≤ s2 → s2 ≤ s3 → s1 ≤ s3
+  _≤⨟_ : ∀ {t1 t2 t3} → t1 ≤ t2 → t2 ≤ t3 → t1 ≤ t3
   _≤⨟_ (mk≤ lt1) (mk≤ lt2) = mk≤ (Raw.≤-trans lt1 lt2)
 
 
-  ≤-refl : ∀ {s} → s ≤ s
+  ≤-refl : ∀ {t} → t ≤ t
   ≤-refl =  mk≤ (Raw.≤-refl _)
 
   ≤-limUpperBound : ∀   {c : ℂ} → {f : El c → Tree}
@@ -95,9 +95,9 @@ opaque
   ≤-limUpperBound {c = c} {f = f} k = mk≤ (Raw.≤-cocone _ (just k) (Raw.≤-refl _) Raw.≤⨟ indMax∞-self (Raw.Lim c _))
 
   ≤-limLeast : ∀   {c : ℂ} → {f : El c → Tree}
-    → {s : Tree}
-    → (∀ k → f k ≤ s) → Lim c f ≤ s
-  ≤-limLeast {f = f} {s = MkTree o idem} lt
+    → {t : Tree}
+    → (∀ k → f k ≤ t) → Lim c f ≤ t
+  ≤-limLeast {f = f} {t = MkTree o idem} lt
     = mk≤ (
         indMax∞-mono (Raw.≤-limiting _ (maybe (λ k → get≤ (lt k)) Raw.≤-Z))
         Raw.≤⨟ (indMax∞-≤ idem) )
@@ -114,47 +114,50 @@ opaque
 
   --≤-limLeast (λ k1 → proj₂ (lt k1) ≤⨟ ≤-limUpperBound (proj₁ (lt k1)))
 
-  ¬Z<↑ : ∀  s → ¬ ((↑ s) ≤ Z)
-  ¬Z<↑ s pf = Raw.¬<Z (sTree s) (get≤ pf)
+  ¬Z<↑ : ∀  t → ¬ ((↑ t) ≤ Z)
+  ¬Z<↑ t pf = Raw.¬<Z (sTree t) (get≤ pf)
 
-  max-≤L : ∀ {s1 s2} → s1 ≤ max s1 s2
+  max-≤L : ∀ {t1 t2} → t1 ≤ max t1 t2
   max-≤L = mk≤ indMax-≤L
 
-  max-≤R : ∀ {s1 s2} → s2 ≤ max s1 s2
+  max-≤R : ∀ {t1 t2} → t2 ≤ max t1 t2
   max-≤R =  mk≤ indMax-≤R
 
-  max-mono : ∀ {s1 s1' s2 s2'} → s1 ≤ s1' → s2 ≤ s2' →
-    max s1 s2 ≤ max s1' s2'
+  max-mono : ∀ {t1 t1' t2 t2'} → t1 ≤ t1' → t2 ≤ t2' →
+    max t1 t2 ≤ max t1' t2'
   max-mono lt1 lt2 = mk≤ (indMax-mono (get≤ lt1) (get≤ lt2))
 
-  max-monoR : ∀ {s1 s2 s2'} → s2 ≤ s2' → max s1 s2 ≤ max s1 s2'
-  max-monoR {s1} {s2} {s2'} lt = max-mono {s1 = s1} {s1' = s1} {s2 = s2} {s2' = s2'} (≤-refl {s1}) lt
+  max-monoR : ∀ {t1 t2 t2'} → t2 ≤ t2' → max t1 t2 ≤ max t1 t2'
+  max-monoR {t1} {t2} {t2'} lt = max-mono {t1 = t1} {t1' = t1} {t2 = t2} {t2' = t2'} (≤-refl {t1}) lt
 
-  max-monoL : ∀ {s1 s1' s2} → s1 ≤ s1' → max s1 s2 ≤ max s1' s2
-  max-monoL {s1} {s1'} {s2} lt = max-mono {s1} {s1'} {s2} {s2} lt (≤-refl {s2})
+  max-monoL : ∀ {t1 t1' t2} → t1 ≤ t1' → max t1 t2 ≤ max t1' t2
+  max-monoL {t1} {t1'} {t2} lt = max-mono {t1} {t1'} {t2} {t2} lt (≤-refl {t2})
 
-  max-idem : ∀ {s} → max s s ≤ s
-  max-idem {s = MkTree o pf} = mk≤ pf
+  max-idem : ∀ {t} → max t t ≤ t
+  max-idem {t = MkTree o pf} = mk≤ pf
+
+  max-idem≤ : ∀ {t} → t ≤ max t t
+  max-idem≤ {t = MkTree o pf} = max-≤L
 
   max-LUB : ∀ {t1 t2 t} → t1 ≤ t → t2 ≤ t → max t1 t2 ≤ t
   max-LUB lt1 lt2 = max-mono lt1 lt2 ≤⨟ max-idem
 
-  max-commut : ∀ s1 s2 → max s1 s2 ≤ max s2 s1
-  max-commut s1 s2 =  mk≤ (indMax-commut (sTree s1) (sTree s2))
+  max-commut : ∀ t1 t2 → max t1 t2 ≤ max t2 t1
+  max-commut t1 t2 =  mk≤ (indMax-commut (sTree t1) (sTree t2))
 
-  max-assocL : ∀ s1 s2 s3 → max s1 (max s2 s3) ≤ max (max s1 s2) s3
-  max-assocL s1 s2 s3 = mk≤ (indMax-assocL _ _ _)
+  max-assocL : ∀ t1 t2 t3 → max t1 (max t2 t3) ≤ max (max t1 t2) t3
+  max-assocL t1 t2 t3 = mk≤ (indMax-assocL _ _ _)
 
-  max-assocR : ∀ s1 s2 s3 →  max (max s1 s2) s3 ≤ max s1 (max s2 s3)
-  max-assocR s1 s2 s3 = mk≤ (indMax-assocR _ _ _)
+  max-assocR : ∀ t1 t2 t3 →  max (max t1 t2) t3 ≤ max t1 (max t2 t3)
+  max-assocR t1 t2 t3 = mk≤ (indMax-assocR _ _ _)
 
-  max-swap4 : ∀ {s1 s1' s2 s2'} → max (max s1 s1') (max s2 s2') ≤ max (max s1 s2) (max s1' s2')
+  max-swap4 : ∀ {t1 t1' t2 t2'} → max (max t1 t1') (max t2 t2') ≤ max (max t1 t2) (max t1' t2')
   max-swap4 =  mk≤ indMax-swap4
 
-  max-strictMono : ∀ {s1 s1' s2 s2'} → s1 < s1' → s2 < s2' → max s1 s2 < max s1' s2'
+  max-strictMono : ∀ {t1 t1' t2 t2'} → t1 < t1' → t2 < t2' → max t1 t2 < max t1' t2'
   max-strictMono lt1 lt2 = mk≤ (indMax-strictMono (get≤ lt1) (get≤ lt2))
 
-  max-sucMono : ∀ {s1 s2 s1' s2'} → max s1 s2 ≤ max s1' s2' → max s1 s2 < max (↑ s1') (↑ s2')
+  max-sucMono : ∀ {t1 t2 t1' t2'} → max t1 t2 ≤ max t1' t2' → max t1 t2 < max (↑ t1') (↑ t2')
   max-sucMono lt =  mk≤ (indMax-sucMono (get≤ lt))
 
 
@@ -207,5 +210,29 @@ max≤max' = max-LUB max'-≤L max'-≤R
 max'≤max : ∀ {t1 t2} → max' t1 t2 ≤ max t1 t2
 max'≤max = max'-LUB max-≤L max-≤R
 
+
+limSwap : ∀ {c1 c2 } {f : El c1 → El c2 → Tree} → (Lim c1 λ x → Lim c2 λ y → f x y) ≤ Lim c2 λ y → Lim c1 λ x → f x y
+limSwap = ≤-limLeast (λ x → ≤-limLeast λ y → ≤-limUpperBound x ≤⨟ ≤-limUpperBound y   )
+
+max-swapL : ∀ {c} {f g : El c → Tree} →  Lim c (λ k → max (f k) (g k)) ≤ max (Lim c f) (Lim c g)
+max-swapL {c} {f} {g} = ≤-extLim (λ k → max≤max') ≤⨟ limSwap ≤⨟ ≤-extLim helper ≤⨟ max'≤max
+  where
+    helper : (k : El Cℕ) →
+      Lim c (λ x → if0 (Iso.fun CℕIso k) (f x) (g x)) ≤
+      if0 (Iso.fun CℕIso k) (Lim c f) (Lim c g)
+    helper kn with Iso.fun CℕIso kn
+    ... | zero = ≤-refl
+    ... | suc n = ≤-refl
+
+
+max-swapR : ∀ {c} {f g : El c → Tree} → max (Lim c f) (Lim c g) ≤ Lim c (λ k → max (f k) (g k))
+max-swapR {c} {f} {g} = max≤max' ≤⨟ ≤-extLim helper ≤⨟ limSwap ≤⨟ ≤-extLim (λ k → max'≤max) 
+  where
+    helper : (k : El Cℕ) →
+      if0 (Iso.fun CℕIso k) (Lim c f) (Lim c g) ≤
+      Lim c (λ z → if0 (Iso.fun CℕIso k) (f z) (g z))
+    helper kn with Iso.fun CℕIso kn
+    ... | zero = ≤-refl
+    ... | suc n = ≤-refl
 
 \end{code}

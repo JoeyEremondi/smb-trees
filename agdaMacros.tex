@@ -3,3 +3,49 @@
 \newcommand{\limiting}{\AgdaInductiveConstructor{≤-limiting}}
 \newcommand{\Lim}{\AgdaInductiveConstructor{Lim}}
 \newcommand{\up}{\AgdaInductiveConstructor{↑}}
+
+
+% Insert extra space before some tokens.
+\DeclareRobustCommand{\AgdaFormat}[2]{%
+  \def\ret{#2}%
+  \ifthenelse{
+    \equal{#1}{t1}
+  }{\def\ret{$t_1$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{t2}
+  }{\def\ret{$t_2$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{t1'}
+  }{\def\ret{$t'_1$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{t2'}
+  }{\def\ret{$t'_2$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{c1}
+  }{\def\ret{$c_1$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{c2}
+  }{\def\ret{$c_2$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{k1}
+  }{\def\ret{$k_1$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{k2}
+  }{\def\ret{$k_2$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{n1}
+  }{\def\ret{$n_1$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{n2}
+  }{\def\ret{$n_2$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{f1}
+  }{\def\ret{$f_1$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{f2}
+  }{\def\ret{$f_2$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{≤⨟}
+  }{\def\ret{\ $\fatsemi_{\leq}$\ }}{}%
+  \ret
+}

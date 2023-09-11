@@ -92,7 +92,8 @@ yielding some element for any code's type.
 \AgdaBound{El}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
-\\
+\end{code}
+\begin{code}[hide]%
 %
 \>[4]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
@@ -101,6 +102,69 @@ yielding some element for any code's type.
 \AgdaBound{El}\AgdaSpace{}%
 \AgdaBound{Cℕ}\AgdaSpace{}%
 \AgdaBound{CℕIso}\<%
+\\
+%
+\>[4]\AgdaFunction{underLim}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{∀}%
+\>[19]\AgdaSymbol{\{}\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{ℂ}\AgdaSymbol{\}}%
+\>[28]\AgdaSymbol{\{}\AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[35]\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{El}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPostulate{Tree}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(∀}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{t}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{t}\AgdaSpace{}%
+\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaPostulate{Lim}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{f}\<%
+\\
+%
+\>[4]\AgdaFunction{underLim}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{c}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSymbol{\}}%
+\>[22]\AgdaSymbol{\{}\AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{f}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{all}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaPostulate{≤-trans}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaPostulate{≤-cocone}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{t}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{default}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaPostulate{≤-refl}\AgdaSpace{}%
+\AgdaBound{t}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaPostulate{≤-limiting}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{t}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPostulate{≤-cocone}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{all}\AgdaSpace{}%
+\AgdaBound{k}\AgdaSymbol{)))}\<%
 \end{code}
 
 We then define our view type:
@@ -405,77 +469,14 @@ $\Lim\ c\ f \le \AgdaInductiveConstructor{Z}$ whenever $\AgdaBound{El}\ c$
 is uninhabited. So $\max\ \up\AgdaInductiveConstructor{Z}\ \Lim\ c\ f$
 will not actually be an upper bound for  $\up\AgdaInductiveConstructor{Z}$
 if $c$ has no inhabitants.
+In \cref{TODO} we show how to circumvent this restriction.
 
+Under the assumption that all code are inhabited, we obtain several
+of our desired properties for a maximum: it is an upper bound,
+it is monotone and strictly monotonicity, and it is associative and commutative.
   \begin{code}%
 \>[0]\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[4]\AgdaFunction{underLim}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}%
-\>[19]\AgdaSymbol{\{}\AgdaBound{c}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{ℂ}\AgdaSymbol{\}}%
-\>[28]\AgdaSymbol{\{}\AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}%
-\>[35]\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{El}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaPostulate{Tree}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaBound{k}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{t}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{t}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
-\AgdaPostulate{Lim}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSpace{}%
-\AgdaBound{f}\<%
-\\
-%
-\>[4]\AgdaFunction{underLim}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{c}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSymbol{\}}%
-\>[22]\AgdaSymbol{\{}\AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{f}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{all}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaPostulate{≤-trans}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaPostulate{≤-cocone}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{t}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{default}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaPostulate{≤-refl}\AgdaSpace{}%
-\AgdaBound{t}\AgdaSymbol{))}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaPostulate{≤-limiting}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{t}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{k}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaPostulate{≤-cocone}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{k}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{all}\AgdaSpace{}%
-\AgdaBound{k}\AgdaSymbol{)))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[4]\AgdaKeyword{opaque}\<%
 \\
@@ -1440,7 +1441,6 @@ if $c$ has no inhabitants.
 \end{code}
 
 
-\subsubsection{Limitation: Idempotence}
 
 
 
@@ -2628,11 +2628,17 @@ if $c$ has no inhabitants.
 \>[62]\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f1}\AgdaSpace{}%
 \AgdaBound{k1}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\<%
 \end{code}
 
+
+\subsubsection{Limitation: Idempotence}
+
+The problem with an inductive definition of the maximum
+is that we cannot prove that it is idempotent. Since $\max$ is associative
+and commutative, proving idempotence is equivalent to proving that it computes
+a true least-upper-bound.
+
+The difficulty lies in showing that
+$\max\ (\Lim\ c\ f)\ (\Lim\ c\ f)\le (\Lim\ c\ f)$.
+By our definition, $\max\ (\Lim\ c\ f)\ (\Lim\ c\ f)$
+reduces to $(\Lim\ c\ \lambda x \to (\Lim\ c\ \lambda y \to \max\ (f\ x)\ (f\ y)))$.

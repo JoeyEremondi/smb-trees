@@ -71,7 +71,14 @@ open BoundedJoinSemilattice SemiLatMod.TreeSemiLat
     × (∀ t → (∀ k → f k ≤ t) → sup ≤ t )
 ⋁-Supremum {f = f}
   = Lim _ f
-    , ≤-cocone
-    , λ t → ≤-limiting
+    , ≤-limUpperBound
+    , λ t → ≤-limLeast
+
+-- Infinite joins distribute with finite ones over the same index set
+⋁-dist : ∀ {c : ℂ} {f g : El c → Tree} →
+  (Lim c f) ∨ (Lim c g) ≈ Lim c (λ x → f x ∨ g x)
+⋁-dist = max-swapR , max-swapL
+
+
 
 \end{code}
