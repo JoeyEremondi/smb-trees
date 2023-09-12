@@ -6,8 +6,8 @@
 \subsection{Recursive Maximum}
 
 In our next attempt at defining a maximum operator, we
-obtain strict monotonicity by making $\max\ (\up t_1) \ (\up t_2) = \up (\max\ t_1\ t_2)$
-hold definitionally. Then, provided $\max$ is monotone, it will also be
+obtain strict monotonicity by making $\indMax\ (\up t_1) \ (\up t_2) = \up (\indMax\ t_1\ t_2)$
+hold definitionally. Then, provided $\indMax$ is monotone, it will also be
 strictly monotone.
 
 To do this, we compute the maximum of two trees recursively,
@@ -466,7 +466,7 @@ giving the definitional equality we need for strict monotonicity.
 This definition only works when limits of all codes are inhabited.
 The $\limiting$ constructor means that
 $\Lim\ c\ f \le \AgdaInductiveConstructor{Z}$ whenever $\AgdaBound{El}\ c$
-is uninhabited. So $\max\ \up\AgdaInductiveConstructor{Z}\ \Lim\ c\ f$
+is uninhabited. So $\indMax\ \up\AgdaInductiveConstructor{Z}\ \Lim\ c\ f$
 will not actually be an upper bound for  $\up\AgdaInductiveConstructor{Z}$
 if $c$ has no inhabitants.
 In \cref{TODO} we show how to circumvent this restriction.
@@ -2595,15 +2595,17 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
 \AgdaBound{f1}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaPostulate{Lim}%
 \>[41]\AgdaBound{c2}\AgdaSpace{}%
-\AgdaBound{f2}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSymbol{)}\<%
+\\
+\>[12][@{}l@{\AgdaIndent{0}}]%
+\>[14]\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
 \AgdaPostulate{Lim}%
-\>[55]\AgdaBound{c1}\AgdaSpace{}%
+\>[21]\AgdaBound{c1}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{k1}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaPostulate{Lim}%
-\>[71]\AgdaBound{c2}\AgdaSpace{}%
+\>[37]\AgdaBound{c2}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{k2}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -2628,17 +2630,44 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
 \>[62]\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f1}\AgdaSpace{}%
 \AgdaBound{k1}\AgdaSymbol{))}\<%
+\\
+\>[0]\<%
 \end{code}
 
 
 \subsubsection{Limitation: Idempotence}
 
 The problem with an inductive definition of the maximum
-is that we cannot prove that it is idempotent. Since $\max$ is associative
+is that we cannot prove that it is idempotent. Since $\indMax$ is associative
 and commutative, proving idempotence is equivalent to proving that it computes
 a true least-upper-bound.
 
 The difficulty lies in showing that
-$\max\ (\Lim\ c\ f)\ (\Lim\ c\ f)\le (\Lim\ c\ f)$.
-By our definition, $\max\ (\Lim\ c\ f)\ (\Lim\ c\ f)$
-reduces to $(\Lim\ c\ \lambda x \to (\Lim\ c\ \lambda y \to \max\ (f\ x)\ (f\ y)))$.
+$\indMax\ (\Lim\ c\ f)\ (\Lim\ c\ f)\le (\Lim\ c\ f)$.
+By our definition, $\indMax\ (\Lim\ c\ f)\ (\Lim\ c\ f)$
+reduces to
+\begin{displaymath}
+(\Lim\ c\ \lambda x \to (\Lim\ c\ \lambda y \to \indMax\ (f\ x)\ (f\ y))) \le \Lim\ c\ f
+\end{displaymath}
+We cannot use $\cocone$ to prove this, since  the left hand side
+is not necessarily equal to $f\ k$ for any $ k : \AgdaBound{El} \ c$.
+So the only possibility is to use $\limiting$. Applying it twice,
+along with a use of commutatativity of $\indMax$, we are left with the following goal:
+\begin{displaymath}
+ (\forall x \to (\forall  y \to \indMax\ (f\ x)\ (f\ y))) \le \Lim\ c\ f
+\end{displaymath}
+There is no a priori way to prove this goal without already
+having a proof that $\AgdaFunction{indMax}$ is a least upper bound.
+But proving that was the whole point of proving idempotence!
+An inductive hypothesis would give that $\indMax\ (f\ x)\ (f\ x) \le f\ x \le Lim\ c\ f$,
+but it does not apply when the arguments to $\indMax$ are not equal.
+Because we are working with constructive ordinals, we have no trichotomy property~\citep{TODO}, and hence no guarantee
+that $\indMax\ (f\ x)\ (f\ y)$ will be one of $f\ x$ and $f\ y$.
+
+We now have two competing defintiions for the maximum: the limit version,
+which is not strictly monotone, and the inductive version, which is not actually
+a least upper bound. In the next section, we describe a large class of trees for
+which $\indMax$ is idempotent, and hence does compute a true upper bound.
+We then use that in \cref{TODO} to create a version of ordinals whose join
+has the best properties of both $\limMax$ and $\indMax$.
+\je{TODO recall the algebraic definition of semilattice}

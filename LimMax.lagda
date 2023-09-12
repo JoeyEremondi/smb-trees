@@ -68,7 +68,9 @@ commutative, and is a true least-upper-bound of its inputs.
         → limMax t1 t2 ≤ limMax t1' t2'
     limMaxMono {t1} {t2} {t1'} {t2'} lt1 lt2 = extLim _ _ helper
       where
-        helper : ∀ k → if0 (Iso.fun CℕIso k) t1 t2 ≤ if0 (Iso.fun CℕIso k) t1' t2'
+        helper : ∀ k →
+          if0 (Iso.fun CℕIso k) t1 t2
+            ≤ if0 (Iso.fun CℕIso k) t1' t2'
         helper k with Iso.fun CℕIso k
         ... | zero = lt1
         ... | suc n = lt2
