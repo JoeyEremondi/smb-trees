@@ -39,20 +39,9 @@ commutative, and is a true least-upper-bound of its inputs.
             (sym (Iso.rightInv CℕIso 0))
             (≤-refl t1))
 
-\end{code}
-
-\begin{code}
     limMax≤R : ∀ {t1 t2} → t2 ≤ limMax t1 t2
-    limMax≤R {t1} {t2}
-        = ≤-cocone _ (Iso.inv CℕIso 1)
-          (subst
-            (λ x → t2 ≤ if0 x t1 t2)
-            (sym (Iso.rightInv CℕIso 1))
-            (≤-refl t2))
+    -- Symmetric
 
-\end{code}
-
-\begin{code}
     limMaxIdem : ∀ {t} → limMax t t ≤ t
     limMaxIdem {t} = ≤-limiting _ helper
       where
@@ -60,12 +49,37 @@ commutative, and is a true least-upper-bound of its inputs.
         helper k with Iso.fun CℕIso k
         ... | zero = ≤-refl t
         ... | suc n = ≤-refl t
-\end{code}
+      \end{code}
 
-\begin{code}
+      \je{TODO update description}
+      From these properties, we can compute several other useful properties:
+      monotonicity, commutativity, and that it is in fact the least of all upper bounds.
+
+      \begin{code}
     limMaxMono : ∀ {t1 t2 t1' t2'}
         → t1 ≤ t1' → t2 ≤ t2'
         → limMax t1 t2 ≤ limMax t1' t2'
+
+    limMaxCommut : ∀ {t1 t2} → limMax t1 t2 ≤ limMax t2 t1
+
+    limMaxLUB : ∀ {t1 t2 t} → t1 ≤ t → t2 ≤ t → limMax t1 t2 ≤ t
+  \end{code}
+  It is not surprising that this version of the maximum is a least upper bound:
+  by definition $\Lim$ computes the least upper bound of a function's image,
+  and $\limMax$ is simply $\Lim$ applied to a function whose image has (at most) two elements.
+
+\begin{code}[hide]
+
+
+
+    limMax≤R {t1} {t2}
+        = ≤-cocone _ (Iso.inv CℕIso 1)
+          (subst
+            (λ x → t2 ≤ if0 x t1 t2)
+            (sym (Iso.rightInv CℕIso 1))
+            (≤-refl t2))
+
+
     limMaxMono {t1} {t2} {t1'} {t2'} lt1 lt2 = extLim _ _ helper
       where
         helper : ∀ k →
@@ -76,12 +90,8 @@ commutative, and is a true least-upper-bound of its inputs.
         ... | suc n = lt2
 
 
-    limMaxLUB : ∀ {t1 t2 t} → t1 ≤ t → t2 ≤ t → limMax t1 t2 ≤ t
     limMaxLUB lt1 lt2 = limMaxMono lt1 lt2 ≤⨟ limMaxIdem
-  \end{code}
 
-  \begin{code}
-    limMaxCommut : ∀ {t1 t2} → limMax t1 t2 ≤ limMax t2 t1
     limMaxCommut = limMaxLUB limMax≤R limMax≤L
     \end{code}
 

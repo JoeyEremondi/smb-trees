@@ -108,12 +108,47 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
         indMax-≤L {t1} {t2} with indMaxView t1 t2
         ... | IndMaxZ-L = ≤-Z
         ... | IndMaxZ-R = ≤-refl _
-        ... | IndMaxLim-L {f = f} = extLim f (λ x → indMax (f x) t2) (λ k → indMax-≤L)
-        ... | IndMaxLim-R {f = f} _ = underLim  λ k → indMax-≤L {t2 = f k}
-        ... | IndMaxLim-Suc = ≤-sucMono indMax-≤L
-
+        ... | IndMaxLim-L {f = f}
+          = extLim f (λ x → indMax (f x) t2) (λ k → indMax-≤L)
+        ... | IndMaxLim-R {f = f} _
+          = underLim  λ k → indMax-≤L {t2 = f k}
+        ... | IndMaxLim-Suc
+          = ≤-sucMono indMax-≤L
 
         indMax-≤R : ∀ {t1 t2} → t2 ≤ indMax t1 t2
+        -- Symmetric
+
+        indMax-monoL : ∀ {t1 t1' t2}
+          → t1 ≤ t1' → indMax t1 t2 ≤ indMax t1' t2
+        indMax-monoR : ∀ {t1 t2 t2'}
+          → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1 t2'
+
+        indMax-mono : ∀ {t1 t2 t1' t2'}
+          → t1 ≤ t1' → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1' t2'
+
+
+        indMax-strictMono : ∀ {t1 t2 t1' t2'}
+          → t1 < t1' → t2 < t2' → indMax t1 t2 < indMax t1' t2'
+        indMax-strictMono lt1 lt2 = indMax-mono lt1 lt2
+
+
+        indMax-assocL : ∀ t1 t2 t3
+          → indMax t1 (indMax t2 t3) ≤ indMax (indMax t1 t2) t3
+        indMax-assocR : ∀ t1 t2 t3
+          → indMax (indMax t1 t2) t3 ≤ indMax t1 (indMax t2 t3)
+        indMax-commut : ∀ t1 t2
+          → indMax t1 t2 ≤ indMax t2 t1
+\end{code}
+
+
+
+
+
+
+\begin{code}[hide]
+
+
+
         indMax-≤R {t1} {t2} with indMaxView t1 t2
         ... | IndMaxZ-R = ≤-Z
         ... | IndMaxZ-L = ≤-refl _
@@ -124,7 +159,6 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
 
 
 
-        indMax-monoR : ∀ {t1 t2 t2'} → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1 t2'
         indMax-monoR' : ∀ {t1 t2 t2'} → t2 < t2' → indMax t1 t2 < indMax (↑ t1) t2'
 
         indMax-monoR {t1} {t2} {t2'} lt with indMaxView t1 t2 in eq1 | indMaxView t1 t2' in eq2
@@ -144,7 +178,6 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
             = ≤-cocone _ k (indMax-monoR' {t1 = t1} lt)
 
 
-        indMax-monoL : ∀ {t1 t1' t2} → t1 ≤ t1' → indMax t1 t2 ≤ indMax t1' t2
         indMax-monoL' : ∀ {t1 t1' t2} → t1 < t1' → indMax t1 t2 < indMax t1' (↑ t2)
         indMax-monoL {t1} {t1'} {t2} lt with indMaxView t1 t2 in eq1 | indMaxView t1' t2 in eq2
         ... | IndMaxZ-L | v2 = ≤-trans (indMax-≤R {t1 = t1'}) (≤-reflEq (cong indMax' eq2))
@@ -169,20 +202,10 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
         indMax-monoL' {t1} {.(↑ _)} {t2} (≤-sucMono lt) | v1 | v2 = ≤-sucMono (≤-trans (≤-reflEq (cong indMax' (sym eq1))) (indMax-monoL lt))
         indMax-monoL' {t1} {.(Lim _ f)} {t2} (≤-cocone f k lt) | v1 | v2
             = ≤-cocone _ k (≤-trans (≤-sucMono (≤-reflEq (cong indMax' (sym eq1)))) (indMax-monoL' lt))
-\end{code}
 
 
-
-
-
-
-\begin{code}
-
-        indMax-mono : ∀ {t1 t2 t1' t2'} → t1 ≤ t1' → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1' t2'
         indMax-mono {t1' = t1'} lt1 lt2 = ≤-trans (indMax-monoL lt1) (indMax-monoR {t1 = t1'} lt2)
 
-        indMax-strictMono : ∀ {t1 t2 t1' t2'} → t1 < t1' → t2 < t2' → indMax t1 t2 < indMax t1' t2'
-        indMax-strictMono lt1 lt2 = indMax-mono lt1 lt2
 
 
         indMax-sucMono : ∀ {t1 t2 t1' t2'} → indMax t1 t2 ≤ indMax t1' t2' → indMax t1 t2 < indMax (↑ t1') (↑ t2')
@@ -210,7 +233,6 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
         indMax-limR f (Lim c f₁) = ≤-limiting _ λ k → ≤-trans (indMax-limR f (f₁ k)) (extLim _ _ (λ k2 → indMax-monoL {t1 = f₁ k} {t1' = Lim c f₁} {t2 = f k2}  (≤-cocone _ k (≤-refl _))))
 
 
-        indMax-commut : ∀ t1 t2 → indMax t1 t2 ≤ indMax t2 t1
         indMax-commut t1 t2 with indMaxView t1 t2
         ... | IndMaxZ-L = indMax-≤L
         ... | IndMaxZ-R = ≤-refl _
@@ -226,7 +248,6 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
             (extLim _ _ (λ k2 → ≤-limiting _ λ k1 → ≤-trans (indMax-commut (f k1) (f2 k2)) (indMax-monoR {t1 = f2 k2} {t2 = f k1} {t2' = Lim c f} (≤-cocone _ k1 (≤-refl _)))))))
 
 
-        indMax-assocL : ∀ t1 t2 t3 → indMax t1 (indMax t2 t3) ≤ indMax (indMax t1 t2) t3
         indMax-assocL t1 t2 t3 with indMaxView t2 t3 in eq23
         ... | IndMaxZ-L = indMax-monoL {t1 = t1} {t1' = indMax t1 Z} {t2 = t3} indMax-≤L
         ... | IndMaxZ-R = indMax-≤L
@@ -241,7 +262,6 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
 
 
 
-        indMax-assocR : ∀ t1 t2 t3 →  indMax (indMax t1 t2) t3 ≤ indMax t1 (indMax t2 t3)
         indMax-assocR t1 t2 t3 = ≤-trans (indMax-commut (indMax t1 t2) t3) (≤-trans (indMax-monoR {t1 = t3} (indMax-commut t1 t2))
             (≤-trans (indMax-assocL t3 t2 t1) (≤-trans (indMax-commut (indMax t3 t2) t1) (indMax-monoR {t1 = t1} (indMax-commut t3 t2)))))
 
