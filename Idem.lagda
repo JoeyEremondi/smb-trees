@@ -380,6 +380,9 @@ max-swapR {c} {f} {g} = max≤max' ≤⨟ ≤-extLim helper ≤⨟ limSwap ≤�
     ... | zero = ≤-refl
     ... | suc n = ≤-refl
 
+open import Induction.WellFounded
+opaque
+  unfolding ↑
 \end{code}
 
 
@@ -392,14 +395,14 @@ of Brouwer trees, and there are fewer SMB-trees than Brouwer trees, then
 there can be no infinite descending chains of SMB-trees.
 The key lemma is that an SMB-tree is accessible if its underlying Brouwer tree is.
 \begin{code}
-open import Induction.WellFounded
-opaque
-  unfolding ↑
   sizeWF : WellFounded _<_
   sizeWF t = sizeAcc (Brouwer.ordWF (rawTree t))
     where
-      sizeAcc : ∀ {t} → Acc Brouwer._<_ (rawTree t) → Acc _<_ t
-      sizeAcc {t} (acc x) = acc ((λ y lt → sizeAcc (x (rawTree y) (get≤ lt))))
+      sizeAcc : ∀ {t}
+        → Acc Brouwer._<_ (rawTree t)
+        → Acc _<_ t
+      sizeAcc {t} (acc x)
+        = acc ((λ y lt → sizeAcc (x (rawTree y) (get≤ lt))))
 \end{code}
 
 Thus, we have an ordinal type with limits, a strictly monotone join,
