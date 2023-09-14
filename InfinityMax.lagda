@@ -17,7 +17,7 @@
     (El : ℂ → Set ℓ)
     (Cℕ : ℂ) (CℕIso : Iso (El Cℕ) ℕ )
     (default : (c : ℂ) → El c) where
-  open import RawTree ℂ El Cℕ CℕIso
+  open import Brouwer ℂ El Cℕ CℕIso
   open import IndMax ℂ El Cℕ CℕIso default
   opaque
     unfolding indMax indMax'

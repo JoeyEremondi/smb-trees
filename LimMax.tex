@@ -73,7 +73,7 @@ of the function that produces $t_1$ when given $0$ and $t_2$ otherwise.
 %
 \>[4]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{RawTree}\AgdaSpace{}%
+\AgdaModule{Brouwer}\AgdaSpace{}%
 \AgdaBound{ℂ}\AgdaSpace{}%
 \AgdaBound{El}\AgdaSpace{}%
 \AgdaBound{Cℕ}\AgdaSpace{}%
@@ -84,18 +84,18 @@ of the function that produces $t_1$ when given $0$ and $t_2$ otherwise.
 %
 \>[4]\AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Tree}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaPostulate{Tree}\AgdaSpace{}%
+\AgdaDatatype{Tree}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaPostulate{Tree}\<%
+\AgdaDatatype{Tree}\<%
 \\
 %
 \>[4]\AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaPostulate{ℕLim}\AgdaSpace{}%
+\AgdaFunction{ℕLim}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -118,7 +118,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\<%
@@ -130,7 +130,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaSymbol{=}%
-\>[69I]\AgdaPostulate{≤-cocone}\AgdaSpace{}%
+\>[69I]\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{Iso.inv}\AgdaSpace{}%
 \AgdaBound{CℕIso}\AgdaSpace{}%
@@ -144,7 +144,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaFunction{if0}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
@@ -157,7 +157,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaNumber{0}\AgdaSymbol{))}\<%
 \\
 %
-\>[12]\AgdaSymbol{(}\AgdaPostulate{≤-refl}\AgdaSpace{}%
+\>[12]\AgdaSymbol{(}\AgdaFunction{≤-refl}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSymbol{))}\<%
 \\
 %
@@ -170,7 +170,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\<%
@@ -189,14 +189,14 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \\
 %
 \>[4]\AgdaFunction{limMaxIdem}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaPostulate{≤-limiting}\AgdaSpace{}%
+\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaFunction{helper}\<%
 \\
@@ -215,7 +215,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{k}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \\
 %
@@ -231,7 +231,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaSymbol{|}\AgdaSpace{}%
 \AgdaInductiveConstructor{zero}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaPostulate{≤-refl}\AgdaSpace{}%
+\AgdaFunction{≤-refl}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \\
 %
@@ -240,7 +240,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaPostulate{≤-refl}\AgdaSpace{}%
+\AgdaFunction{≤-refl}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \end{code}
 
@@ -261,11 +261,11 @@ commutative, and is a true least-upper-bound of its inputs.
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaBound{t1'}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaBound{t2'}\<%
 \\
 %
@@ -273,7 +273,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1'}\AgdaSpace{}%
 \AgdaBound{t2'}\<%
@@ -290,7 +290,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
 \AgdaBound{t1}\<%
@@ -306,17 +306,17 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{limMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaBound{t}\<%
 \end{code}
   It is not surprising that this version of the maximum is a least upper bound:
@@ -337,7 +337,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaSymbol{=}%
-\>[191I]\AgdaPostulate{≤-cocone}\AgdaSpace{}%
+\>[191I]\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{Iso.inv}\AgdaSpace{}%
 \AgdaBound{CℕIso}\AgdaSpace{}%
@@ -351,7 +351,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaFunction{if0}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
@@ -364,7 +364,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaNumber{1}\AgdaSymbol{))}\<%
 \\
 %
-\>[12]\AgdaSymbol{(}\AgdaPostulate{≤-refl}\AgdaSpace{}%
+\>[12]\AgdaSymbol{(}\AgdaFunction{≤-refl}\AgdaSpace{}%
 \AgdaBound{t2}\AgdaSymbol{))}\<%
 \\
 %
@@ -380,7 +380,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{lt1}\AgdaSpace{}%
 \AgdaBound{lt2}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaPostulate{extLim}\AgdaSpace{}%
+\AgdaFunction{extLim}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaFunction{helper}\<%
@@ -404,7 +404,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{t2}\<%
 \\
 \>[10][@{}l@{\AgdaIndent{0}}]%
-\>[12]\AgdaOperator{\AgdaPostulate{≤}}\AgdaSpace{}%
+\>[12]\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
 \AgdaFunction{if0}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{Iso.fun}\AgdaSpace{}%
 \AgdaBound{CℕIso}\AgdaSpace{}%
@@ -447,7 +447,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaFunction{limMaxMono}\AgdaSpace{}%
 \AgdaBound{lt1}\AgdaSpace{}%
 \AgdaBound{lt2}\AgdaSpace{}%
-\AgdaOperator{\AgdaPostulate{≤⨟}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≤⨟}}\AgdaSpace{}%
 \AgdaFunction{limMaxIdem}\<%
 \\
 %

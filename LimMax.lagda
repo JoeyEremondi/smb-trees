@@ -18,7 +18,7 @@ of the function that produces $t_1$ when given $0$ and $t_2$ otherwise.
     (ℂ : Set ℓ)
     (El : ℂ → Set ℓ)
     (Cℕ : ℂ) (CℕIso : Iso (El Cℕ) ℕ ) where
-    open import RawTree ℂ El Cℕ CℕIso
+    open import Brouwer ℂ El Cℕ CℕIso
 \end{code}
 
 \begin{code}

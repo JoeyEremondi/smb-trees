@@ -43,7 +43,7 @@ module SemiLatMod where
     IsBoundedJoinSemilattice.minimum treeBoundedSemi _ = ≤-Z
 
     TreeSemiLat : BoundedJoinSemilattice ℓ ℓ ℓ
-    Carrier TreeSemiLat = Tree
+    Carrier TreeSemiLat = SMBTree
     _≈_ TreeSemiLat t1 t2 = t1 ≤' t2 × t2 ≤' t1
     _≤_ TreeSemiLat = _≤'_
     _∨_ TreeSemiLat = max
@@ -65,8 +65,8 @@ open BoundedJoinSemilattice SemiLatMod.TreeSemiLat
   , max-LUB (≤-sucMono max-≤L) (≤-sucMono max-≤R)
 
 -- We can take infinite joins over any code-indexed set
-⋁-Supremum : ∀ {c : ℂ} {f : El c → Tree}
-  → Σ[ sup ∈ Tree ]
+⋁-Supremum : ∀ {c : ℂ} {f : El c → SMBTree}
+  → Σ[ sup ∈ SMBTree ]
     (∀ k → f k ≤ sup )
     × (∀ t → (∀ k → f k ≤ t) → sup ≤ t )
 ⋁-Supremum {f = f}
@@ -75,7 +75,7 @@ open BoundedJoinSemilattice SemiLatMod.TreeSemiLat
     , λ t → ≤-limLeast
 
 -- Infinite joins distribute with finite ones over the same index set
-⋁-dist : ∀ {c : ℂ} {f g : El c → Tree} →
+⋁-dist : ∀ {c : ℂ} {f g : El c → SMBTree} →
   (Lim c f) ∨ (Lim c g) ≈ Lim c (λ x → f x ∨ g x)
 ⋁-dist = max-swapR , max-swapL
 

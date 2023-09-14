@@ -35,7 +35,7 @@ yielding some element for any code's type.
     (default : (c : ℂ) → El c) where
 \end{code}
 \begin{code}[hide]
-    open import RawTree ℂ El Cℕ CℕIso
+    open import Brouwer ℂ El Cℕ CℕIso
     underLim : ∀   {c : ℂ}  {t} →  {f : El c → Tree} → (∀ k → t ≤ f k) → t ≤ Lim c f
     underLim {c = c}  {t} {f} all = ≤-trans (≤-cocone (λ _ → t) (default c) (≤-refl t)) (≤-limiting (λ _ → t) (λ k → ≤-cocone f k (all k)))
 \end{code}
@@ -223,9 +223,6 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
         indMax-Z Z = ≤-Z
         indMax-Z (↑ t) = ≤-refl (indMax (↑ t) Z)
         indMax-Z (Lim c f) = extLim (λ x → indMax (f x) Z) f (λ k → indMax-Z (f k))
-
-        indMax-↑ : ∀ {t1 t2} → indMax (↑ t1) (↑ t2) ≡ ↑ (indMax t1 t2)
-        indMax-↑ = refl
 
         indMax-≤Z : ∀ t → indMax t Z ≤ t
         indMax-≤Z Z = ≤-refl _

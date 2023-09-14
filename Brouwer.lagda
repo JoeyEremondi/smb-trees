@@ -12,7 +12,7 @@ Under this definition, a Brouwer tree is either zero, the successor of another B
 To represent the limits of uncountable sequences, we can paramterize our definition over some Universe \ala Tarski:
 
 \begin{code}
-  module RawTree {ℓ}
+  module Brouwer {ℓ}
     (ℂ : Set ℓ)
     (El : ℂ → Set ℓ)
     (Cℕ : ℂ) (CℕIso : Iso (El Cℕ) ℕ ) where
