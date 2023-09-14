@@ -2,11 +2,12 @@
 \newcommand{\cocone}{\AgdaInductiveConstructor{≤-cocone}}
 \newcommand{\limiting}{\AgdaInductiveConstructor{≤-limiting}}
 \newcommand{\Lim}{\AgdaInductiveConstructor{Lim}}
+\newcommand{\nLim}{\AgdaFunction{ℕLim}}
 \newcommand{\up}{\AgdaInductiveConstructor{↑}}
 \newcommand{\indMax}{\AgdaFunction{indMax}}
 \newcommand{\limMax}{\AgdaFunction{limMax}}
 \renewcommand{\max}{\AgdaFunction{max}}
-
+\newcommand{\maxInf}{\AgdaFunction{indMax∞}}
 
 % Insert extra space before some tokens.
 \DeclareRobustCommand{\AgdaFormat}[2]{%
@@ -47,8 +48,8 @@
   \ifthenelse{
     \equal{#1}{f2}
   }{\def\ret{$f_2$\xspace}}{}%
-  \ifthenelse{
-    \equal{#1}{≤⨟}
-  }{\def\ret{\ $\fatsemi_{\leq}$\ }}{}%
+  % \ifthenelse{
+  %   \equal{#1}{≤⨟}
+  % }{\def\ret{\ $\fatsemi_{\leq}$\ }}{}%
   \ret
 }

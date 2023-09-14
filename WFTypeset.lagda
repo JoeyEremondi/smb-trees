@@ -79,4 +79,3 @@ calls on smaller values:
   wfRec = build wfRecBuilder
 \end{code}
 
-\end{code}

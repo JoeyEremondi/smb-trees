@@ -148,13 +148,13 @@ and the successor constructor:
 
 \begin{code}
     <-in-≤ : ∀ {x y} → x < y → x ≤ y
-    <-in-≤ pf = ≤-trans (≤↑t _) pf
+    <-in-≤ pf = (≤↑t _) ≤⨟ pf
 
     <∘≤-in-< : ∀ {x y z} → x < y → y ≤ z → x < z
-    <∘≤-in-< x<y y≤z = ≤-trans x<y y≤z
+    <∘≤-in-< x<y y≤z = x<y ≤⨟ y≤z
 
     ≤∘<-in-< : ∀ {x y z} → x ≤ y → y < z → x < z
-    ≤∘<-in-< {x} {y} {z} x≤y y<z = ≤-trans (≤-sucMono x≤y) y<z
+    ≤∘<-in-< {x} {y} {z} x≤y y<z = (≤-sucMono x≤y) ≤⨟ y<z
 
     ¬<Z : ∀ t → ¬(t < Z)
     ¬<Z t ()

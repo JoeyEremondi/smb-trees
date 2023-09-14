@@ -162,16 +162,23 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
         indMax-monoR' : ∀ {t1 t2 t2'} → t2 < t2' → indMax t1 t2 < indMax (↑ t1) t2'
 
         indMax-monoR {t1} {t2} {t2'} lt with indMaxView t1 t2 in eq1 | indMaxView t1 t2' in eq2
-        ... | IndMaxZ-L  | v2  = ≤-trans lt (≤-reflEq (cong indMax' eq2))
-        ... | IndMaxZ-R  | v2  = ≤-trans indMax-≤L (≤-reflEq (cong indMax' eq2))
+        ... | IndMaxZ-L  | v2  =
+          lt
+          ≤⨟ (≤-reflEq (cong indMax' eq2))
+        ... | IndMaxZ-R  | v2  =
+          indMax-≤L
+          ≤⨟ ≤-reflEq (cong indMax' eq2)
         ... | IndMaxLim-L {f = f1} |  IndMaxLim-L  = extLim _ _ λ k → indMax-monoR {t1 = f1 k} lt
         indMax-monoR {t1} {(Lim _ f')} {.(Lim _ f)} (≤-cocone f k lt) | IndMaxLim-R neq  | IndMaxLim-R neq'
-            = ≤-limiting (λ x → indMax t1 (f' x)) (λ y → ≤-cocone (λ x → indMax t1 (f x)) k (indMax-monoR {t1 = t1} {t2 = f' y} (≤-trans (≤-cocone _ y (≤-refl _)) lt)))
-        indMax-monoR {t1} {.(Lim _ _)} {t2'} (≤-limiting f x₁) | IndMaxLim-R x  | v2  =
-            ≤-trans (≤-limiting (λ x₂ → indMax t1 (f x₂)) λ k → indMax-monoR {t1 = t1} (x₁ k)) (≤-reflEq (cong indMax' eq2))
+            = ≤-limiting (λ x → indMax t1 (f' x)) (λ y → ≤-cocone (λ x → indMax t1 (f x)) k (indMax-monoR {t1 = t1} {t2 = f' y} ((≤-cocone _ y (≤-refl _)) ≤⨟ lt)))
+        indMax-monoR {t1} {.(Lim _ _)} {t2'} (≤-limiting f x₁) | IndMaxLim-R x  | v2
+          = ≤-limiting (λ x₂ →
+            indMax t1 (f x₂)) λ k → indMax-monoR {t1 = t1} (x₁ k)
+          ≤⨟ ≤-reflEq (cong indMax' eq2)
         indMax-monoR {(↑ t1)} {.(↑ _)} {.(↑ _)} (≤-sucMono lt) | IndMaxLim-Suc  | IndMaxLim-Suc  = ≤-sucMono (indMax-monoR {t1 = t1} lt)
         indMax-monoR {(↑ t1)} {(↑ t2)} {(Lim _ f)} (≤-cocone f k lt) | IndMaxLim-Suc  | IndMaxLim-R x
-            = ≤-trans (indMax-monoR' {t1 = t1} {t2 = t2} {t2' = f k} lt) (≤-cocone (λ x₁ → indMax (↑ t1) (f x₁)) k (≤-refl _)) --indMax-monoR' {!lt!}
+            = indMax-monoR' {t1 = t1} {t2 = t2} {t2' = f k} lt
+            ≤⨟ ≤-cocone (λ x₁ → indMax (↑ t1) (f x₁)) k (≤-refl _)
 
         indMax-monoR' {t1} {t2} {t2'}  (≤-sucMono lt) = ≤-sucMono ( (indMax-monoR {t1 = t1} lt))
         indMax-monoR' {t1} {t2} {.(Lim _ f)} (≤-cocone f k lt)
