@@ -18,7 +18,7 @@ Using a view type lets us avoid enumerating all nine possibilities when defining
 the maximum and proving its properties.
 
 \begin{code}[hide]
-  open import Data.Nat hiding (_≤_ ; _<_)
+  open import Data.Nat hiding (_≤_ ; _<_ ; _+_)
   open import Relation.Binary.PropositionalEquality
   open import Data.Product
   open import Relation.Nullary
@@ -340,3 +340,6 @@ which $\indMax$ is idempotent, and hence does compute a true upper bound.
 We then use that in \cref{TODO} to create a version of ordinals whose join
 has the best properties of both $\limMax$ and $\indMax$.
 \je{TODO recall the algebraic definition of semilattice}
+
+
+

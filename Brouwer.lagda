@@ -1,6 +1,6 @@
 % !TEX root =  main.tex
 \begin{code}[hide]
-  open import Data.Nat hiding (_≤_ ; _<_)
+  open import Data.Nat hiding (_≤_ ; _<_ ; _+_)
   open import Relation.Binary.PropositionalEquality
   open import Data.Product
   open import Relation.Nullary

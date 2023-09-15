@@ -25,7 +25,9 @@ the maximum and proving its properties.
 \AgdaKeyword{hiding}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{;}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSymbol{)}\<%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{\AgdaUnderscore{}+\AgdaUnderscore{}}}\AgdaSymbol{)}\<%
 \\
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
@@ -145,7 +147,7 @@ yielding some element for any code's type.
 \AgdaFunction{≤-trans}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{default}\AgdaSpace{}%
@@ -154,7 +156,7 @@ yielding some element for any code's type.
 \AgdaBound{t}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
@@ -1057,12 +1059,12 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
 \\
 \>[8][@{}l@{\AgdaIndent{0}}]%
 \>[10]\AgdaSymbol{=}%
-\>[680I]\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
+\>[682I]\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{x₂}\AgdaSpace{}%
 \AgdaSymbol{→}\<%
 \\
-\>[.][@{}l@{}]\<[680I]%
+\>[.][@{}l@{}]\<[682I]%
 \>[12]\AgdaFunction{indMax}\AgdaSpace{}%
 \AgdaBound{t1}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
@@ -1989,7 +1991,7 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
 \\
 %
 \>[8]\AgdaSymbol{...}%
-\>[1395I]\AgdaSymbol{|}\AgdaSpace{}%
+\>[1397I]\AgdaSymbol{|}\AgdaSpace{}%
 \AgdaInductiveConstructor{IndMaxLim-L}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{c}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -1999,7 +2001,7 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
 \AgdaBound{f2}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}\<%
 \\
-\>[.][@{}l@{}]\<[1395I]%
+\>[.][@{}l@{}]\<[1397I]%
 \>[12]\AgdaFunction{≤-trans}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{extLim}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -2700,3 +2702,6 @@ which $\indMax$ is idempotent, and hence does compute a true upper bound.
 We then use that in \cref{TODO} to create a version of ordinals whose join
 has the best properties of both $\limMax$ and $\indMax$.
 \je{TODO recall the algebraic definition of semilattice}
+
+
+
