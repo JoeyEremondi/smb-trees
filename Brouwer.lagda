@@ -172,6 +172,9 @@ and the successor constructor:
     existsLim : ∀  {c1 : ℂ} {c2 : ℂ} →  (f1 : El c1  → Tree) (f2 : El  c2  → Tree) → (∀ k1 → Σ[ k2 ∈ El  c2 ] f1 k1 ≤ f2 k2) → Lim  c1 f1 ≤ Lim  c2 f2
     existsLim {æ1} {æ2} f1 f2 allex = ≤-limiting  f1 (λ k → ≤-cocone f2 (proj₁ (allex k)) (proj₂ (allex k)))
 
+    invertSuc : ∀ {t1 t2} → ↑ t1 ≤ ↑ t2 → t1 ≤ t2
+    invertSuc (≤-sucMono lt) = lt
+
     open import Induction.WellFounded
 \end{code}
 

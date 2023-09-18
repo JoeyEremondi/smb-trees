@@ -118,11 +118,15 @@ an upper bound on is argument.
     the least upper bound.
    \begin{code}
     indMax∞-≤ : ∀ {t} → indMax t t ≤ t → indMax∞ t ≤ t
-    indMax∞-≤ lt = ≤-limiting  _ λ k → nindMax-≤ (Iso.fun CℕIso k) lt
+    indMax∞-≤ lt
+      = ≤-limiting  _
+        λ k → nindMax-≤ (Iso.fun CℕIso k) lt
       where
         nindMax-≤ : ∀ {t} n → indMax t t ≤ t → nindMax t n ≤ t
         nindMax-≤ ℕ.zero lt = ≤-Z
-        nindMax-≤ {t = t} (ℕ.suc n) lt =  (indMax-monoL {t1 = nindMax t n} {t2 = t} (nindMax-≤ n lt)) ≤⨟ lt
+        nindMax-≤ {t = t} (ℕ.suc n) lt
+          = indMax-monoL (nindMax-≤ n lt)
+            ≤⨟ lt
       \end{code}
 
       An immediate corollary of this is that $\maxInf\ (\maxInf\ t)$ is equivalent to $\maxInf\ t$.

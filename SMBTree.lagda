@@ -35,7 +35,11 @@ This ensures that we always take Brouwer limits over non-empty sets,
 an assumption that was critical for the definitions of \cref{TODO}.
 However, we place no such restriction on SMB-trees.
 \begin{code}
-import Brouwer ℂ (λ c → Maybe (El c)) Cℕ (maybeNatIso CℕIso) as Brouwer
+import Brouwer
+    ℂ
+    (λ c → Maybe (El c))
+    Cℕ (maybeNatIso CℕIso)
+  as Brouwer
   \end{code}
 
 
@@ -80,7 +84,7 @@ opaque
 
 However, constructing the limit of a sequence of SMB-trees is not so easy.
 Since we instantiated $\AgdaBound{El}$ to wrap its result in $\AgdaDatatype{Maybe}$,
-we need to handle $\AgdaDatatypeConstructor{nothing}$ for each limit,
+we need to handle $\AgdaInductiveConstructor{nothing}$ for each limit,
 but we can use $\AgdaFunction{Z}$ as a default value, since adding it to any sequence
 does not change the least upper bound.
 More challenging is how, as we saw in \cref{TODO}, Brouwer trees do not have $\indMax\ (\Lim\ c\ f)\ (\Lim\ c\ f) \le \Lim\ c\ f$, so we cannot directly produce a proof of idempotence.
@@ -361,29 +365,30 @@ limSwap : ∀ {c1 c2 } {f : El c1 → El c2 → SMBTree} → (Lim c1 λ x → Li
 limSwap = ≤-limLeast (λ x → ≤-limLeast λ y → ≤-limUpperBound x ≤⨟ ≤-limUpperBound y   )
 
 max-swapL : ∀ {c} {f g : El c → SMBTree} →  Lim c (λ k → max (f k) (g k)) ≤ max (Lim c f) (Lim c g)
-max-swapL {c} {f} {g} = ≤-extLim (λ k → max≤max') ≤⨟ limSwap ≤⨟ ≤-extLim helper ≤⨟ max'≤max
-  where
-    helper : (k : El Cℕ) →
-      Lim c (λ x → if0 (Iso.fun CℕIso k) (f x) (g x)) ≤
-      if0 (Iso.fun CℕIso k) (Lim c f) (Lim c g)
-    helper kn with Iso.fun CℕIso kn
-    ... | zero = ≤-refl
-    ... | suc n = ≤-refl
+max-swapL {c} {f} {g} = ≤-limLeast λ k1 → max-mono (≤-limUpperBound _) (≤-limUpperBound _)
 
+
+max-swap2L : ∀ {c1 c2} {f : El c1 → SMBTree} {g : El c2 → SMBTree } →  Lim c1 (λ k1 → Lim c2  λ k2 → max (f k1) (g k2)) ≤ max (Lim c1 f) (Lim c2 g)
+max-swap2L {c1} {c2} {f} {g} = ≤-limLeast λ k1 → ≤-limLeast λ k2 → max-mono (≤-limUpperBound k1) (≤-limUpperBound k2)
 
 max-swapR : ∀ {c} {f g : El c → SMBTree} → max (Lim c f) (Lim c g) ≤ Lim c (λ k → max (f k) (g k))
-max-swapR {c} {f} {g} = max≤max' ≤⨟ ≤-extLim helper ≤⨟ limSwap ≤⨟ ≤-extLim (λ k → max'≤max)
-  where
-    helper : (k : El Cℕ) →
-      if0 (Iso.fun CℕIso k) (Lim c f) (Lim c g) ≤
-      Lim c (λ z → if0 (Iso.fun CℕIso k) (f z) (g z))
-    helper kn with Iso.fun CℕIso kn
-    ... | zero = ≤-refl
-    ... | suc n = ≤-refl
+max-swapR {c} {f} {g} = max-LUB (≤-extLim λ k → max-≤L) (≤-extLim λ k → max-≤R)
+
+
+max-swap2R : ∀ {c1 c2} {f : El c1 → SMBTree} {g : El c2 → SMBTree } → El c1 → El c2 → max (Lim c1 f) (Lim c2 g) ≤ Lim c1 (λ k1 → Lim c2  λ k2 → max (f k1) (g k2))
+max-swap2R k1 k2 =
+  max-LUB
+    (≤-extLim (λ k → ≤-limUpperBound k2 ≤⨟ ≤-extLim λ _ → max-≤L))
+    (≤-limUpperBound k1 ≤⨟ ≤-extLim λ _ → ≤-extLim (λ _ → max-≤R))
+
 
 open import Induction.WellFounded
 opaque
   unfolding ↑
+
+
+  invertSuc : ∀ {t1 t2} → ↑ t1 ≤ ↑ t2 → t1 ≤ t2
+  invertSuc {MkTree t1 _} {MkTree t2 _} (mk≤ (Brouwer._≤_.≤-sucMono lt)) = mk≤ lt
 \end{code}
 
 

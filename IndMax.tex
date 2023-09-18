@@ -147,7 +147,7 @@ yielding some element for any code's type.
 \AgdaFunction{≤-trans}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{default}\AgdaSpace{}%
@@ -156,7 +156,7 @@ yielding some element for any code's type.
 \AgdaBound{t}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{≤-limiting}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
@@ -305,7 +305,7 @@ We then define our view type:
 Our view type has five cases. The first two handle when either input
 is zero, and the second two handle when either input is a limit.
 The final case is when both inputs are successors.
-$\agdaFunction{indMaxView}$ computes the view for any pair of trees.
+$\AgdaFunction{indMaxView}$ computes the view for any pair of trees.
 
 \begin{code}[hide]%
 %

@@ -59,7 +59,7 @@ We then define our view type:
 Our view type has five cases. The first two handle when either input
 is zero, and the second two handle when either input is a limit.
 The final case is when both inputs are successors.
-$\agdaFunction{indMaxView}$ computes the view for any pair of trees.
+$\AgdaFunction{indMaxView}$ computes the view for any pair of trees.
 
 \begin{code}[hide]
         indMaxView Z t2 = IndMaxZ-L
