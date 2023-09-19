@@ -116,24 +116,30 @@
 \end{code}
 
 \begin{code}%
-\>[0]\AgdaKeyword{data}\AgdaSpace{}%
-\AgdaDatatype{Acc}\AgdaSpace{}%
+\>[0]\AgdaKeyword{data}%
+\>[67I]\AgdaDatatype{Acc}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
-\AgdaGeneralizable{a}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaGeneralizable{a}\AgdaSymbol{\}}\<%
+\\
+\>[.][@{}l@{}]\<[67I]%
+\>[5]\AgdaSymbol{(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
-\AgdaGeneralizable{ℓ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
+\AgdaGeneralizable{ℓ}\AgdaSymbol{)}\<%
+\\
+%
+\>[5]\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+%
+\>[5]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -194,7 +200,7 @@
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{acc-inverse}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[125I]\AgdaSymbol{∀}\AgdaSpace{}%
+\>[122I]\AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
@@ -210,7 +216,7 @@
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\<%
 \\
-\>[.][@{}l@{}]\<[125I]%
+\>[.][@{}l@{}]\<[122I]%
 \>[14]\AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaGeneralizable{A}\AgdaSymbol{)}\AgdaSpace{}%
@@ -237,7 +243,7 @@
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{Acc-resp-≈}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[159I]\AgdaSymbol{\{}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[156I]\AgdaSymbol{\{}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaGeneralizable{A}\AgdaSpace{}%
@@ -252,7 +258,7 @@
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{→}\<%
 \\
-\>[.][@{}l@{}]\<[159I]%
+\>[.][@{}l@{}]\<[156I]%
 \>[13]\AgdaOperator{\AgdaBound{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{Respectsʳ}}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -355,7 +361,7 @@
 %
 \>[2]\AgdaFunction{unfold-wfRec}\AgdaSpace{}%
 \AgdaSymbol{:}%
-\>[241I]\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
+\>[238I]\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
@@ -377,7 +383,7 @@
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\<%
 \\
-\>[.][@{}l@{}]\<[241I]%
+\>[.][@{}l@{}]\<[238I]%
 \>[17]\AgdaFunction{wfRec}\AgdaSpace{}%
 \AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -495,11 +501,43 @@ calls on smaller values:
 \AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
+The $\AgdaFunction{wfRec}$ function is defined using structural recursion on an argument
+of type $\AgdaDatatype{Acc}$, so the type checker accepts it.
 \begin{code}[hide]%
 %
 \>[2]\AgdaFunction{wfRec}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{build}\AgdaSpace{}%
 \AgdaFunction{wfRecBuilder}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaComment{--\ wfRecAcc\ :\ (P\ :\ A\ →\ Set\ ℓ)}\<%
+\\
+%
+\>[2]\AgdaComment{--\ \ \ →\ (∀\ x}\<%
+\\
+%
+\>[2]\AgdaComment{--\ \ \ \ \ \ \ \ \ \ →\ (self\ :\ (y\ :\ A)\ →\ y\ <\ x\ →\ P\ y)}\<%
+\\
+%
+\>[2]\AgdaComment{--\ \ \ \ \ \ \ \ \ \ →\ (∀\ \{y\ pf1\ pf2\}\ →\ self\ y\ pf1\ ≡\ self\ y\ pf2)}\<%
+\\
+%
+\>[2]\AgdaComment{--\ \ \ \ \ \ \ \ \ \ →\ P\ x)}\<%
+\\
+%
+\>[2]\AgdaComment{--\ \ \ →\ ∀\ x\ →\ (pf\ :\ Acc\ \AgdaUnderscore{}<\AgdaUnderscore{}\ x\ )\ →\ (pf\ ≡\ wf\ x\ )\ →\ P\ x}\<%
+\\
+%
+\>[2]\AgdaComment{--\ wfRecAcc\ P\ f\ x\ (acc\ pf)\ \AgdaUnderscore{}\ =\ \{!f!\}}\<%
+\\
+\>[0]\<%
 \end{code}
-

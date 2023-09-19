@@ -106,9 +106,9 @@ of the function that produces $t_1$ when given $0$ and $t_2$ otherwise.
 \AgdaBound{t2}\<%
 \end{code}
 
-This version of the maximum has several of the properties we want from a
-maximum function: it is monotone, idempotent,
-commutative, and is a true least-upper-bound of its inputs.
+This version of the maximum has the properties we want from a
+maximum function: it is an upper bound on its arguments,
+and it is idempotent.
 
 \begin{code}%
 %
@@ -321,7 +321,7 @@ commutative, and is a true least-upper-bound of its inputs.
 \AgdaBound{t}\<%
 \end{code}
   It is not surprising that this version of the maximum is a least upper bound:
-  by definition $\Lim$ computes the least upper bound of a function's image,
+  by definition $\Lim$ denotes the least upper bound of a function's image,
   and $\limMax$ is simply $\Lim$ applied to a function whose image has (at most) two elements.
 
 \begin{code}[hide]%
@@ -472,5 +472,5 @@ $\up (\max\ t_{1} \ t_{2}) \le t'_{1}$ or that
 $\up (\max\ t_{1} \ t_{2}) \le t'_{2}$, which cannot be deduced from the
 premises alone.
 %
-What we want is to have $\up \max\ (t_{1}) \ t_{2} \le \max (\up t_{1})\ (\up t_{2})$, so that strict monotonicity is a direct consequence of ordinary
+What we want is to have $\up \max\ t_{1} \ t_{2} \le \max (\up t_{1})\ (\up t_{2})$, so that strict monotonicity is a direct consequence of ordinary
 monotonicity of the maximum. This is not possible when defining the constructor as a limit.

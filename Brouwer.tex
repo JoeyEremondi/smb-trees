@@ -78,13 +78,15 @@ Our module is paramterized over a universe level, a type $\bC$ of \textit{codes}
 function $\mathit{El}$, which computes the type represented by each code.
 We require that there be a code whose interpretation is isomorphic to the natural numbers,
 as this is essential to our construction in \cref{subsec:infinity}.
-Increasingly larger trees can be obtained by setting $\bC := \AgdaPrimitive{Set} \ \ell$ and
+This also ensures that our trees are at least as powerful as $\AgdaDatatype{SmallTree}$.
+Increasingly larger ordinals can be obtained by setting $\bC := \AgdaPrimitive{Set} \ \ell$ and
 $\mathit{El} := \mathit{id}$ for increasing $\ell$.
 However, by defining an inductive-recursive universe,
 one can still capture limits over some non-countable types, since
- $\AgdaDatatype{Tree}$ is in $\AgdaPrimitive{Set}$ whenever $\bC$ is.
+ $\AgdaDatatype{Tree}$ is in $\AgdaPrimitive{Set}\ 0$ whenever $\bC$ is.
 
-We then generalize limits to any function whose domain is the interpretation of some code.
+ Given our universe of codes,
+ we generalize limits to any function whose domain is the interpretation of some code.
 \begin{code}%
 %
 \>[4]\AgdaKeyword{data}\AgdaSpace{}%
@@ -109,8 +111,7 @@ We then generalize limits to any function whose domain is the interpretation of 
 %
 \>[6]\AgdaInductiveConstructor{Lim}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}%
-\>[15]\AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{ℂ}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
@@ -153,7 +154,7 @@ The small limit constructor can be recovered from the natural-number code
 
 Brouwer trees are a the quintessential example of a higher-order inductive type.%
 \footnote{Not to be confused with Higher Inductive Types (HITs) from Homotopy Type Theory~\citep{hottbook}}:
-Each tree is built using smaller trees or functions producing smaller trees, which is essentially
+each tree is built using smaller trees or functions producing smaller trees, which is essentially
 a way of storing a possibly infinite number of smaller trees.
 
 \subsection{Ordering Trees}
@@ -279,6 +280,16 @@ so we define a relation to order Brouwer trees.
 \\
 \>[0]\<%
 \end{code}
+      There are four constructors. First, zero is less than any other tree.
+      Second, the successor operator is monotone: if $t_{1} \le t_{2}$, then $\up t_{1} \le \up t_{2}$.
+      Finally, there are two constructors which establish that $\Lim\ c\ f$ denotes the least upper
+      bound of the image of $f$. First $\cocone$ establishes that $f\ x \le Lim \ c\ f$, i.e., it is an
+      upper bound on the image of $f$.
+      Second, $\limiting$ establishes that if a value is an upper bound on the image of $f$,
+      then $\Lim\ c\ f$ is less than that value, i.e. it is the least of all upper bounds.
+      The constructor names and types are adapted from \citet{KRAUS2023113843},
+      although we change the definition of $\cocone$ slightly so that we do not need a separate
+      constructor for transitivity.
 
       This relation is reflexive:
 \begin{code}%
@@ -350,13 +361,8 @@ so we define a relation to order Brouwer trees.
 \AgdaFunction{≤-refl}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\<%
 \end{code}
-
+%
       Crucially, it is also transitive, making the relation a preorder.
-We modify our the order relation from that of \citet{KRAUS2023113843}
-so that transitivity can be proven constructively, rather than adding it as a constructor
-for the relation. This allows us to prove well-foundedness of the relation without needing
-quotient types or other advanced features.
-
 \begin{code}%
 %
 \>[4]\AgdaFunction{≤-trans}\AgdaSpace{}%
@@ -452,8 +458,39 @@ quotient types or other advanced features.
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{)}\<%
 \end{code}
-
-\begin{code}[hide]%
+We create an infix version of transitivity for more readable construction of proofs:
+\begin{code}%
+%
+\>[4]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤⨟\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[12]\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{t1}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSpace{}%
+\AgdaBound{t3}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{t3}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
+\AgdaBound{t3}\<%
+\\
+%
+\>[4]\AgdaBound{lt1}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≤⨟}}\AgdaSpace{}%
+\AgdaBound{lt2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{≤-trans}\AgdaSpace{}%
+\AgdaBound{lt1}\AgdaSpace{}%
+\AgdaBound{lt2}\<%
+\end{code}
+    A useful property is that limits of sequences are related if the sequences are related element-wise:
+   \begin{code}%
 %
 \>[4]\AgdaFunction{extLim}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -514,46 +551,17 @@ quotient types or other advanced features.
 \AgdaBound{k}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{all}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{))}\<%
+\end{code}
+
+\begin{code}[hide]%
+\>[0]\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[4]\AgdaKeyword{infixr}\AgdaSpace{}%
 \AgdaNumber{10}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤⨟\AgdaUnderscore{}}}\<%
 \end{code}
 
-We create an infix version of transitivity for more readable construction of proofs:
-\begin{code}%
-%
-\>[4]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≤⨟\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[12]\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{t1}\AgdaSpace{}%
-\AgdaBound{t2}\AgdaSpace{}%
-\AgdaBound{t3}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
-\AgdaBound{t2}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{t2}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
-\AgdaBound{t3}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{t1}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≤}}\AgdaSpace{}%
-\AgdaBound{t3}\<%
-\\
-%
-\>[4]\AgdaBound{lt1}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≤⨟}}\AgdaSpace{}%
-\AgdaBound{lt2}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≤-trans}\AgdaSpace{}%
-\AgdaBound{lt1}\AgdaSpace{}%
-\AgdaBound{lt2}\<%
-\end{code}
 
 \subsubsection{Strict Ordering}
 
@@ -581,13 +589,16 @@ and the successor constructor:
 \AgdaBound{t2}\<%
 \end{code}
 
-  That is, a $t_{1}$ is strictly smaller than $t_{2}$ if the tree one-size larger than $t_{1}$ is as small as $t_{2}$.
+  That is,  $t_{1}$ is strictly smaller than $t_{2}$ if the tree one-size larger than $t_{1}$ is as small as $t_{2}$.
+  The fact that $\up t$ is always strictly larger than $t$ is a key property of ordinals.
+  Adding one element to a countably-infinite set does not change its cardinaly, but taking the
+  successor of an infinite ordinal produces something larger, which is why they are useful
+  for assigning sizes to infinite data.
+
   This relation has the properties one expects of a strictly-less-than
   relation: it is a transitive  sub-relation of the less-than relation,
   every tree is strictly less than its successor,
   and no tree is strictly smaller than zero.
-  \je{TODO more?}
-
 \begin{code}%
 %
 \>[4]\AgdaFunction{≤↑t}\AgdaSpace{}%
@@ -869,7 +880,10 @@ and the successor constructor:
 
 \subsection{Well Founded Induction}
 \label{subsec:wf}
-Recall the definition of a constructive well founded relation:
+Here we recall the definition of a constructive well founded relation.
+An element is said to be accessible if all strictly smaller elements are accessible.
+A relation is then well founded if all elements are accessible.
+This is formulated as follows:
 
 \input{WFTypeset}
 
@@ -911,7 +925,7 @@ are are also accessible.
 \AgdaSymbol{(}\AgdaInductiveConstructor{acc}\AgdaSpace{}%
 \AgdaBound{r}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{x<y}\<%
+\AgdaBound{x≤y}\<%
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[6]\AgdaSymbol{=}\AgdaSpace{}%
@@ -924,9 +938,9 @@ are are also accessible.
 \AgdaBound{y'}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{<∘≤-in-<}\AgdaSpace{}%
 \AgdaBound{y'<y}\AgdaSpace{}%
-\AgdaBound{x<y}\AgdaSymbol{))}\<%
+\AgdaBound{x≤y}\AgdaSymbol{))}\<%
 \end{code}
-Then we use structural reduction to show that all terms are accesible.
+Then we use structural induction to show that all terms are accesible.
 The key observations are that zero is trivially accessible,
 since no trees are strictly smaller than it,
 and that the only way to derive
@@ -981,13 +995,13 @@ on which we can recur.
 \AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{acc}\AgdaSpace{}%
-\AgdaFunction{helper}\<%
+\AgdaFunction{wfLim}\<%
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[6]\AgdaKeyword{where}\<%
 \\
 \>[6][@{}l@{\AgdaIndent{0}}]%
-\>[8]\AgdaFunction{helper}\AgdaSpace{}%
+\>[8]\AgdaFunction{wfLim}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1006,7 +1020,7 @@ on which we can recur.
 \AgdaBound{y}\<%
 \\
 %
-\>[8]\AgdaFunction{helper}\AgdaSpace{}%
+\>[8]\AgdaFunction{wfLim}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{≤-cocone}\AgdaSpace{}%
 \AgdaDottedPattern{\AgdaSymbol{.}}\AgdaDottedPattern{\AgdaBound{f}}\AgdaSpace{}%
@@ -1029,4 +1043,6 @@ on which we can recur.
 \\
 \>[0]\<%
 \end{code}
-
+This lets us use Brouwer trees as the decreasing metric for well founded recursion.
+However, the $\AgdaFunction{wfRec}$ function only worked with one argument.
+To handle recursion with more than one argument, we need a way to combine ordinals.

@@ -10,8 +10,12 @@
 
 \section{First Attempts at a Join}
 \label{sec:join}
+One way to do well founded induction over multiple arguments is to do well founded
+induction over the maximum of the sizes of those arguments. Doing this is requires
+a maximum function, or in semilattice terminology, a join operator.
+
 In this section, we present two faulty implmentations of a join operator
-for trees. The first uses limits to define the join, but does not satisfy
+for Brouwer trees. The first uses limits to define the join, but does not satisfy
 strict monotonicity. The second is defined inductively. Its satisfies
 strict monotonicity, but fails to be the least of all upper bounds,
 and requires us to assume that limits are only taken over non-empty types.

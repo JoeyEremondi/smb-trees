@@ -24,7 +24,10 @@ WfRec _<_ P x = ∀ y → y < x → P y
 \end{code}
 
 \begin{code}
-data Acc {A : Set a} (_<_ : A → A → Set ℓ) (x : A) : Set (a ⊔ ℓ) where
+data Acc {A : Set a}
+     (_<_ : A → A → Set ℓ)
+     (x : A)
+     : Set (a ⊔ ℓ) where
   acc : (rs : ∀ y → y < x → Acc _<_ y) → Acc _<_ x
 
 WellFounded : (A → A → Set ℓ) → Set _
@@ -75,7 +78,20 @@ calls on smaller values:
     → (∀ x → ((y : A) → y < x → P y) → P x)
     → ∀ x → P x
 \end{code}
+The $\AgdaFunction{wfRec}$ function is defined using structural recursion on an argument
+of type $\AgdaDatatype{Acc}$, so the type checker accepts it.
 \begin{code}[hide]
   wfRec = build wfRecBuilder
-\end{code}
 
+
+
+
+  -- wfRecAcc : (P : A → Set ℓ)
+  --   → (∀ x
+  --          → (self : (y : A) → y < x → P y)
+  --          → (∀ {y pf1 pf2} → self y pf1 ≡ self y pf2)
+  --          → P x)
+  --   → ∀ x → (pf : Acc _<_ x ) → (pf ≡ wf x ) → P x
+  -- wfRecAcc P f x (acc pf) _ = {!f!}
+
+\end{code}

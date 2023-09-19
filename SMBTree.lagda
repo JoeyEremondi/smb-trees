@@ -5,8 +5,7 @@
 
 Now that we have identified a substantial class of well behaved Brouwer trees,
 we want to define a new type containing only those trees.
-These are SMB-trees: strictly monotone Brouwer trees.
-In this section, we will define them, and show how
+In this section, we will define strictly monotone Brouwer trees (SMB-trees), and show how
 they can be given a similar interface to Brouwer trees.
 
 \begin{code}[hide]
@@ -28,13 +27,17 @@ module SMBTree {ℓ}
     (Cℕ : ℂ) (CℕIso : Iso (El Cℕ) ℕ ) where
 \end{code}
 
-We import all of our definitions so far, using the ``Brouwer" prefix to distinguish
+Next we import all of our definitions so far, using the ``Brouwer" prefix to distinguish
 them from the trees and ordering we are about to define.
 Critically, we do not instantiate these with the same interpretation function.
 Instead, we interpret each code wrapped in $\AgdaDatatype{Maybe}$.
-This ensures that we always take Brouwer limits over non-empty sets,
+Note that if a type $T$ is isomorphic to $\bN$, then $\AgdaDatatype{Maybe}\ T$ is as well.
+Wrapping in $\AgdaDatatype{Maybe}$ ensures that we always take Brouwer limits over non-empty sets,
 an assumption that was critical for the definitions of \cref{subsec:indmax}.
-However, we place no such restriction on SMB-trees.
+Essentially, we are adding an explicit zero to every sequence whose limit we take,
+so that the sequences are never empty, but the upper bound doe snot change.
+This detail is hidden in the interface for SMB-trees: the assumption of non-emptiness
+is only used in the Brouwer trees underlying SMB-trees.
 \begin{code}
 import Brouwer
     ℂ
@@ -80,7 +83,8 @@ opaque
   Z = MkTree Brouwer.Z Brouwer.≤-Z
 
   ↑ : SMBTree → SMBTree
-  ↑ (MkTree t pf) = MkTree (Brouwer.↑ t) (Brouwer.≤-sucMono pf)
+  ↑ (MkTree t pf)
+    = MkTree (Brouwer.↑ t) (Brouwer.≤-sucMono pf)
 \end{code}
 
 However, constructing the limit of a sequence of SMB-trees is not so easy.
@@ -98,7 +102,9 @@ The idempotence proof is then the property of $\maxInf$ that we proved in \cref{
   Lim : ∀   (c : ℂ) → (f : El c → SMBTree) → SMBTree
   Lim c f =
     MkTree
-    (indMax∞ (Brouwer.Lim c (maybe′ (λ x → rawTree (f x)) Brouwer.Z)))
+    (indMax∞
+      (Brouwer.Lim c
+        (maybe′ (λ x → rawTree (f x)) Brouwer.Z)))
     (indMax∞-idem _)
 \end{code}
 
@@ -118,7 +124,7 @@ open _≤_
 
 \end{code}
 %
-Having a successor function allows us to define a strict ording on SMB-trees.
+The successor function allows us to define a strict ording on SMB-trees.
 \begin{code}
 _<_ : SMBTree → SMBTree → Set ℓ
 _<_ t1 t2 = (↑ t1) ≤ t2
@@ -152,8 +158,8 @@ For zero and successor, these are trivially lifted.
   ≤-sucMono (mk≤ lt) = mk≤ (Brouwer.≤-sucMono lt)
 \end{code}
   The constructors for ordering limits require more attention.
-  To show that an SMB-tree limit is an upper-bound, we use the fact
-  that the underlying limit was an upper bound, and the fact that $\maxInf$ is an upper bound,
+  To show that an SMB-tree limit is an upper bound, we use the fact
+  that the underlying limit was an upper bound, and the fact that $\maxInf$ is as large as its argument,
   since the SMB-tree $\AgdaFunction{Lim}$ wraps its result in $\maxInf$.
   Note that, since we already have transitivity for our new $\le$,
   we can simply show that $f\ k$ is less than the limit of $f$,
@@ -167,10 +173,11 @@ For zero and successor, these are trivially lifted.
 \end{code}
 
 Finally, we need to show that the SMT-tree limit is less than all other upper bounds.
-Suppose $t : \AgdaDatatype{SMBTRee}$ is an upper bound for $f$,
+Suppose $t : \AgdaDatatype{SMBTree}$ is an upper bound for $f$,
 and $t_u$ is the underlying tree for $t$, and $f_u$ computes the underlying trees for $f$.
 Then $\limiting$ gives that the underlying tree for $t$ is an upper bound for the trees underlying the image of $f$.
-However, the SMB-tree limit wraps its result in $\maxInf$.
+However, the SMB-tree limit wraps its result in $\maxInf$, so we need to show that $\maxInf$ of the limit
+is also less than $t'$.
 The monotonicity of $\maxInf$ then gives that $\indMax (\Lim\ c\ f_u)$ is less than $\maxInf\ t'$.
 In \cref{subsec:infinity}, we showed that $\maxInf$ had no effect on Brouwer trees that $\indMax$ was idempotent on.
 This is exactly what the  $\AgdaField{isIdem}$ field of SMB-trees contains! So we have $\maxInf\ t' \le\ t'$,
@@ -221,9 +228,11 @@ SMB-trees:
 
   max-commut : ∀ t1 t2 → max t1 t2 ≤ max t2 t1
 
-  max-assocL : ∀ t1 t2 t3 → max t1 (max t2 t3) ≤ max (max t1 t2) t3
+  max-assocL : ∀ t1 t2 t3
+    → max t1 (max t2 t3) ≤ max (max t1 t2) t3
 
-  max-assocR : ∀ t1 t2 t3 →  max (max t1 t2) t3 ≤ max t1 (max t2 t3)
+  max-assocR : ∀ t1 t2 t3
+    →  max (max t1 t2) t3 ≤ max t1 (max t2 t3)
 \end{code}
 
 In particular, $\AgdaFunction{max}$ is strictly monotone, and distributes over
@@ -300,7 +309,8 @@ the least of all upper bounds.
   \end{code}
 
   Perhaps surprisingly, this means that an SMB-tree version of $\limMax$
-  is equivalent to $\AgdaFunction{max}$, since they are both the least upper bound:
+  is equivalent to $\AgdaFunction{max}$, since they are both the least upper bound.
+  This in turn means that the limit based maximum is strictly monotone for SMB-trees.
   \begin{code}
 
 ℕLim : (ℕ → SMBTree) → SMBTree
@@ -397,8 +407,8 @@ opaque
 Our motivation for defining SMB-trees was defining well founded recursion,
 so the final piece of our definition is a proof that the strict ordering of
 SMB-trees is well founded.
-Intuitively this should hold: if there are no infinite descending chains
-of Brouwer trees, and there are fewer SMB-trees than Brouwer trees, then
+Intuitively this should hold: there are no infinite descending chains
+of Brouwer trees, and there are fewer SMB-trees than Brouwer trees, so
 there can be no infinite descending chains of SMB-trees.
 The key lemma is that an SMB-tree is accessible if its underlying Brouwer tree is.
 \begin{code}

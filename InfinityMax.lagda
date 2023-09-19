@@ -25,10 +25,10 @@
 
 Our first step in defining an ordinal notation with a well behaved maximum
 is to identify a class of Brouwer trees which are well behaved with
-respect to the inductive maximum.
-As we saw in
+respect to the inductive maximum. As we saw in the previous section, neither
+the limit based nor the inductive definition of the maximum was satisfactory.
 
-The answer, it turns out, is more limits:
+The solution, it turns out, is more limits:
 if we $\indMax$ a term with itself an infinite number of times,
 the result will be idempotent with respect to $\indMax$.
 First, we define a function to $\indMax$ a term with itself $n$
@@ -59,7 +59,7 @@ an upper bound on is argument.
       → (indMax∞ t1) ≤ (indMax∞ t2)
     \end{code}
 
-    However, the most important property we want from $\maxInf$ is that $\indMax$ is idempotent
+    However, the most important property that we want from $\maxInf$ is that $\indMax$ is idempotent
     with respect to it.
   The first step to showing this is realizing that we can take the maximum of $t$
   and $\maxInf\ t$ and we have a tree that is no larger than $\maxInf\ t$:
@@ -89,7 +89,8 @@ an upper bound on is argument.
         ≤⨟ indMax-monoL (indMax-∞lt1 t)
         ≤⨟ indMax-∞ltn n t
       \end{code}
-%
+
+      It remains to show that taking $\indMax$ of $\maxInf\ t$ with itself does not make it larger.
       By our inductive definition of $\indMax$, we have that
       \begin{displaymath}
       \indMax\ (\maxInf\ t) (\maxInf\ t)
@@ -106,7 +107,8 @@ an upper bound on is argument.
       → indMax (indMax∞ t) (indMax∞ t) ≤ indMax∞ t
     indMax∞-idem t =
       ≤-limiting  _ λ k →
-        (indMax-commut (nindMax t (Iso.fun CℕIso k)) (indMax∞ t))
+        (indMax-commut
+          (nindMax t (Iso.fun CℕIso k)) (indMax∞ t))
       ≤⨟ indMax-∞ltn (Iso.fun CℕIso k) t
     \end{code}
 

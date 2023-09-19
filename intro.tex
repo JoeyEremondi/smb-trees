@@ -3,12 +3,19 @@
 \label{sec:intro}
 
 \subsection{Recursion and Dependent Types}
-Dependently typed languages, such as Agda~\citep{agdaPaper}, Coq~\citep{coqart},
-Idris~\citep{DBLP:journals/corr/abs-2104-00480}, and Lean~\citep{10.1007/978-3-319-21401-6_26}, bridge the gap between theorem
-proving and programming.
+Dependently typed programming languages
+ bridge the gap between theorem proving and programming.
+In languages like Agda~\citep{agdaPaper}, Coq~\citep{coqart},
+Idris~\citep{DBLP:journals/corr/abs-2104-00480}, and Lean~\citep{10.1007/978-3-319-21401-6_26},
+ one can write programs, specifications, and proofs that programs
+meet those specifications, all using a unified language.
 
+One challenge in writing dependently typed code is proving termination.
 Functions defined in dependently typed languages are typically required to be
-\textit{total}: they must provably halt in all inputs. Since the halting problem
+\textit{total}: they must provably halt in all inputs.
+This is necessary both to ensure that type checking terminates and to prevent
+false results from being accidentally proven.
+Since the halting problem
 is undecidable, recursively-defined functions must be written in such a way that the type checker
 can mechanically deduce termination.
 Some functions only make recursive calls to structurally-smaller arguments,
@@ -21,9 +28,13 @@ chains, for which each recursive call is strictly smaller according to this orde
 
 While numeric orderings work for first-order data, they are ill suited to recursion over
 higher-order data structures, where some fields contain functions.
-
-There are many formulations of ordinals in dependent type theory, each with their own advantages and disadvantages.
-
+Instead, one must use \textit{ordinals} to assign a size to such data structures, so that even
+when a structure represents infinite data, only a finite number of recursive calls are made when traversing it.
+In classical mathematics, ordinals are totally ordered and straightforward to reason about. They have
+many different representations, all of which are equivalent.
+However, in constructive theories, such as those underlying dependently typed languages,
+there are many representations of ordinals which are not equivalent.
+Different constructive ordinal notations have different capabilities, each with their own advantages and disadvantages.
 
 \subsection{Contributions}
 
@@ -40,7 +51,6 @@ well founded recursion. Specifically, SMB-trees:
         univalence, quotient types, or higher inductive types.
 \end{itemize}
 
-
 \subsection{Uses for SMB-trees}
 
 \subsubsection{Well Founded Recursion}
@@ -49,7 +59,7 @@ Having a maximum operator for ordinals is particularly useful when traversing ov
 data structures in parallel, where neither argument takes priority over the other.
 In such a case, a lexicographic ordering cannot be used.
 
-
+\je{TODO rewrite}
 As an example, consider a unification algorithm over some encoding of types, and suppose that $\alpha$-renaming or some other restriction prevents
 structural recursion from being used.
 To solve a unification problem $ \Sigma(x : A)\ldotp B = \Sigma(x : C)\ldotp D$
@@ -69,8 +79,8 @@ two sides.
 
 This style of well founded induction was used to prove termination
 in a syntactic model of gradual dependent types~\citep{Eremondi_2023}. There, Brouwer trees
-were used to establish termination of recursive procedures for
-combining the type information in two imprecise types.
+were used to establish termination of recursive procedures that
+combined the type information in two imprecise types.
 The decreasing metric was the maximum size of the codes for the types being combined. Brouwer trees' arbitrary limits were used to assign sizes
 to dependent function and product types, and the strict monotonicity of the
 maximum operator was essential for proving that recursive calls were on
@@ -92,15 +102,14 @@ while still maintaining logical consistency.
 
 \subsubsection{Algebraic Reasoning}
 Another advantage of SMB-trees is that they allow Brouwer trees to
-be interpreted using algebraic tools.
-SMB-trees can be described as
+be understood using algebraic tools.
 In algebraic terminology, SMB-trees satisfy the following algebraic laws, up to the equivalence relation defined by $s \approx t := s \le t \le s $
 \begin{itemize}
-  \item Join-semlattice: the binary $\max$ is associative, commutative, and idempotent
-  \item Bounded: there is a least tree $Z$ such that $\max\ t\ Z \approx t$
+  \item Join-semlattice: the binary $\max$ is associative, commutative, and idempotent;
+  \item Bounded: there is a least tree $Z$ such that $\max\ t\ Z \approx t$;
   \item Inflationary endomorphism: there is a successor operator $\up$
         such that ${\max\ (\up t)\ t \approx \up t}$
-        and\\ ${\up (\max\ s\ t) = \max (\up s)\ (\up t)}$
+        and\\ ${\up (\max\ s\ t) = \max (\up s)\ (\up t)}$;
 \end{itemize}
 
 \Citet{BEZEM20221} describe a polynomial time algorithm for solving equations in such an algebra,
@@ -129,6 +138,6 @@ that the library can be easily ported to other proof assistants.
 
 This paper is written as a literate Agda document, and the definitions
 given in the paper are valid Agda code.
-Several definitions are presented with their body omitted due to
+For several definitions, only the type is presented, with the body omitted due to
 space restrictions. The full implementation can be found in the supplementary
 materials section of this submission.

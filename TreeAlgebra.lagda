@@ -77,8 +77,7 @@ any time $\AgdaBound{El}\ c$ is uninhabited.
 As such, we present our equations in the setoid style \ie up to an equivalence relation,
 but the results in this section could be adapted to quotient types in
 a system like Cubical Agda~\citep{10.1145/3341691}.
-First, we establish that SMB-trees are a bounded join-semilattice,
-up to the symmetric closure of the $\le$ relation:
+First, we establish that SMB-trees are a bounded join-semilattice.
 \begin{code}
     TreeSemiLat : BoundedJoinSemilattice ℓ ℓ ℓ
     Carrier TreeSemiLat = SMBTree
@@ -116,7 +115,8 @@ the succesor function is what \citet{BEZEM20221} call
 an \textit{inflationary endomorphism}, \ie a unary operator
 whose interactions with the join behave like the successor on natural numbers.
 To our knowledge, SMB-trees are the first ordinal notation
-in type theory for which the successor is inflationary.
+in type theory for which the successor is inflationary
+and arbitrary limits are supported.
 
 There are two laws to inflationary endomorphisms.
 First, the maximum of $\uparrow\ t$ and $t$ must be $\uparrow\ t$,
@@ -144,7 +144,7 @@ them using $\bigvee$.
 ⋁ : ∀ {c} → (El c → SMBTree) → SMBTree
 ⋁ f = Lim _ f
 \end{code}
-Since limits are an upper bound, joining any element from a sequence with the limit of that sequence
+Limits are an upper bound, so joining any element from a sequence with the limit of that sequence
 has no effect:
 \begin{code}
 ⋁-Bound : ∀ {c : ℂ} {f : El c → SMBTree} {k}
@@ -188,7 +188,10 @@ is the same as the limit of joining the sequences together.
   = max-LUB
       (≤-extLim (λ _ → max-≤L))
       (≤-extLim (λ _ → max-≤R))
-    , ≤-limLeast (λ k → max-mono (≤-limUpperBound _) (≤-limUpperBound _))
+      , ≤-limLeast
+        (λ k → max-mono
+          (≤-limUpperBound _)
+          (≤-limUpperBound _))
 \end{code}
 
 We can obtain a more general result, distributing a limit over a join,

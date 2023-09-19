@@ -13,7 +13,7 @@ hold definitionally. Then, provided $\indMax$ is monotone, it will also be
 strictly monotone.
 
 To do this, we compute the maximum of two trees recursively,
-pattern matching on the operands. We use a \textit{view}~\citep{mcbridemckinna2004}
+pattern matching on the operands. We use a \textit{view} \citep{mcbridemckinna2004}
 datatype to identify the cases we are matching on: we are matching on two arguments,
 which each have three possible constructors, but several cases overlap.
 Using a view type lets us avoid enumerating all nine possibilities when defining
@@ -54,6 +54,9 @@ the maximum and proving its properties.
 
 To begin, we parameterize our definition over a function
 yielding some element for any code's type.
+Having a representative of every code will be useful in computing
+the maximum of a limit and some other tree, since we do not need to handle
+the special case where the limit of an empty sequence is zero.
 \begin{code}%
 %
 \>[2]\AgdaKeyword{module}\AgdaSpace{}%
@@ -307,7 +310,7 @@ We then define our view type:
 Our view type has five cases. The first two handle when either input
 is zero, and the second two handle when either input is a limit.
 The final case is when both inputs are successors.
-$\AgdaFunction{indMaxView}$ computes the view for any pair of trees.
+The helper $\AgdaFunction{indMaxView}$ computes the view for any pair of trees.
 
 \begin{code}[hide]%
 %
@@ -477,7 +480,8 @@ In \cref{subsec:smb} we show how to circumvent this restriction.
 
 Under the assumption that all code are inhabited, we obtain several
 of our desired properties for a maximum: it is an upper bound,
-it is monotone and strictly monotonicity, and it is associative and commutative.
+it is monotone and strictly monotone, and it is associative and commutative.
+The proof bodies are omitted: they are straightforwrad reasoning by cases, but they are long and tedious.
   \begin{code}%
 \>[0]\<%
 \\
@@ -679,7 +683,8 @@ it is monotone and strictly monotonicity, and it is associative and commutative.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\\[\AgdaEmptyExtraSkip]%
+\>[8]\AgdaComment{--Holds\ definitionally}\<%
+\\
 %
 \>[8]\AgdaFunction{indMax-strictMono}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2678,7 +2683,7 @@ a true least-upper-bound.
 The difficulty lies in showing that
 $\indMax\ (\Lim\ c\ f)\ (\Lim\ c\ f)\le (\Lim\ c\ f)$.
 By our definition, $\indMax\ (\Lim\ c\ f)\ (\Lim\ c\ f)$
-reduces to
+reduces to:
 \begin{displaymath}
 (\Lim\ c\ \lambda x \to (\Lim\ c\ \lambda y \to \indMax\ (f\ x)\ (f\ y))) \le \Lim\ c\ f
 \end{displaymath}
