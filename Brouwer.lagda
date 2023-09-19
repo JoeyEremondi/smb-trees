@@ -1,4 +1,6 @@
 % !TEX root =  main.tex
+\label{sec:discussion}
+
 \begin{code}[hide]
   open import Data.Nat hiding (_≤_ ; _<_ ; _+_)
   open import Relation.Binary.PropositionalEquality
@@ -22,7 +24,7 @@ To represent the limits of uncountable sequences, we can paramterize our definit
 Our module is paramterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
 function $\mathit{El}$, which computes the type represented by each code.
 We require that there be a code whose interpretation is isomorphic to the natural numbers,
-as this is essential to our construction in \cref{sec:TODO}.
+as this is essential to our construction in \cref{subsec:infinity}.
 Increasingly larger trees can be obtained by setting $\bC := \AgdaPrimitive{Set} \ \ell$ and
 $\mathit{El} := \mathit{id}$ for increasing $\ell$.
 However, by defining an inductive-recursive universe,
@@ -179,7 +181,7 @@ and the successor constructor:
 \end{code}
 
 \subsection{Well Founded Induction}
-
+\label{subsec:wf}
 Recall the definition of a constructive well founded relation:
 
 \input{WFTypeset}

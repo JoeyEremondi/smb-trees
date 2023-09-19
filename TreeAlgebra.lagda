@@ -1,5 +1,6 @@
 
 \section{An Algebraic Perspective}
+\label{sec:algebra}
 
 \begin{code}[hide]
 open import Iso
@@ -73,9 +74,9 @@ even though their heads are distinct datatype constructors.
 Likewise, $\Lim\ c\ f$ is equivalent to $\AgdaInductiveConstructor{Z}$
 any time $\AgdaBound{El}\ c$ is uninhabited.
 
-As such, we present our equations in the setoid style~\citep{TODO} \ie up to an equivalence relation,
+As such, we present our equations in the setoid style \ie up to an equivalence relation,
 but the results in this section could be adapted to quotient types in
-a system like Cubical Agda~\citep{TODO}.
+a system like Cubical Agda~\citep{10.1145/3341691}.
 First, we establish that SMB-trees are a bounded join-semilattice,
 up to the symmetric closure of the $\le$ relation:
 \begin{code}

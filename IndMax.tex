@@ -4,6 +4,8 @@
 
 
 \subsection{Recursive Maximum}
+\label{subsec:indmax}
+
 
 In our next attempt at defining a maximum operator, we
 obtain strict monotonicity by making $\indMax\ (\up t_1) \ (\up t_2) = \up (\indMax\ t_1\ t_2)$
@@ -11,7 +13,7 @@ hold definitionally. Then, provided $\indMax$ is monotone, it will also be
 strictly monotone.
 
 To do this, we compute the maximum of two trees recursively,
-pattern matching on the operands. We use a \textit{view}~\citep{TODO}
+pattern matching on the operands. We use a \textit{view}~\citep{mcbridemckinna2004}
 datatype to identify the cases we are matching on: we are matching on two arguments,
 which each have three possible constructors, but several cases overlap.
 Using a view type lets us avoid enumerating all nine possibilities when defining
@@ -471,7 +473,7 @@ $\Lim\ c\ f \le \AgdaInductiveConstructor{Z}$ whenever $\AgdaBound{El}\ c$
 is uninhabited. So $\indMax\ \up\AgdaInductiveConstructor{Z}\ \Lim\ c\ f$
 will not actually be an upper bound for  $\up\AgdaInductiveConstructor{Z}$
 if $c$ has no inhabitants.
-In \cref{TODO} we show how to circumvent this restriction.
+In \cref{subsec:smb} we show how to circumvent this restriction.
 
 Under the assumption that all code are inhabited, we obtain several
 of our desired properties for a maximum: it is an upper bound,
@@ -2692,14 +2694,14 @@ having a proof that $\AgdaFunction{indMax}$ is a least upper bound.
 But proving that was the whole point of proving idempotence!
 An inductive hypothesis would give that $\indMax\ (f\ x)\ (f\ x) \le f\ x \le Lim\ c\ f$,
 but it does not apply when the arguments to $\indMax$ are not equal.
-Because we are working with constructive ordinals, we have no trichotomy property~\citep{TODO}, and hence no guarantee
+Because we are working with constructive ordinals, we have no trichotomy property~\citep{KRAUS2023113843}, and hence no guarantee
 that $\indMax\ (f\ x)\ (f\ y)$ will be one of $f\ x$ and $f\ y$.
 
 We now have two competing defintiions for the maximum: the limit version,
 which is not strictly monotone, and the inductive version, which is not actually
 a least upper bound. In the next section, we describe a large class of trees for
 which $\indMax$ is idempotent, and hence does compute a true upper bound.
-We then use that in \cref{TODO} to create a version of ordinals whose join
+We then use that in \cref{subsec:smb} to create a version of ordinals whose join
 has the best properties of both $\limMax$ and $\indMax$.
 \je{TODO recall the algebraic definition of semilattice}
 

@@ -4,7 +4,7 @@
 
 
 \subsection{Well-Behaved Trees}
-
+\label{subsec:infinity}
 
 \begin{code}[hide]
   open import Data.Nat hiding (_≤_ ; _<_)

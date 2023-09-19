@@ -1,6 +1,7 @@
 
 
 \subsection{Limit-based Maximum}
+\label{subsec:limmax}
 
 Since the limit constructor finds the least upper bound
 of the image of a function, it should be possible to define
