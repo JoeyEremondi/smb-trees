@@ -51,6 +51,13 @@ well founded recursion. Specifically, SMB-trees:
         univalence, quotient types, or higher inductive types.
 \end{itemize}
 
+The novel insight behind our contribution is that there is a subset of
+Brouwer trees which behave in the way we want. Specifically,
+the ability of Brouwer trees to take the limit of a sequence allows
+us to apply operations to an ordinal an infinite number of times,
+exposing properties that do not hold for finite applications but do hold
+in the limit.
+
 \subsection{Uses for SMB-trees}
 
 \subsubsection{Well Founded Recursion}
@@ -59,23 +66,36 @@ Having a maximum operator for ordinals is particularly useful when traversing ov
 data structures in parallel, where neither argument takes priority over the other.
 In such a case, a lexicographic ordering cannot be used.
 
-\je{TODO rewrite}
-As an example, consider a unification algorithm over some encoding of types, and suppose that $\alpha$-renaming or some other restriction prevents
-structural recursion from being used.
+As an example, consider a unification algorithm that merges
+two higher order data structures, such as a unifier for a strongly typed encoding of dependent types,
+ and suppose that $\alpha$-renaming or some other restriction prevents
+ structural recursion from being used.
+
 To solve a unification problem $ \Sigma(x : A)\ldotp B = \Sigma(x : C)\ldotp D$
 we must recursively
 solve $A = C$ and $\forall x \ldotp B[x] = D[x]$.
-However, the type of $x$ in the latter equation depends on the solution
-to the first equation, which is bounded by the size of the maximum of the sizes
-of both $A$ and $C$.
-So for each recursive call to be on a smaller size,
-the size of $a = c$ and $b = d$ must both be strictly smaller than
-$(a,b)=(c,d)$. In a lexicographic ordering where the size of the left-hand size
-dominates, we know that $a$ is strictly smaller than $(a,b)$, but we have no
-guarantees that \je{TODO}.
-Conversely, if we order unification problems by the size of the maximum of their
-two sides.
+However, the types of the variables in the latter equation are different.
+So after computing the unification of $A$ and $C$, we may need to traverse
+$B$ and $D$ and convert terms from type $A$ or $C$ to their unification.
+If such a conversion is defined mutually with unification, then
+it must work on a pair of types strictly smaller than
+$\Sigma(x : A)\ldotp B , \Sigma(x : C)\ldotp D$.
 
+To assign sizes to such a procedure, we need a few features.
+First, we need
+a maximum operator, so that we can bound the size of unifying $A$ and $C$
+by their maximum size.
+Second, the operator should be strictly monotone, so that the recursive
+call unifying $A$ and $C$ is on a strictly smaller size.
+Third, the maximum should be commutative:
+we need the size of the nested pairs $((A,B),(C,D))$
+to be the same as $((A,C),(B,D))$, so that a recursive call on arguments whose
+size is bounded by the maximum of  $(A,C)$ will still
+be strictly smaller than the initial size of $((A,B),(C,D))$.
+One such call would be a the procedure converting from type $A$ to the
+solution of $A=C$.
+Lexicographic orderings lack this commutativity, and are too restrictive
+for situations such as this.
 
 This style of well founded induction was used to prove termination
 in a syntactic model of gradual dependent types~\citep{Eremondi_2023}. There, Brouwer trees
@@ -85,6 +105,10 @@ The decreasing metric was the maximum size of the codes for the types being comb
 to dependent function and product types, and the strict monotonicity of the
 maximum operator was essential for proving that recursive calls were on
 strictly smaller arguments.
+
+In general, we want to provide the programmer with the ability
+to specify complex relationships between the sizes of multiple arguments,
+and to be able to deduce facts about those sizes in a principled way.
 
 \subsubsection{Syntactic Models and Sized Types}
 
@@ -109,7 +133,7 @@ In algebraic terminology, SMB-trees satisfy the following algebraic laws, up to 
   \item Bounded: there is a least tree $Z$ such that $\max\ t\ Z \approx t$;
   \item Inflationary endomorphism: there is a successor operator $\up$
         such that ${\max\ (\up t)\ t \approx \up t}$
-        and\\ ${\up (\max\ s\ t) = \max (\up s)\ (\up t)}$;
+        and\\ ${\up (\max\ s\ t) \approx \max (\up s)\ (\up t)}$;
 \end{itemize}
 
 \Citet{BEZEM20221} describe a polynomial time algorithm for solving equations in such an algebra,

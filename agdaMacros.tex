@@ -19,6 +19,12 @@
     \equal{#1}{t2}
   }{\def\ret{$t_2$\xspace}}{}%
   \ifthenelse{
+    \equal{#1}{s1}
+  }{\def\ret{$s_1$\xspace}}{}%
+  \ifthenelse{
+    \equal{#1}{s2}
+  }{\def\ret{$s_2$\xspace}}{}%
+  \ifthenelse{
     \equal{#1}{t1'}
   }{\def\ret{$t'_1$\xspace}}{}%
   \ifthenelse{

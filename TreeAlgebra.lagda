@@ -100,7 +100,29 @@ ord→equiv : ∀ {t1 t2} → t1 ≤ t2 → t1 ∨ t2 ≈ t2
 equiv→ord : ∀ {t1 t2} → t1 ∨ t2 ≈ t2 → t1 ≤ t2
 \end{code}
 
-The semilattice properties can be presented algebraically:
+This means that our ordering respects equivalence.
+Additionally, the successor, join and limit constructors are congruences for our equivalence: equivalent inputs produce equivalent outputs.
+These can be combined with the proof irrelevance
+of well founded recursion to rewrite ordering goals
+according to algebraic laws.
+
+\begin{code}
+≤≈ : ∀ {t1 t2 s1 s2}
+  → s1 ≤ t1 → s1 ≈ s2 → t1 ≈ t2 → s2 ≤ t2
+<≈ : ∀ {t1 t2 s1 s2}
+  → s1 < t1 → s1 ≈ s2 → t1 ≈ t2 → s2 < t2
+↑-cong : ∀ {t1 t2}
+  → t1 ≈ t2 → ↑ t1 ≈ ↑ t2
+Lim-cong : ∀ {c} {f1 f2}
+  → (∀ x → f1 x ≈ f2 x) → Lim c f1 ≈ Lim c f2
+max-cong : ∀ {s1 s2 t1 t2}
+  → s1 ≈ s2 → t1 ≈ t2 → s1 ∨ t1 ≈ s2 ∨ t2
+\end{code}
+
+This gives us a framework
+to present the properties of SMB-trees equationally.
+For instance,
+the semilattice properties of the join can be given algebraically:
 a semilattice is a commutative, idempotent semigroup.
 \begin{code}
 assoc : ∀ {t1 t2 t3} → t1 ∨ (t2 ∨ t3) ≈ (t1 ∨ t2) ∨ t3
@@ -228,5 +250,10 @@ equiv→ord (lt , _) = max-≤L ≤⨟ lt
 ≤-extensional {t1} {t2} to from = to t1 ≤-refl , from t2 ≤-refl
 
 
+≤≈ s1≤t1 (_ , s2≤s1) (t1≤t2 , _) = s2≤s1 ≤⨟ s1≤t1 ≤⨟ t1≤t2
+<≈ pf (_ , s2≤s1) (t1≤t2 , _) = ≤-sucMono s2≤s1 ≤⨟ pf ≤⨟ t1≤t2
+↑-cong (pf1 , pf2) = (≤-sucMono pf1 , ≤-sucMono pf2)
+Lim-cong pf = (≤-extLim (λ k → proj₁ (pf k)) , ≤-extLim λ k → proj₂ (pf k))
+max-cong (pfs1 , pfs2) (pft1 , pft2) = max-mono pfs1 pft1 , max-mono pfs2 pft2
 
 \end{code}

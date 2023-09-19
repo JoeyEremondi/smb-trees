@@ -52,7 +52,6 @@ and it is idempotent.
         ... | suc n = ≤-refl t
       \end{code}
 
-      \je{TODO update description}
       From these properties, we can compute several other useful properties:
       monotonicity, commutativity, and that it is in fact the least of all upper bounds.
 

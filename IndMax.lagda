@@ -345,7 +345,3 @@ a least upper bound. In the next section, we describe a large class of trees for
 which $\indMax$ is idempotent, and hence does compute a true upper bound.
 We then use that in \cref{subsec:smb} to create a version of ordinals whose join
 has the best properties of both $\limMax$ and $\indMax$.
-\je{TODO recall the algebraic definition of semilattice}
-
-
-

@@ -83,15 +83,33 @@ of type $\AgdaDatatype{Acc}$, so the type checker accepts it.
 \begin{code}[hide]
   wfRec = build wfRecBuilder
 
+module FixPoint
+  {_<_ : Rel A r} (wf : WellFounded _<_)
+  (P : Pred A ℓ) (f : WfRec _<_ P ⊆′ P)
+  (f-ext : (x : A) {IH IH′ : WfRec _<_ P x} → (∀ {y} y<x → IH y y<x ≡ IH′ y y<x) → f x IH ≡ f x IH′)
+  where
+
+  some-wfRec-irrelevant : ∀ x → (q q′ : Acc _<_ x) → Some.wfRec P f x q ≡ Some.wfRec P f x q′
+  some-wfRec-irrelevant = All.wfRec wf _
+                                   (λ x → (q q′ : Acc _<_ x) → Some.wfRec P f x q ≡ Some.wfRec P f x q′)
+                                   (λ { x IH (acc rs) (acc rs′) → f-ext x (λ y<x → IH _ y<x (rs _ y<x) (rs′ _ y<x)) })
+
+  open All wf ℓ
+  wfRecBuilder-wfRec : ∀ {x y} y<x → wfRecBuilder P f x y y<x ≡ wfRec P f y
+  wfRecBuilder-wfRec {x} {y} y<x with wf x
+  ... | acc rs = some-wfRec-irrelevant y (rs y y<x) (wf y)
 
 
+\end{code}
+Well founded induction computes a fixed point of the function,
+meaning that the particular proof that the strict order holds
+is irrelevant:
+\begin{code}
+  unfold-wfRec : ∀ {x}
+    → wfRec P f x ≡ f x (λ y _ → wfRec P f y)
+\end{code}
 
-  -- wfRecAcc : (P : A → Set ℓ)
-  --   → (∀ x
-  --          → (self : (y : A) → y < x → P y)
-  --          → (∀ {y pf1 pf2} → self y pf1 ≡ self y pf2)
-  --          → P x)
-  --   → ∀ x → (pf : Acc _<_ x ) → (pf ≡ wf x ) → P x
-  -- wfRecAcc P f x (acc pf) _ = {!f!}
+\begin{code}[hide]
 
+  unfold-wfRec {x} = f-ext x wfRecBuilder-wfRec
 \end{code}
