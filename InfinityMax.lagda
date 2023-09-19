@@ -84,10 +84,11 @@ an upper bound on is argument.
       → indMax (indMax∞ t) (nindMax t n) ≤ indMax∞ t
     indMax-∞ltn ℕ.zero t = indMax-≤Z (indMax∞ t)
     indMax-∞ltn (ℕ.suc n) t =
-        indMax-monoR (indMax-commut (nindMax t n) t)
-        ≤⨟ indMax-assocL (indMax∞ t) t (nindMax t n)
-        ≤⨟ indMax-monoL (indMax-∞lt1 t)
-        ≤⨟ indMax-∞ltn n t
+      indMax-monoR
+        {t1 = indMax∞ t} (indMax-commut (nindMax t n) t)
+      ≤⨟ indMax-assocL (indMax∞ t) t (nindMax t n)
+      ≤⨟ indMax-monoL (indMax-∞lt1 t)
+      ≤⨟ indMax-∞ltn n t
       \end{code}
 
       It remains to show that taking $\indMax$ of $\maxInf\ t$ with itself does not make it larger.

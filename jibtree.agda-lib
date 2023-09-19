@@ -1,6 +1,0 @@
-
-name: jibtree
-depend:
-    standard-library
-include: .
-flags:  --lossy-unification

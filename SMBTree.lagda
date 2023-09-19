@@ -208,7 +208,8 @@ opaque
   max t1 t2 =
     MkTree
       (indMax (rawTree t1) (rawTree t2))
-      (indMax-swap4
+      (indMax-swap4 {t1 = rawTree t1} {t1' = rawTree t2}
+                    {t2 = rawTree t1} {t2' = rawTree t2}
         Brouwer.≤⨟ indMax-mono (isIdem t1) (isIdem t2))
 \end{code}
 
@@ -260,19 +261,19 @@ idempotent for SMB-trees:
   ≤-extLim : ∀  {c : ℂ} → {f1 f2 : El c → SMBTree}
     → (∀ k → f1 k ≤ f2 k)
     → Lim c f1 ≤ Lim c f2
-  ≤-extLim lt = ≤-limLeast (λ k → lt k ≤⨟ ≤-limUpperBound k)
+  ≤-extLim {f1 = f1} {f2 = f2} lt = ≤-limLeast (λ k → lt k ≤⨟ ≤-limUpperBound {f = λ v → f2 v} k)
 
   ≤-extExists : ∀  {c1 c2 : ℂ} → {f1 : El c1 → SMBTree} {f2 : El c2 → SMBTree}
     → (∀ k1 → Σ[ k2 ∈ El c2 ] f1 k1 ≤ f2 k2)
     → Lim c1 f1 ≤ Lim c2 f2
-  ≤-extExists {f1 = f1} {f2} lt = ≤-limLeast (λ k1 → proj₂ (lt k1) ≤⨟ ≤-limUpperBound (proj₁ (lt k1)))
+  ≤-extExists {f1 = f1} {f2} lt = ≤-limLeast (λ k1 → proj₂ (lt k1) ≤⨟ ≤-limUpperBound {f = f2} (proj₁ (lt k1)))
 
   ¬Z<↑ : ∀  t → ¬ ((↑ t) ≤ Z)
   ¬Z<↑ t pf = Brouwer.¬<Z (rawTree t) (get≤ pf)
 
   max-≤L = mk≤ indMax-≤L
 
-  max-≤R =  mk≤ indMax-≤R
+  max-≤R {t1 = t1} {t2 = t2} =  mk≤ (indMax-≤R {t1 = rawTree t1} )
 
   max-mono lt1 lt2 = mk≤ (indMax-mono (get≤ lt1) (get≤ lt2))
 
@@ -288,16 +289,16 @@ idempotent for SMB-trees:
 
   max-commut t1 t2 =  mk≤ (indMax-commut (rawTree t1) (rawTree t2))
 
-  max-assocL t1 t2 t3 = mk≤ (indMax-assocL _ _ _)
+  max-assocL t1 t2 t3 = mk≤ (indMax-assocL (rawTree t1) (rawTree t2) (rawTree t3))
 
-  max-assocR t1 t2 t3 = mk≤ (indMax-assocR _ _ _)
+  max-assocR t1 t2 t3 = mk≤ (indMax-assocR (rawTree t1) (rawTree t2) (rawTree t3))
 
   max-swap4 : ∀ {t1 t1' t2 t2'} → max (max t1 t1') (max t2 t2') ≤ max (max t1 t2) (max t1' t2')
-  max-swap4 =  mk≤ indMax-swap4
+  max-swap4 {t1 = t1} {t1' = t1'} {t2 = t2} {t2' = t2'} =  mk≤ (indMax-swap4 {t1 = rawTree t1} {t1' = rawTree t1'} {t2 = rawTree t2} {t2' = rawTree t2'})
 
   max-strictMono lt1 lt2 = mk≤ (indMax-strictMono (get≤ lt1) (get≤ lt2))
 
-  max-sucMono lt =  mk≤ (indMax-sucMono (get≤ lt))
+  max-sucMono {t1 = t1} {t2 = t2} {t1' = t1'}  {t2' = t2'} lt =  mk≤ (indMax-sucMono {t1 = rawTree t1} {t2 = rawTree t2} {t1' = rawTree t1'} {t2' = rawTree t2'} (get≤ lt))
 
 \end{code}
 

@@ -159,7 +159,7 @@ The proof bodies are omitted: they are straightforwrad reasoning by cases, but t
         ... | IndMaxZ-R = ≤-Z
         ... | IndMaxZ-L = ≤-refl _
         ... | IndMaxLim-R {f = f} _ = extLim f (λ x → indMax t1 (f x)) (λ k → indMax-≤R {t1 = t1} {f k})
-        ... | IndMaxLim-L {f = f} = underLim  λ k → indMax-≤R
+        ... | IndMaxLim-L {f = f} = underLim  λ k → indMax-≤R {t1 = f k}
         ... | IndMaxLim-Suc {t1} {t2} = ≤-sucMono (indMax-≤R {t1 = t1} {t2 = t2})
 
 
