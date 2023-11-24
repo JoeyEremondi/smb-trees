@@ -23,8 +23,8 @@
     unfolding indMax indMax'
 \end{code}
 
-Our first step in defining an ordinal notation with a well behaved maximum
-is to identify a class of Brouwer trees which are well behaved with
+Our first step in defining an ordinal notation with a well-behaved maximum
+is to identify a class of Brouwer trees which are well-behaved with
 respect to the inductive maximum. As we saw in the previous section, neither
 the limit based nor the inductive definition of the maximum was satisfactory.
 
@@ -62,7 +62,7 @@ an upper bound on is argument.
     However, the most important property that we want from $\maxInf$ is that $\indMax$ is idempotent
     with respect to it.
   The first step to showing this is realizing that we can take the maximum of $t$
-  and $\maxInf\ t$ and we have a tree that is no larger than $\maxInf\ t$:
+  and $\maxInf\ t$, and that we have a tree that is no larger than $\maxInf\ t$:
   because it is already an infinite chain of applications, adding one more
   makes no difference.
 %

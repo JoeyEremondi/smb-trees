@@ -27,7 +27,7 @@
 %%
 %% The first command in your LaTeX source must be the \documentclass command.
 % \documentclass[autogobble,dvipsnames,acmsmall,anonymous,review]{acmart}
-\documentclass[dvipsnames,sigplan,10pt,anonymous,review]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
+\documentclass[dvipsnames,sigplan,10pt,review]{acmart}\settopmatter{printfolios=false,printccs=false,printacmref=false}
 
 
 % \def\@testdef #1#2#3{%
@@ -69,21 +69,21 @@
 %   BoldItalicFont=*-BoldItalic,
 % ]
 
-\ifdef{\reviewmode}{
-  \settopmatter{printfolios=true,printccs=false,printacmref=false}
-  \setcopyright{none}
-  \renewcommand\footnotetextcopyrightpermission[1]{}
-  % \pagestyle{plain}
-  \raggedbottom
-}{
-  \settopmatter{printfolios=true,printccs=false,printacmref=false}
-  \setcopyright{none}
-  \renewcommand\footnotetextcopyrightpermission[1]{}
-  \pagestyle{plain}
-% \setcopyright{acmcopyright}
-% \copyrightyear{2021}
-% \acmDOI{10.1145/1122445.1122456}
-}
+% \ifdef{\reviewmode}{
+%   \settopmatter{printfolios=true,printccs=false,printacmref=false}
+%   \setcopyright{none}
+%   \renewcommand\footnotetextcopyrightpermission[1]{}
+%   % \pagestyle{plain}
+%   \raggedbottom
+% }{
+%   \settopmatter{printfolios=true,printccs=false,printacmref=false}
+%   \setcopyright{none}
+%   \renewcommand\footnotetextcopyrightpermission[1]{}
+%   \pagestyle{plain}
+% % \setcopyright{acmcopyright}
+% % \copyrightyear{2021}
+% % \acmDOI{10.1145/1122445.1122456}
+% }
 
 
 
@@ -146,7 +146,7 @@
 %% end of the preamble, start of the body of the document source.
 \begin{document}
 
-\title{Strictly Monotone Brouwer Trees for Well Founded Recursion Over Multiple Arguments}
+\title{Strictly Monotone Brouwer Trees for Well-founded Recursion Over Multiple Arguments}
 % \titlenote{This work is partially funded by CONICYT FONDECYT Regular
 % Project 1190058. This work is partially funded by an NSERC Discovery Grant.}
 
@@ -164,7 +164,7 @@
                                           %% can be repeated if necessary
 
   \affiliation{
-    \department{Laboratory for the Foundation of Computer Science}              %% \department is recommended
+    \department{Laboratory for the Foundations of Computer Science}              %% \department is recommended
     \institution{University of Edinburgh}            %% \institution is required
     \country{Scotland, United Kingdom}                    %% \country is recommended
   }
@@ -179,7 +179,7 @@
 %% other information printed in the page headers. This command allows
 %% the author to define a more concise list
 %% of authors' names for this purpose.
-\renewcommand{\shortauthors}{Joseph Eremondi, Ronald Garcia, and \'Eric Tanter}
+\renewcommand{\shortauthors}{Joseph Eremondi}
 
 
 % \begin{acks}
@@ -219,7 +219,7 @@
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{dependent types, Brouwer trees, well founded recursion}
+\keywords{dependent types, Brouwer trees, well-founded recursion}
 
 \def\acmBooktitle#1{\gdef\@acmBooktitle{#1}}
 \acmBooktitle{Proceedings of \acmConference@name

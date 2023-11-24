@@ -3,7 +3,7 @@
 \subsection{Strictly Monotone Brouwer Trees}
 \label{subsec:smb}
 
-Now that we have identified a substantial class of well behaved Brouwer trees,
+Now that we have identified a substantial class of well-behaved Brouwer trees,
 we want to define a new type containing only those trees.
 In this section, we will define strictly monotone Brouwer trees (SMB-trees), and show how
 they can be given a similar interface to Brouwer trees.
@@ -27,7 +27,7 @@ module SMBTree {ℓ}
     (Cℕ : ℂ) (CℕIso : Iso (El Cℕ) ℕ ) where
 \end{code}
 
-Next we import all of our definitions so far, using the ``Brouwer" prefix to distinguish
+Next we import all of our definitions so far, using the ``Brouwer'' prefix to distinguish
 them from the trees and ordering we are about to define.
 Critically, we do not instantiate these with the same interpretation function.
 Instead, we interpret each code wrapped in $\AgdaDatatype{Maybe}$.
@@ -35,7 +35,7 @@ Note that if a type $T$ is isomorphic to $\bN$, then $\AgdaDatatype{Maybe}\ T$ i
 Wrapping in $\AgdaDatatype{Maybe}$ ensures that we always take Brouwer limits over non-empty sets,
 an assumption that was critical for the definitions of \cref{subsec:indmax}.
 Essentially, we are adding an explicit zero to every sequence whose limit we take,
-so that the sequences are never empty, but the upper bound doe snot change.
+so that the sequences are never empty, but the upper bound does not change.
 This detail is hidden in the interface for SMB-trees: the assumption of non-emptiness
 is only used in the Brouwer trees underlying SMB-trees.
 \begin{code}
@@ -96,7 +96,7 @@ More challenging is how, as we saw in \cref{subsec:indmax}, Brouwer trees do not
 
 Our key insight is to define limits of SMB-trees using $\maxInf$ on the underlying trees:
 for any function producing SMB-trees, we take the limit of the underlying trees,
-then $\indMax$ that result with itself an infinite numer of times.
+then $\indMax$ that result with itself an infinite number of times.
 The idempotence proof is then the property of $\maxInf$ that we proved in \cref{subsec:infinity}.
 \begin{code}
   Lim : ∀   (c : ℂ) → (f : El c → SMBTree) → SMBTree
@@ -124,7 +124,7 @@ open _≤_
 
 \end{code}
 %
-The successor function allows us to define a strict ording on SMB-trees.
+The successor function allows us to define a strict order on SMB-trees.
 \begin{code}
 _<_ : SMBTree → SMBTree → Set ℓ
 _<_ t1 t2 = (↑ t1) ≤ t2
@@ -404,10 +404,10 @@ opaque
 \end{code}
 
 
-\subsubsection{Well Founded Ordering on SMB-trees}
-Our motivation for defining SMB-trees was defining well founded recursion,
+\subsubsection{Well-founded Ordering on SMB-trees}
+Our motivation for defining SMB-trees was defining well-founded recursion,
 so the final piece of our definition is a proof that the strict ordering of
-SMB-trees is well founded.
+SMB-trees is well-founded.
 Intuitively this should hold: there are no infinite descending chains
 of Brouwer trees, and there are fewer SMB-trees than Brouwer trees, so
 there can be no infinite descending chains of SMB-trees.
@@ -424,6 +424,4 @@ The key lemma is that an SMB-tree is accessible if its underlying Brouwer tree i
 \end{code}
 
 Thus, we have an ordinal type with limits, a strictly monotone join,
-and well founded recursion.
-
-
+and well-founded recursion.

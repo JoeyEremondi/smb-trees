@@ -68,7 +68,7 @@ module All {_<_ : Rel A r} (wf : WellFounded _<_) ℓ where
 
 
 That is, an element of a type is accessible for a relation if all strictly
-smaller elements of it are also accessible. A relation is well founded
+smaller elements of it are also accessible. A relation is well-founded
 if all values are accessible with respect to that relation.
 This can then be used to define induction with arbitrary recursive
 calls on smaller values:
@@ -101,7 +101,7 @@ module FixPoint
 
 
 \end{code}
-Well founded induction computes a fixed point of the function,
+Well-founded induction computes a fixed point of the function,
 meaning that the particular proof that the strict order holds
 is irrelevant:
 \begin{code}

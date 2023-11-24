@@ -6,23 +6,23 @@ Brouwer trees are a particular ordinal notation that
 make it very easy to assign sizes to higher order data structures.
 They extend unary natural numbers with a limit constructor,
 so a function's size can be the least upper bound of the sizes of values from its image.
-These can then be used to define well founded recursion: any recursive calls are allowed
+These can then be used to define well-founded recursion: any recursive calls are allowed
 so long as they are on values whose sizes are strictly smaller than the current size.
 
-Unfortunately, Brouwer trees are not algebraically well behaved.
+Unfortunately, Brouwer trees are not algebraically well-behaved.
 They can be characterized equationally as a join-semilattice, where the join takes the maximum
 of two trees. However, this join does not interact well with
 the successor constructor, so it does not interact properly with
-the strict ordering used in well founded recursion.
+the strict ordering used in well-founded recursion.
 
 We present Strictly Monotone Brouwer trees (SMB-trees), a refinement of Brouwer trees
-that are algebraically well behaved. SMB-trees are built using functions with the same
+that are algebraically well-behaved. SMB-trees are built using functions with the same
 signatures as Brouwer tree constructors, and they satisfy all Brouwer tree inequalities.
 However,  their join operator distributes over the successor, making them
-suited for well founded recursion or equational reasoning.
+suited for well-founded recursion or equational reasoning.
 
-This paper teaches how, using dependent pairs and careful definitions, an ill behaved
-definition can be turned into a well behaved one.
+This paper teaches how, using dependent pairs and careful definitions, an ill-behaved
+definition can be turned into a well-behaved one.
 Our approach is axiomatically lightweight:
 it does not rely on Axiom K, univalence, quotient types, or Higher Inductive Types.
 We implement a recursively-defined maximum operator for Brouwer trees that matches

@@ -61,8 +61,8 @@ We then define our view type:
 
         indMaxView : ∀ t1 t2 → IndMaxView t1 t2
 \end{code}
-Our view type has five cases. The first two handle when either input
-is zero, and the second two handle when either input is a limit.
+Our view type has five cases. The first two cases handle when either input
+is zero, and the next two cases handle when either input is a limit.
 The final case is when both inputs are successors.
 The helper $\AgdaFunction{indMaxView}$ computes the view for any pair of trees.
 
@@ -104,7 +104,7 @@ In \cref{subsec:smb} we show how to circumvent this restriction.
 Under the assumption that all code are inhabited, we obtain several
 of our desired properties for a maximum: it is an upper bound,
 it is monotone and strictly monotone, and it is associative and commutative.
-The proof bodies are omitted: they are straightforwrad reasoning by cases, but they are long and tedious.
+The proof bodies are omitted: they are straightforward reasoning by cases, but they are long and tedious.
   \begin{code}
 
     opaque
@@ -324,10 +324,10 @@ reduces to:
 \begin{displaymath}
 (\Lim\ c\ \lambda x \to (\Lim\ c\ \lambda y \to \indMax\ (f\ x)\ (f\ y))) \le \Lim\ c\ f
 \end{displaymath}
-We cannot use $\cocone$ to prove this, since  the left hand side
+We cannot use $\cocone$ to prove this, since  the left-hand side
 is not necessarily equal to $f\ k$ for any $ k : \AgdaBound{El} \ c$.
 So the only possibility is to use $\limiting$. Applying it twice,
-along with a use of commutatativity of $\indMax$, we are left with the following goal:
+along with a use of commutativity of $\indMax$, we are left with the following goal:
 \begin{displaymath}
  (\forall x \to (\forall  y \to \indMax\ (f\ x)\ (f\ y))) \le \Lim\ c\ f
 \end{displaymath}
@@ -339,7 +339,7 @@ but it does not apply when the arguments to $\indMax$ are not equal.
 Because we are working with constructive ordinals, we have no trichotomy property~\citep{KRAUS2023113843}, and hence no guarantee
 that $\indMax\ (f\ x)\ (f\ y)$ will be one of $f\ x$ and $f\ y$.
 
-We now have two competing defintiions for the maximum: the limit version,
+We now have two competing definitions for the maximum: the limit version,
 which is not strictly monotone, and the inductive version, which is not actually
 a least upper bound. In the next section, we describe a large class of trees for
 which $\indMax$ is idempotent, and hence does compute a true upper bound.

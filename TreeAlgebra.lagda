@@ -103,7 +103,7 @@ equiv→ord : ∀ {t1 t2} → t1 ∨ t2 ≈ t2 → t1 ≤ t2
 This means that our ordering respects equivalence.
 Additionally, the successor, join and limit constructors are congruences for our equivalence: equivalent inputs produce equivalent outputs.
 These can be combined with the proof irrelevance
-of well founded recursion to rewrite ordering goals
+of well-founded recursion to rewrite ordering goals
 according to algebraic laws.
 
 \begin{code}
@@ -133,7 +133,7 @@ idem : ∀ {t} → t ∨ t ≈ t
 \subsection{Successor: The Inflationary Endomorphism}
 
 The algebraic version of strict monotonicity is that
-the succesor function is what \citet{BEZEM20221} call
+the successor function is what \citet{BEZEM20221} call
 an \textit{inflationary endomorphism}, \ie a unary operator
 whose interactions with the join behave like the successor on natural numbers.
 To our knowledge, SMB-trees are the first ordinal notation
@@ -150,7 +150,7 @@ which captures the idea that $t$ is less that $\uparrow\ t$.
   , max-≤R
 \end{code}
 Second, the successor must distribute over the join. Recall that
-this was precisely the condition we used to establish strict monotnicity.
+this was precisely the condition we used to establish strict monotonicity.
 \begin{code}
 ↑dist : ∀ {t1 t2} → ↑ (t1  ∨ t2) ≈ ↑ t1 ∨ ↑ t2
 ↑dist {t1} {t2} =
@@ -173,7 +173,7 @@ has no effect:
   → f k ∨ (⋁ f) ≈ ⋁ f
 ⋁-Bound = ord→equiv (≤-limUpperBound _)
 \end{code}
-Moreover, limits are an actual supremum: the limit of a function
+Moreover, a limit is an actual supremum: the limit of a function
 is absorbed by any upper bound of the function's image.
 \begin{code}
 ⋁-Supremum : ∀ {c : ℂ} {f : El c → SMBTree} {t}

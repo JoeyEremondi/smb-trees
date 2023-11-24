@@ -21,12 +21,12 @@ can mechanically deduce termination.
 Some functions only make recursive calls to structurally-smaller arguments,
 so their termination is apparent to the compiler. However, some functions
 cannot be easily expressed using structural recursion.
-For such functions, the programmer must instead use \textit{well founded recursion}, showing that there is some ordering, with no infinitely-descending
-chains, for which each recursive call is strictly smaller according to this ordering. For example, the typical quicksort algorithm is not structurally recursive, but can use well founded recursion on the length of the lists being sorted.
+For such functions, the programmer must instead use \textit{well-founded recursion}, showing that there is some ordering, with no infinitely-descending
+chains, for which each recursive call is strictly smaller according to this ordering. For example, the typical quicksort algorithm is not structurally recursive, but can use well-founded recursion on the length of the lists being sorted.
 
 \subsection{Ordinals}
 
-While numeric orderings work for first-order data, they are ill suited to recursion over
+While numeric orderings work for first-order data, they are ill-suited to recursion over
 higher-order data structures, where some fields contain functions.
 Instead, one must use \textit{ordinals} to assign a size to such data structures, so that even
 when a structure represents infinite data, only a finite number of recursive calls are made when traversing it.
@@ -40,14 +40,14 @@ Different constructive ordinal notations have different capabilities, each with 
 
 This work defines \textit{strictly monotone Brouwer Trees}, henceforth SMB-trees,
 a new presentation of ordinals that hit a sort of sweet-spot for defining functions by
-well founded recursion. Specifically, SMB-trees:
+well-founded recursion. Specifically, SMB-trees:
 
 \begin{itemize}
-  \item are strictly ordered by a well founded relation;
-  \item have a maximum operator which computes a least-upper bound;
-  \item are \textit{strictly-monotone} with respect to the maximum: if $a < b$ and $c < d$, then $\max\ a\ c < \max\ b\ d$;
-  \item can compute the limits of arbitrary sequences;
-  \item are light in axiomatic requirements: they are defined without using axiom K,
+  \item Are strictly ordered by a well-founded relation;
+  \item Have a maximum operator which computes a least-upper bound;
+  \item Are \textit{strictly-monotone} with respect to the maximum: if $a < b$ and $c < d$, then $\max\ a\ c < \max\ b\ d$;
+  \item Can compute the limits of arbitrary sequences;
+  \item Are light in axiomatic requirements: they are defined without using axiom K,
         univalence, quotient types, or higher inductive types.
 \end{itemize}
 
@@ -60,7 +60,7 @@ in the limit.
 
 \subsection{Uses for SMB-trees}
 
-\subsubsection{Well Founded Recursion}
+\subsubsection{Well-founded Recursion}
 
 Having a maximum operator for ordinals is particularly useful when traversing over multiple higher order
 data structures in parallel, where neither argument takes priority over the other.
@@ -92,12 +92,12 @@ we need the size of the nested pairs $((A,B),(C,D))$
 to be the same as $((A,C),(B,D))$, so that a recursive call on arguments whose
 size is bounded by the maximum of  $(A,C)$ will still
 be strictly smaller than the initial size of $((A,B),(C,D))$.
-One such call would be a the procedure converting from type $A$ to the
+One such call would be the procedure converting from type $A$ to the
 solution of $A=C$.
 Lexicographic orderings lack this commutativity, and are too restrictive
 for situations such as this.
 
-This style of well founded induction was used to prove termination
+This style of well-founded induction was used to prove termination
 in a syntactic model of gradual dependent types~\citep{Eremondi_2023}. There, Brouwer trees
 were used to establish termination of recursive procedures that
 combined the type information in two imprecise types.
@@ -120,7 +120,7 @@ using a syntactic model based on Brouwer trees.
 
 SMB-trees provide the capability to extend existing syntactic models to sized types
 with a maximum operator.
-This brings the capability of consistent sized types closder to feature parity with Agda,
+This brings the capability of consistent sized types closer to feature parity with Agda,
 which has a maximum operator for its sizes,
 while still maintaining logical consistency.
 
@@ -142,7 +142,7 @@ in dependent type checking. While equations involving limits of infinite sequenc
 are undecidable, the inflationary laws could be used to automatically discharge some equations involving sizes. This algebraic presentation is particularly
 amenable to solving equations using free extensions of algebras~\citep{corbyn:proof-synthesis,allais2023frex}.
 
-% Even without sizes integrated into types, SMB-trees are useful for creating syntactic models of dependently typed languages and defining terms by well founded recursion in these models.
+% Even without sizes integrated into types, SMB-trees are useful for creating syntactic models of dependently typed languages and defining terms by well-founded recursion in these models.
 % The ability to take the limit of arbitrary sequences of types makes it very easy to assign an ordinal size
 % to encodings of dependent function or pair types: for $\Pi(x : A)\ldotp B$, if  $A$ has size $t_{A}$,
 % and $B[x]$ has size $t_{B}[x]$ for each $x$, then the function type has size (using our notation from \cref{TODO})
@@ -157,7 +157,7 @@ amenable to solving equations using free extensions of algebras~\citep{corbyn:pr
 
 We have implemented SMB-trees in Agda 2.6.4.
 Our library specifically avoids Agda-specific features
-such as cubcal type theory or Axiom K, so we expect
+such as cubical type theory or Axiom K, so we expect
 that the library can be easily ported to other proof assistants.
 
 This paper is written as a literate Agda document, and the definitions

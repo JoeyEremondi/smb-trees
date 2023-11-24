@@ -696,7 +696,25 @@ associativity, commutativity, and monotonicity of $\indMax$.
 \AgdaBound{t2}\AgdaSymbol{))}\<%
 \\
 %
-\>[6]\AgdaSymbol{(}\AgdaFunction{indMax-swap4}\<%
+\>[6]\AgdaSymbol{(}\AgdaFunction{indMax-swap4}%
+\>[353I]\AgdaSymbol{\{}\AgdaArgument{t1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{\}}\<%
+\\
+\>[.][@{}l@{}]\<[353I]%
+\>[20]\AgdaSymbol{\{}\AgdaArgument{t2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{\}}\<%
 \\
 \>[6][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaOperator{\AgdaFunction{Brouwer.≤⨟}}\AgdaSpace{}%
@@ -989,6 +1007,12 @@ idempotent for SMB-trees:
 \\
 %
 \>[2]\AgdaFunction{≤-extLim}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{f1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{f1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{f2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{lt}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{≤-limLeast}\AgdaSpace{}%
@@ -999,6 +1023,13 @@ idempotent for SMB-trees:
 \AgdaBound{k}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤⨟}}\AgdaSpace{}%
 \AgdaFunction{≤-limUpperBound}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{f}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSpace{}%
+\AgdaBound{v}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{k}\AgdaSymbol{)}\<%
 \\
 %
@@ -1069,6 +1100,9 @@ idempotent for SMB-trees:
 \AgdaBound{k1}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤⨟}}\AgdaSpace{}%
 \AgdaFunction{≤-limUpperBound}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{f}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{f2}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{proj₁}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{lt}\AgdaSpace{}%
 \AgdaBound{k1}\AgdaSymbol{)))}\<%
@@ -1110,9 +1144,20 @@ idempotent for SMB-trees:
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{max-≤R}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[12]\AgdaInductiveConstructor{mk≤}\AgdaSpace{}%
-\AgdaFunction{indMax-≤R}\<%
+\>[32]\AgdaInductiveConstructor{mk≤}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{indMax-≤R}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -1252,9 +1297,12 @@ idempotent for SMB-trees:
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{mk≤}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{indMax-assocL}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\<%
+\AgdaSymbol{(}\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t3}\AgdaSymbol{))}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -1266,9 +1314,12 @@ idempotent for SMB-trees:
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{mk≤}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{indMax-assocR}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\<%
+\AgdaSymbol{(}\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t3}\AgdaSymbol{))}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -1299,9 +1350,37 @@ idempotent for SMB-trees:
 \\
 %
 \>[2]\AgdaFunction{max-swap4}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t1'}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t2'}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[15]\AgdaInductiveConstructor{mk≤}\AgdaSpace{}%
-\AgdaFunction{indMax-swap4}\<%
+\>[59]\AgdaInductiveConstructor{mk≤}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{indMax-swap4}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1'}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t2'}\AgdaSymbol{\})}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -1321,10 +1400,38 @@ idempotent for SMB-trees:
 \\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{max-sucMono}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t1'}\AgdaSymbol{\}}%
+\>[47]\AgdaSymbol{\{}\AgdaArgument{t2'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{t2'}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{lt}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[20]\AgdaInductiveConstructor{mk≤}\AgdaSpace{}%
+\>[65]\AgdaInductiveConstructor{mk≤}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{indMax-sucMono}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t2}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t1'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t1'}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{t2'}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaField{rawTree}\AgdaSpace{}%
+\AgdaBound{t2'}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{get≤}\AgdaSpace{}%
 \AgdaBound{lt}\AgdaSymbol{))}\<%
 \\
@@ -1530,7 +1637,7 @@ the least of all upper bounds.
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}%
-\>[915I]\AgdaFunction{subst}\AgdaSpace{}%
+\>[1018I]\AgdaFunction{subst}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1547,7 +1654,7 @@ the least of all upper bounds.
 \AgdaFunction{≤-refl}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤⨟}}\<%
 \\
-\>[.][@{}l@{}]\<[915I]%
+\>[.][@{}l@{}]\<[1018I]%
 \>[6]\AgdaFunction{≤-limUpperBound}%
 \>[23]\AgdaSymbol{(}\AgdaField{Iso.inv}\AgdaSpace{}%
 \AgdaBound{CℕIso}\AgdaSpace{}%
@@ -1561,7 +1668,7 @@ the least of all upper bounds.
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaSymbol{=}%
-\>[935I]\AgdaFunction{subst}\AgdaSpace{}%
+\>[1038I]\AgdaFunction{subst}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1578,7 +1685,7 @@ the least of all upper bounds.
 \AgdaFunction{≤-refl}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤⨟}}\<%
 \\
-\>[.][@{}l@{}]\<[935I]%
+\>[.][@{}l@{}]\<[1038I]%
 \>[6]\AgdaFunction{≤-limUpperBound}%
 \>[23]\AgdaSymbol{(}\AgdaField{Iso.inv}\AgdaSpace{}%
 \AgdaBound{CℕIso}\AgdaSpace{}%
@@ -2124,10 +2231,10 @@ the least of all upper bounds.
 \end{code}
 
 
-\subsubsection{Well Founded Ordering on SMB-trees}
-Our motivation for defining SMB-trees was defining well founded recursion,
+\subsubsection{Well-founded Ordering on SMB-trees}
+Our motivation for defining SMB-trees was defining well-founded recursion,
 so the final piece of our definition is a proof that the strict ordering of
-SMB-trees is well founded.
+SMB-trees is well-founded.
 Intuitively this should hold: there are no infinite descending chains
 of Brouwer trees, and there are fewer SMB-trees than Brouwer trees, so
 there can be no infinite descending chains of SMB-trees.
@@ -2192,6 +2299,4 @@ The key lemma is that an SMB-tree is accessible if its underlying Brouwer tree i
 \end{code}
 
 Thus, we have an ordinal type with limits, a strictly monotone join,
-and well founded recursion.
-
-
+and well-founded recursion.

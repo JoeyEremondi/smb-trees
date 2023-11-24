@@ -11,7 +11,7 @@
 \end{code}
 
 Under this definition, a Brouwer tree is either zero, the successor of another Brouwer tree, or the limit of a countable sequence of Brouwer trees. However, these are quite weak, in that they can only take the limit of countable sequences.
-To represent the limits of uncountable sequences, we can paramterize our definition over some Universe \ala Tarski:
+To represent the limits of uncountable sequences, we can parameterize our definition over some Universe \ala Tarski:
 
 \begin{code}
   module Brouwer {ℓ}
@@ -21,7 +21,7 @@ To represent the limits of uncountable sequences, we can paramterize our definit
 \end{code}
 
 
-Our module is paramterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
+Our module is parameterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
 function $\mathit{El}$, which computes the type represented by each code.
 We require that there be a code whose interpretation is isomorphic to the natural numbers,
 as this is essential to our construction in \cref{subsec:infinity}.
@@ -47,7 +47,7 @@ The small limit constructor can be recovered from the natural-number code
     ℕLim f = Lim Cℕ  (λ cn → f (Iso.fun CℕIso cn))
 \end{code}
 
-Brouwer trees are a the quintessential example of a higher-order inductive type.%
+Brouwer trees are the quintessential example of a higher-order inductive type.%
 \footnote{Not to be confused with Higher Inductive Types (HITs) from Homotopy Type Theory~\citep{hottbook}}:
 each tree is built using smaller trees or functions producing smaller trees, which is essentially
 a way of storing a possibly infinite number of smaller trees.
@@ -143,7 +143,7 @@ and the successor constructor:
 
   That is,  $t_{1}$ is strictly smaller than $t_{2}$ if the tree one-size larger than $t_{1}$ is as small as $t_{2}$.
   The fact that $\up t$ is always strictly larger than $t$ is a key property of ordinals.
-  Adding one element to a countably-infinite set does not change its cardinaly, but taking the
+  Adding one element to a countably-infinite set does not change its cardinality, but taking the
   successor of an infinite ordinal produces something larger, which is why they are useful
   for assigning sizes to infinite data.
 
@@ -193,21 +193,21 @@ and the successor constructor:
     open import Induction.WellFounded
 \end{code}
 
-\subsection{Well Founded Induction}
+\subsection{Well-founded Induction}
 \label{subsec:wf}
-Here we recall the definition of a constructive well founded relation.
+Here we recall the definition of a constructive well-founded relation.
 An element is said to be accessible if all strictly smaller elements are accessible.
-A relation is then well founded if all elements are accessible.
+A relation is then well-founded if all elements are accessible.
 This is formulated as follows:
 
 \input{WFTypeset}
 
 Following the construction of \citet{KRAUS2023113843},
 we can show that the strict ordering on Brouwer trees is
-well founded.
+well-founded.
 First, we prove a helper lemma: if a value is accessible,
 then all (not necessarily strictly) smaller terms
-are are also accessible.
+are also accessible.
 %
 \begin{code}
     smaller-accessible : (x : Tree)
@@ -215,7 +215,7 @@ are are also accessible.
     smaller-accessible x (acc r) y x≤y
       = acc (λ y' y'<y → r y' (<∘≤-in-< y'<y x≤y))
 \end{code}
-Then we use structural induction to show that all terms are accesible.
+Then we use structural induction to show that all terms are accessible.
 The key observations are that zero is trivially accessible,
 since no trees are strictly smaller than it,
 and that the only way to derive
@@ -239,6 +239,6 @@ on which we can recur.
             (ordWF (f k)) y (<-in-≤ y<fk)
 
 \end{code}
-This lets us use Brouwer trees as the decreasing metric for well founded recursion.
+This lets us use Brouwer trees as the decreasing metric for well-founded recursion.
 However, the $\AgdaFunction{wfRec}$ function only worked with one argument.
 To handle recursion with more than one argument, we need a way to combine ordinals.
