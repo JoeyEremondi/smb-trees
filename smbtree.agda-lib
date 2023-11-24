@@ -1,0 +1,6 @@
+
+name: smbtree
+depend:
+    standard-library
+include: .
+flags: 

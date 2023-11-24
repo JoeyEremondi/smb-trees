@@ -1,0 +1,97 @@
+% !TEX root =  main.tex
+% !TeX spellcheck = en-US
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Comparison to Other Ordinal Systems}
+
+In the literature, many different variations of ordinals have been presented.
+To keep our comparison brief, we refer to the work of
+\citet{KRAUS2023113843}.
+They give a comprehensive overview
+of ordinal notation systems in type theory, with a detailed
+comparison of their comparative properties.
+They define three different systems: Cantor normal forms
+that represent ordinals as binary trees, restricted Brouwer trees that represent
+ordinals as infinitely branching trees, and well-founded types
+that represent ordinals as types with a certain sort of relation on
+their elements.
+
+
+The definitions \citeauthor{KRAUS2023113843} give are more restrictive than
+ours. For example, for Brouwer trees they require that $\Lim$ only operate
+on functions that are strictly increasing, preventing
+the definition of $\limMax$. These restrictions
+make their ordinals very well-behaved with respect to propositional equality,
+so they can
+examine their mathematical properties.
+SMB-trees have less rich theory, but the properties
+they do satisfy are specifically tailored to proving
+termination of higher-order programs.
+
+\subsubsection{Transitivity, Extensionality and Well-foundedness}
+\Citeauthor{KRAUS2023113843} show three properties for each system they present:
+transitivity of the ordering, well-foundedness (as in \cref{subsec:wf}),
+and \textit{extensionality}, the property that two ordinals are equal
+iff their sets of smaller terms are equal. They also show a strict version
+of extensionality for each system: to ordinals are equal iff their sets of
+strictly smaller terms are equal.
+
+SMB-trees satisfy each of the above properties: the transitivity of $\le$
+is inherited from Brouwer trees, and we show well-foundedness in \cref{subsec:wf}.
+Extensionality for $\le$ is trivially true for our setoid version of equivalence.
+For propositional equality, extensionality cannot be proved without some form of quotient type.
+We conjecture that the strict order $<$  is not extensional for SMB-trees,
+since it does not hold for Brouwer trees without quotient types.
+
+Well-founded types lack a basic transitivity property for the strict order:
+without additional axioms, one cannot conclude $x < z$ from $x \le y$ and $y < z$.
+So, though well-founded types have binary and infinitary suprema like SMB-trees,
+they lack the basic principles for reasoning about strict orders, making them ill-suited
+for defining recursive procedures.
+
+\subsubsection{Classifiability}
+Classifiability is the property that each ordinal is either zero, a successor,
+or a limit, and that exactly one of those properties holds.
+Restricted Brouwer trees and Cantor normal forms both satisfy classifiability,
+but SMB-trees do not. Even our version of Brouwer trees do not have this property:
+since we allow non-increasing sequences, the limit of the constant-zero sequence
+is equivalent to zero.
+
+Not having classifiability does negatively affect the decidability properties of SMB-trees.
+For example, for restricted Brouwer trees, it is decidable whether a tree is
+infinite or not, but this is not the case for SMB-trees, since some limits are
+actually finite. However, since SMB-trees are defined specifically around
+well-founded recursion, losing decidability properties is an acceptable
+compromise. Additionally, the ability to reason about SMB-trees using the
+equational style reduces the need to pattern match on them.
+
+\subsubsection{Joins and Suprema}
+
+The main novelty of SMB-trees is the existence of both binary suprema (joins) and infinitary suprema (limits)
+that interact well with the strict ordering.
+Cantor normal forms have binary joins and strict monotonicity (as a by-product of decidable ordering),
+but lack infinitary joins.
+Well-founded types have binary and infinitary suprema,
+but without additional axioms even their successor function is not monotone,
+so strict monotonicity is out of the question.
+For restricted Brouwer trees,
+binary joins cannot exist without further axioms. This is an artifact of
+allowing $\Lim$ only on strictly increasing sequences, since it disallows
+$\limMax$ or other similar constructs.
+So even without strict monotonicity, the capability of SMB-trees exceeds that of
+restricted Brouwer trees. The cost of this is that SMB-trees fulfill fewer nice properties
+with respect to propositional equality. Since setoid reasoning is sufficient for well-founded recursion,
+we find this tradeoff acceptable.
+
+
+\subsection{Conclusion}
+Designing an ordinal library is an exercise in compromise, balancing the desired properties
+with the limitations of decidability and constructive reasoning.
+With SMB-trees, we have identified a point in the design space
+well suited to proving termination. The algebraic framework of SMB-trees
+lays the groundwork for future developments on reasoning mechanically
+about ordinals. Beyond of our specific use-case, the development of
+SMB-trees shows that sometimes careful design with dependent types
+can avoid the need for additional axioms or language features.

@@ -258,3 +258,17 @@ idris/GradEq.idr
 *.agda~main-pratenddefaultcategory.tex
 pratenddefaultcategory.tex
 equality/main-pratenddefaultcategory.tex
+
+
+Brouwer.tex
+IndMax.tex
+InfinityMax.tex
+LimMax.tex
+SMBTree.tex
+SmallTree.tex
+TreeAlgebra.tex
+WFTypeset.tex
+/supp
+.DS_Store
+ambiguous-tocheck.org
+/arxiv
