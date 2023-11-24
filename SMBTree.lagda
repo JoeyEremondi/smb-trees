@@ -172,7 +172,7 @@ For zero and successor, these are trivially lifted.
            Brouwer.≤⨟ indMax∞-self (Brouwer.Lim c _))
 \end{code}
 
-Finally, we need to show that the SMT-tree limit is less than all other upper bounds.
+Finally, we need to show that the SMB-tree limit is less than all other upper bounds.
 Suppose $t : \AgdaDatatype{SMBTree}$ is an upper bound for $f$,
 and $t_u$ is the underlying tree for $t$, and $f_u$ computes the underlying trees for $f$.
 Then $\limiting$ gives that the underlying tree for $t$ is an upper bound for the trees underlying the image of $f$.

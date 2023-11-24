@@ -23,7 +23,7 @@ To represent the limits of uncountable sequences, we can parameterize our defini
 
 Our module is parameterized over a universe level, a type $\bC$ of \textit{codes}, and an ``elements-of'' interpretation
 function $\mathit{El}$, which computes the type represented by each code.
-We require that there be a code whose interpretation is isomorphic to the natural numbers,
+We require a code whose interpretation is isomorphic to the natural numbers,
 as this is essential to our construction in \cref{subsec:infinity}.
 This also ensures that our trees are at least as powerful as $\AgdaDatatype{SmallTree}$.
 Increasingly larger ordinals can be obtained by setting $\bC := \AgdaPrimitive{Set} \ \ell$ and
@@ -47,7 +47,7 @@ The small limit constructor can be recovered from the natural-number code
     ℕLim f = Lim Cℕ  (λ cn → f (Iso.fun CℕIso cn))
 \end{code}
 
-Brouwer trees are the quintessential example of a higher-order inductive type.%
+Brouwer trees are the quintessential example of a higher-order inductive type%
 \footnote{Not to be confused with Higher Inductive Types (HITs) from Homotopy Type Theory~\citep{hottbook}}:
 each tree is built using smaller trees or functions producing smaller trees, which is essentially
 a way of storing a possibly infinite number of smaller trees.

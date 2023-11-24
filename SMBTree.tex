@@ -3,7 +3,7 @@
 \subsection{Strictly Monotone Brouwer Trees}
 \label{subsec:smb}
 
-Now that we have identified a substantial class of well behaved Brouwer trees,
+Now that we have identified a substantial class of well-behaved Brouwer trees,
 we want to define a new type containing only those trees.
 In this section, we will define strictly monotone Brouwer trees (SMB-trees), and show how
 they can be given a similar interface to Brouwer trees.
@@ -74,7 +74,7 @@ and a code whose interpretation is isomorphic to $\bN$.
 \AgdaKeyword{where}\<%
 \end{code}
 
-Next we import all of our definitions so far, using the ``Brouwer" prefix to distinguish
+Next we import all of our definitions so far, using the ``Brouwer'' prefix to distinguish
 them from the trees and ordering we are about to define.
 Critically, we do not instantiate these with the same interpretation function.
 Instead, we interpret each code wrapped in $\AgdaDatatype{Maybe}$.
@@ -82,7 +82,7 @@ Note that if a type $T$ is isomorphic to $\bN$, then $\AgdaDatatype{Maybe}\ T$ i
 Wrapping in $\AgdaDatatype{Maybe}$ ensures that we always take Brouwer limits over non-empty sets,
 an assumption that was critical for the definitions of \cref{subsec:indmax}.
 Essentially, we are adding an explicit zero to every sequence whose limit we take,
-so that the sequences are never empty, but the upper bound doe snot change.
+so that the sequences are never empty, but the upper bound does not change.
 This detail is hidden in the interface for SMB-trees: the assumption of non-emptiness
 is only used in the Brouwer trees underlying SMB-trees.
 \begin{code}%
@@ -253,7 +253,7 @@ More challenging is how, as we saw in \cref{subsec:indmax}, Brouwer trees do not
 
 Our key insight is to define limits of SMB-trees using $\maxInf$ on the underlying trees:
 for any function producing SMB-trees, we take the limit of the underlying trees,
-then $\indMax$ that result with itself an infinite numer of times.
+then $\indMax$ that result with itself an infinite number of times.
 The idempotence proof is then the property of $\maxInf$ that we proved in \cref{subsec:infinity}.
 \begin{code}%
 %
@@ -347,7 +347,7 @@ SMB-trees are ordered by the order on their underlying Brouwer trees:
 \>[0]\<%
 \end{code}
 %
-The successor function allows us to define a strict ording on SMB-trees.
+The successor function allows us to define a strict order on SMB-trees.
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}<\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -564,7 +564,7 @@ For zero and successor, these are trivially lifted.
 \AgdaSymbol{\AgdaUnderscore{}))}\<%
 \end{code}
 
-Finally, we need to show that the SMT-tree limit is less than all other upper bounds.
+Finally, we need to show that the SMB-tree limit is less than all other upper bounds.
 Suppose $t : \AgdaDatatype{SMBTree}$ is an upper bound for $f$,
 and $t_u$ is the underlying tree for $t$, and $f_u$ computes the underlying trees for $f$.
 Then $\limiting$ gives that the underlying tree for $t$ is an upper bound for the trees underlying the image of $f$.

@@ -82,11 +82,11 @@ The maximum is then defined by pattern matching on the view for its arguments:
         indMax t1 t2 = indMax' (indMaxView t1 t2)
         indMax' {.Z} {t2} IndMaxZ-L = t2
         indMax' {t1} {.Z} IndMaxZ-R = t1
-        indMax' {(Lim c f)} {t2} IndMaxLim-L
+        indMax' {Lim c f} {t2} IndMaxLim-L
             = Lim c λ x → indMax (f x) t2
-        indMax' {t1} {(Lim c f)} (IndMaxLim-R _)
+        indMax' {t1} {Lim c f} (IndMaxLim-R _)
             = Lim c (λ x → indMax t1 (f x))
-        indMax' {(↑ t1)} {(↑ t2)} IndMaxLim-Suc = ↑ (indMax t1 t2)
+        indMax' {↑ t1} {↑ t2} IndMaxLim-Suc = ↑ (indMax t1 t2)
   \end{code}
 The maximum of zero and $t$ is always $t$, and the maximum of $t$ and the limit of $f$
 is the limit of the function computing the maximum between $t$ and $f\ x$.
@@ -322,14 +322,14 @@ $\indMax\ (\Lim\ c\ f)\ (\Lim\ c\ f)\le (\Lim\ c\ f)$.
 By our definition, $\indMax\ (\Lim\ c\ f)\ (\Lim\ c\ f)$
 reduces to:
 \begin{displaymath}
-(\Lim\ c\ \lambda x \to (\Lim\ c\ \lambda y \to \indMax\ (f\ x)\ (f\ y))) \le \Lim\ c\ f
+(\Lim\ c\ \lambda x \to (\Lim\ c\ (\lambda y \to \indMax\ (f\ x)\ (f\ y)))) \le \Lim\ c\ f
 \end{displaymath}
 We cannot use $\cocone$ to prove this, since  the left-hand side
 is not necessarily equal to $f\ k$ for any $ k : \AgdaBound{El} \ c$.
 So the only possibility is to use $\limiting$. Applying it twice,
 along with a use of commutativity of $\indMax$, we are left with the following goal:
 \begin{displaymath}
- (\forall x \to (\forall  y \to \indMax\ (f\ x)\ (f\ y))) \le \Lim\ c\ f
+ \forall x \to \forall  y \to (\indMax\ (f\ x)\ (f\ y) \le \Lim\ c\ f)
 \end{displaymath}
 There is no a priori way to prove this goal without already
 having a proof that $\AgdaFunction{indMax}$ is a least upper bound.

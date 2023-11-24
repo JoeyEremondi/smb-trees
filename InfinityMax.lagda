@@ -31,6 +31,9 @@ the limit based nor the inductive definition of the maximum was satisfactory.
 The solution, it turns out, is more limits:
 if we $\indMax$ a term with itself an infinite number of times,
 the result will be idempotent with respect to $\indMax$.
+This is essentially an application of Kleene's Fixed-Point Theorem~\citep{constructiveTarski},
+using transfinite iteration to find the solution to $x \approx \indMax\ x\ x$.
+
 First, we define a function to $\indMax$ a term with itself $n$
 times or a given number $n$:
 \begin{code}

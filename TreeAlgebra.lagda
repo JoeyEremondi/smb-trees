@@ -68,7 +68,7 @@ so applying $\Lim$ to definitionally distinct but extensionally equal functions
 produces trees that are equivalent but not equal.
 Postulating that equivalent terms are equal would be inconsistent:
 inductive and limit-based joins are
-equivalent for SMB-trees, so $\uparrow\ (t_{1} \ t_{2})$ is equivalent to
+equivalent for SMB-trees, so $\uparrow\ (t_{1} \vee t_{2})$ is equivalent to
 $\limMax\ (\uparrow\ t_{1})\ (\uparrow\ t_{2})$,
 even though their heads are distinct datatype constructors.
 Likewise, $\Lim\ c\ f$ is equivalent to $\AgdaInductiveConstructor{Z}$

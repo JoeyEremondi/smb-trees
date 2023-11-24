@@ -75,7 +75,7 @@ calls on smaller values:
 
 \begin{code}
   wfRec : (P : A → Set ℓ)
-    → (∀ x → ((y : A) → y < x → P y) → P x)
+    → (∀ x → (∀ y → y < x → P y) → P x)
     → ∀ x → P x
 \end{code}
 The $\AgdaFunction{wfRec}$ function is defined using structural recursion on an argument

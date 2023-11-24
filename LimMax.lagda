@@ -98,7 +98,7 @@ and it is idempotent.
   \subsubsection{Limitation: Strict Monotonicity}
 
 The one crucial property that this formulation lacks is that it is not
-strictly monotone: we cannot deduce $\max\ t_1\ t_1 < \max\ t'_1 \ t'_2 $
+strictly monotone: we cannot deduce $\max\ t_1\ t_2 < \max\ t'_1 \ t'_2 $
 from $t_1 < t'_1$ and $t_2 < t'_2$. This is because the only way to construct a
 proof that $\up t \le \Lim\ c\ f$
 is using the $\cocone$ constructor. So we would need to prove that
