@@ -27,8 +27,22 @@
 %%
 %% The first command in your LaTeX source must be the \documentclass command.
 % \documentclass[autogobble,dvipsnames,acmsmall,anonymous,review]{acmart}
-\documentclass[dvipsnames,sigplan,10pt]{acmart}\settopmatter{printfolios=false,printccs=false,printacmref=false}
+\documentclass[dvipsnames,sigplan,screen]{acmart}
 
+%%% The following is specific to CPP '24 and the paper
+%%% 'Strictly Monotone Brouwer Trees for Well Founded Recursion over Multiple Arguments'
+%%% by Joseph Eremondi.
+%%%
+\setcopyright{acmlicensed}
+\acmDOI{10.1145/3636501.3636948}
+\acmYear{2024}
+\copyrightyear{2024}
+\acmSubmissionID{poplws24cppmain-p26-p}
+\acmISBN{979-8-4007-0488-8/24/01}
+\acmConference[CPP '24]{Proceedings of the 13th ACM SIGPLAN International Conference on Certified Programs and Proofs}{January 15--16, 2024}{London, UK}
+\acmBooktitle{Proceedings of the 13th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP '24), January 15--16, 2024, London, UK}
+\received{2023-09-19}
+\received[accepted]{2023-11-25}
 
 % \def\@testdef #1#2#3{%
 % \def\reserved@a{#3}\expandafter \ifx \csname #1@#2\endcsname
@@ -146,7 +160,7 @@
 %% end of the preamble, start of the body of the document source.
 \begin{document}
 
-\title{Strictly Monotone Brouwer Trees for Well-founded Recursion Over Multiple Arguments}
+\title[Strictly Monotone Brouwer Trees]{Strictly Monotone Brouwer Trees for Well-founded Recursion Over Multiple Arguments}
 % \titlenote{This work is partially funded by CONICYT FONDECYT Regular
 % Project 1190058. This work is partially funded by an NSERC Discovery Grant.}
 
@@ -159,16 +173,16 @@
 %% used to denote shared contribution to the research.
 % \orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
 
-  \author{Joseph Eremondi}
-  % \authornote{with author1 note}          %% \authornote is optional;
-                                          %% can be repeated if necessary
+\author{Joseph Eremondi}
+% \authornote{with author1 note}          %% \authornote is optional;
+%% can be repeated if necessary
 
-  \affiliation{
-    \department{Laboratory for the Foundations of Computer Science}              %% \department is recommended
-    \institution{University of Edinburgh}            %% \institution is required
-    \country{Scotland, United Kingdom}                    %% \country is recommended
-  }
-  \email{{joey.eremondi@ed.ac.uk}}          %% \email is recommended
+\affiliation{
+	\department{Laboratory for the Foundations of Computer Science}              %% \department is recommended
+	\institution{University of Edinburgh}            %% \institution is required
+	\country{Scotland, United Kingdom}                    %% \country is recommended
+}
+\email{{joey.eremondi@ed.ac.uk}}          %% \email is recommended
 
 
 
@@ -183,7 +197,7 @@
 
 
 % \begin{acks}
-  % \end{acks}
+% \end{acks}
 
 %%
 %% The "title" command has an optional parameter,
@@ -193,38 +207,40 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-  \input{abstract}
+	\input{abstract}
 \end{abstract}
 
+
 \begin{CCSXML}
-<ccs2012>
-<concept>
-<concept_id>10003752.10010124.10010125.10010130</concept_id>
-<concept_desc>Theory of computation~Type structures</concept_desc>
-<concept_significance>500</concept_significance>
-</concept>
-<concept>
-<concept_id>10003752.10010124.10010131</concept_id>
-<concept_desc>Theory of computation~Program semantics</concept_desc>
-<concept_significance>500</concept_significance>
-</concept>
-</ccs2012>
+	<ccs2012>
+	<concept>
+	<concept_id>10003752.10003790.10011740</concept_id>
+	<concept_desc>Theory of computation~Type theory</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10011007.10010940.10010992.10010998.10010999</concept_id>
+	<concept_desc>Software and its engineering~Software verification</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	</ccs2012>
 \end{CCSXML}
 
-\ccsdesc[500]{Theory of computation~Type structures}
-\ccsdesc[500]{Theory of computation~Program semantics}
+\ccsdesc[500]{Theory of computation~Type theory}
+\ccsdesc[500]{Software and its engineering~Software verification}
+
 
 
 
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{dependent types, Brouwer trees, well-founded recursion}
+\keywords{dependent types, Brouwer trees, well founded recursion}
 
-\def\acmBooktitle#1{\gdef\@acmBooktitle{#1}}
-\acmBooktitle{Proceedings of \acmConference@name
-       \ifx\acmConference@name\acmConference@shortname\else
-         \ (\acmConference@shortname)\fi}
+% \def\acmBooktitle#1{\gdef\@acmBooktitle{#1}}
+% \acmBooktitle{Proceedings of \acmConference@name
+% 	\ifx\acmConference@name\acmConference@shortname\else
+% 		\ (\acmConference@shortname)\fi}
 
 %%
 %% This command processes the author and affiliation and title

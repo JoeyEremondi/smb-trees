@@ -1,6 +1,6 @@
 % !TEX root =  main.tex
 \label{sec:discussion}
-
+%
 \begin{code}[hide]
   open import Data.Nat hiding (_≤_ ; _<_ ; _+_)
   open import Relation.Binary.PropositionalEquality
@@ -9,8 +9,8 @@
   open import Iso
 
 \end{code}
-
-Under this definition, a Brouwer tree is either zero, the successor of another Brouwer tree, or the limit of a countable sequence of Brouwer trees. However, these are quite weak, in that they can only take the limit of countable sequences.
+%
+A Brouwer tree is either zero, the successor of another Brouwer tree, or the limit of a countable sequence of Brouwer trees. However, these are quite weak, in that they can only take the limit of countable sequences.
 To represent the limits of uncountable sequences, we can parameterize our definition over some Universe \ala Tarski:
 
 \begin{code}
@@ -205,7 +205,7 @@ This is formulated as follows:
 Following the construction of \citet{KRAUS2023113843},
 we can show that the strict ordering on Brouwer trees is
 well-founded.
-First, we prove a helper lemma: if a value is accessible,
+First, we prove a lemma: if a value is accessible,
 then all (not necessarily strictly) smaller terms
 are also accessible.
 %
@@ -215,15 +215,15 @@ are also accessible.
     smaller-accessible x (acc r) y x≤y
       = acc (λ y' y'<y → r y' (<∘≤-in-< y'<y x≤y))
 \end{code}
-Then we use structural induction to show that all terms are accessible.
+Then structural induction shows that all terms are accessible.
 The key observations are that zero is trivially accessible,
 since no trees are strictly smaller than it,
 and that the only way to derive
  $\up t \le \AgdaSymbol{(}\AgdaInductiveConstructor{Lim}\AgdaSpace{}\
 \AgdaBound{c}\AgdaSpace{}\ 
 \AgdaBound{f}\AgdaSymbol{)}$ is with $\AgdaInductiveConstructor{≤-cocone}$,
-yielding a concrete index $k$ for which $\uparrow t \le f\ k$,
-on which we can recur.
+yielding a concrete $k$ for which $\uparrow t \le f\ k$,
+on which we recur.
 \begin{code}
     ordWF : WellFounded _<_
     ordWF Z = acc λ _ ()

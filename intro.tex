@@ -11,7 +11,7 @@ Idris~\citep{DBLP:journals/corr/abs-2104-00480}, and Lean~\citep{10.1007/978-3-3
 meet those specifications, all using a unified language.
 
 One challenge in writing dependently typed code is proving termination.
-Functions defined in dependently typed languages are typically required to be
+Functions in dependently typed languages are typically required to be
 \textit{total}: they must provably halt in all inputs.
 This is necessary both to ensure that type checking terminates and to prevent
 false results from being accidentally proven.
@@ -20,9 +20,9 @@ is undecidable, recursively-defined functions must be written in such a way that
 can mechanically deduce termination.
 Some functions only make recursive calls to structurally-smaller arguments,
 so their termination is apparent to the compiler. However, some functions
-cannot be easily expressed using structural recursion.
+are not easily expressed using structural recursion.
 For such functions, the programmer must instead use \textit{well-founded recursion}, showing that there is some ordering, with no infinitely-descending
-chains, for which each recursive call is strictly smaller according to this ordering. For example, the typical quicksort algorithm is not structurally recursive, but can use well-founded recursion on the length of the lists being sorted.
+chains, for which each recursive call is strictly smaller according to this ordering. For example, a typical quicksort is not structurally recursive, but can use well-founded recursion on the length of the lists being sorted.
 
 \subsection{Ordinals}
 
@@ -60,7 +60,7 @@ in the limit.
 
 \subsection{Uses for SMB-trees}
 
-\subsubsection{Well-founded Recursion}
+\paragraph{Well-founded Recursion}
 
 Having a maximum operator for ordinals is particularly useful when traversing over multiple higher order
 data structures in parallel, where neither argument takes priority over the other.
@@ -97,7 +97,7 @@ solution of $A=C$.
 Lexicographic orderings lack this commutativity, and are too restrictive
 for situations such as this.
 
-This style of well-founded induction was used to prove termination
+This style of induction was used to prove termination
 in a syntactic model of gradual dependent types~\citep{Eremondi_2023}. There, Brouwer trees
 were used to establish termination of recursive procedures that
 combined the type information in two imprecise types.
@@ -106,12 +106,12 @@ to dependent function and product types, and the strict monotonicity of the
 maximum operator was essential for proving that recursive calls were on
 strictly smaller arguments.
 
-In general, we want to provide the programmer with the ability
-to specify complex relationships between the sizes of multiple arguments,
-and to be able to deduce facts about those sizes in a principled way.
+We want to enable the programmer
+to specify complex relationships between the sizes of multiple arguments
+and to deduce facts about those sizes in a principled way.
 
-\subsubsection{Syntactic Models and Sized Types}
-
+\paragraph{Syntactic Models and Sized Types}
+%
 An alternate view of our contribution is as a tool for modelling sized types~\citep{10.1145/237721.240882}.
 The implementation of sized types in Agda has been shown to be unsound~\citep{agdaSizedIssue}, due to the interaction
 between propositional equality and the top size $\infty$ satisfying $\infty < \infty$.
@@ -124,7 +124,7 @@ This brings the capability of consistent sized types closer to feature parity wi
 which has a maximum operator for its sizes,
 while still maintaining logical consistency.
 
-\subsubsection{Algebraic Reasoning}
+\paragraph{Algebraic Reasoning}
 Another advantage of SMB-trees is that they allow Brouwer trees to
 be understood using algebraic tools.
 In algebraic terminology, SMB-trees satisfy the following algebraic laws, up to the equivalence relation defined by $s \approx t := s \le t \le s $
@@ -163,5 +163,4 @@ that the library can be easily ported to other proof assistants.
 This paper is written as a literate Agda document, and the definitions
 given in the paper are valid Agda code.
 For several definitions, only the type is presented, with the body omitted due to
-space restrictions. The full implementation can be found in the supplementary
-materials section of this submission.
+space restrictions. The full implementation is open source~\citep{smbtreeZenodo}.
