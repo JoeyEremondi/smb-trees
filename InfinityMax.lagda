@@ -131,8 +131,7 @@ an upper bound on is argument.
         nindMax-≤ : ∀ {t} n → indMax t t ≤ t → nindMax t n ≤ t
         nindMax-≤ ℕ.zero lt = ≤-Z
         nindMax-≤ {t = t} (ℕ.suc n) lt
-          = indMax-monoL (nindMax-≤ n lt)
-            ≤⨟ lt
+          = indMax-monoL (nindMax-≤ n lt) ≤⨟ lt
       \end{code}
 
       An immediate corollary of this is that $\maxInf\ (\maxInf\ t)$ is equivalent to $\maxInf\ t$.

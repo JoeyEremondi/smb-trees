@@ -55,7 +55,7 @@ a way of storing a possibly infinite number of smaller trees.
 \subsection{Ordering Trees}
 
 Our ultimate goal is to have a well-founded ordering%
-\footnote{Technically, this is a well-founded quasi-ordering because there are pairs of
+\footnote{Technically, this is a well-founded quasi-ordering because there are
   trees which are related by both $\leq$ and $\geq$, but which are not propositionally equal.},
 so we define a relation to order Brouwer trees.
 
@@ -63,15 +63,12 @@ so we define a relation to order Brouwer trees.
     data _≤_ : Tree → Tree → Set ℓ where
       ≤-Z : ∀ {t} → Z ≤ t
       ≤-sucMono : ∀ {t1 t2}
-        → t1 ≤ t2
-        → ↑ t1 ≤ ↑ t2
+        → t1 ≤ t2 → ↑ t1 ≤ ↑ t2
       ≤-cocone : ∀  {t} {c : ℂ} (f : El c  → Tree) (k : El c)
-        → t ≤ f k
-        → t ≤ Lim c f
+        → t ≤ f k → t ≤ Lim c f
       ≤-limiting : ∀   {t} {c : ℂ}
         → (f : El c → Tree)
-        → (∀ k → f k ≤ t)
-        → Lim c f ≤ t
+        → (∀ k → f k ≤ t) → Lim c f ≤ t
 
       \end{code}
       There are four constructors. First, zero is less than any other tree.

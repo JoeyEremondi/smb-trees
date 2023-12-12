@@ -74,7 +74,7 @@ open SMBTree
 We can then define so-called ``smart-constructors'' corresponding to each of the constructors
 for Brouwer-trees: zero, successor, and limit.
 Zero and successor directly correspond to the Brouwer tree zero and successor.
-Their proofs of idempotence are trivial from the properties of Brouwer $\le$.
+Proofs of idempotence are trivial from the properties of Brouwer $\le$.
 \begin{code}
 opaque
   unfolding indMax
@@ -120,8 +120,10 @@ record _≤_ (t1 t2 : SMBTree) : Set ℓ where
   inductive
   field
     get≤ : (rawTree t1) Brouwer.≤ (rawTree t2)
-open _≤_
+\end{code}
 
+\begin{code}[hide]
+open _≤_
 \end{code}
 %
 The successor function allows us to define a strict order on SMB-trees.
