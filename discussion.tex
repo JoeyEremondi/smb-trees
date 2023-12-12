@@ -30,7 +30,7 @@ SMB-trees have less rich theory, but the properties
 they do satisfy are specifically tailored to proving
 termination of higher-order programs.
 
-\subsubsection{Transitivity, Extensionality and Well-foundedness}
+\paragraph{Transitivity, Extensionality and Well-foundedness}
 \Citeauthor{KRAUS2023113843} show three properties for each system they present:
 transitivity of the ordering, well-foundedness (as in \cref{subsec:wf}),
 and \textit{extensionality}, the property that two ordinals are equal
@@ -51,7 +51,7 @@ So, though well-founded types have binary and infinitary suprema like SMB-trees,
 they lack the basic principles for reasoning about strict orders, making them ill-suited
 for defining recursive procedures.
 
-\subsubsection{Classifiability}
+\paragraph{Classifiability}
 Classifiability is the property that each ordinal is either zero, a successor,
 or a limit, and that exactly one of those properties holds.
 Restricted Brouwer trees and Cantor normal forms both satisfy classifiability,
@@ -67,7 +67,7 @@ well-founded recursion, losing decidability properties is an acceptable
 compromise. Additionally, the ability to reason about SMB-trees using the
 equational style reduces the need to pattern match on them.
 
-\subsubsection{Joins and Suprema}
+\paragraph{Joins and Suprema}
 
 The main novelty of SMB-trees is the existence of both binary suprema (joins) and infinitary suprema (limits)
 that interact well with the strict ordering.
@@ -86,7 +86,7 @@ with respect to propositional equality. Since setoid reasoning is sufficient for
 we find this tradeoff acceptable.
 
 
-\subsection{Conclusion}
+\paragraph{Conclusion}
 Designing an ordinal library is an exercise in compromise, balancing the desired properties
 with the limitations of decidability and constructive reasoning.
 With SMB-trees, we have identified a point in the design space

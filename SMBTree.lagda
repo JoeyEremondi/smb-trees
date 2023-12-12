@@ -55,7 +55,7 @@ infixr 10 _≤_
 \end{code}
 
 
-\subsubsection{Refining Brouwer Trees}
+\paragraph{Refining Brouwer Trees}
 
 We define SMB-trees as a dependent record,
 containing an underlying Brouwer tree, and a proof
@@ -110,7 +110,7 @@ The idempotence proof is then the property of $\maxInf$ that we proved in \cref{
 
 
 
-\subsubsection{Ordering SMB-trees}
+\paragraph{Ordering SMB-trees}
 
 SMB-trees are ordered by the order on their underlying Brouwer trees:
 %
@@ -195,7 +195,7 @@ and transitivity gives our result.
 \end{code}
 
 
-\subsubsection{The Join for SMB-trees}
+\paragraph{The Join for SMB-trees}
 Our whole reason for defining SMB-trees was to define a well-behaved maximum operator,
 and we finally have the tools to do so.
 We can define the join in terms of $\indMax$ on the underlying trees.
@@ -404,7 +404,7 @@ opaque
 \end{code}
 
 
-\subsubsection{Well-founded Ordering on SMB-trees}
+\paragraph{Well-founded Ordering on SMB-trees}
 Our motivation for defining SMB-trees was defining well-founded recursion,
 so the final piece of our definition is a proof that the strict ordering of
 SMB-trees is well-founded.

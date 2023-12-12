@@ -14,8 +14,8 @@ strictly monotone.
 
 To do this, we compute the maximum of two trees recursively,
 pattern matching on the operands. We use a \textit{view} \citep{mcbridemckinna2004}
-datatype to identify the cases we are matching on: we are matching on two arguments,
-which each have three possible constructors, but several cases overlap.
+to identify the cases we are matching on: we are matching on two arguments,
+each with three possible constructors, but several cases overlap.
 Using a view type lets us avoid enumerating all nine possibilities when defining
 the maximum and proving its properties.
 
@@ -122,7 +122,6 @@ The proof bodies are omitted: they are straightforward reasoning by cases, but t
           = ≤-sucMono indMax-≤L
 
         indMax-≤R : ∀ {t1 t2} → t2 ≤ indMax t1 t2
-        -- Symmetric
 
         indMax-monoL : ∀ {t1 t1' t2}
           → t1 ≤ t1' → indMax t1 t2 ≤ indMax t1' t2
@@ -132,11 +131,9 @@ The proof bodies are omitted: they are straightforward reasoning by cases, but t
         indMax-mono : ∀ {t1 t2 t1' t2'}
           → t1 ≤ t1' → t2 ≤ t2' → indMax t1 t2 ≤ indMax t1' t2'
 
-        --Holds definitionally
         indMax-strictMono : ∀ {t1 t2 t1' t2'}
           → t1 < t1' → t2 < t2' → indMax t1 t2 < indMax t1' t2'
         indMax-strictMono lt1 lt2 = indMax-mono lt1 lt2
-
 
         indMax-assocL : ∀ t1 t2 t3
           → indMax t1 (indMax t2 t3) ≤ indMax (indMax t1 t2) t3
@@ -310,7 +307,7 @@ The proof bodies are omitted: they are straightforward reasoning by cases, but t
 \end{code}
 
 
-\subsubsection{Limitation: Idempotence}
+\paragraph{Limitation: Idempotence}
 
 The problem with an inductive definition of the maximum
 is that we cannot prove that it is idempotent. Since $\indMax$ is associative

@@ -132,7 +132,7 @@ We create an infix version of transitivity for more readable construction of pro
 \end{code}
 
 
-\subsubsection{Strict Ordering}
+\paragraph{Strict Ordering}
 
 We can define a strictly-less-than relation in terms of our less-than relation
 and the successor constructor:
@@ -163,20 +163,20 @@ and the successor constructor:
 
 \begin{code}
     <-in-≤ : ∀ {x y} → x < y → x ≤ y
-    <-in-≤ pf = (≤↑t _) ≤⨟ pf
 
     <∘≤-in-< : ∀ {x y z} → x < y → y ≤ z → x < z
-    <∘≤-in-< x<y y≤z = x<y ≤⨟ y≤z
 
     ≤∘<-in-< : ∀ {x y z} → x ≤ y → y < z → x < z
-    ≤∘<-in-< {x} {y} {z} x≤y y<z = (≤-sucMono x≤y) ≤⨟ y<z
 
     ¬<Z : ∀ t → ¬(t < Z)
-    ¬<Z t ()
   \end{code}
 
 
   \begin{code}[hide]
+    <-in-≤ pf = (≤↑t _) ≤⨟ pf
+    <∘≤-in-< x<y y≤z = x<y ≤⨟ y≤z
+    ≤∘<-in-< {x} {y} {z} x≤y y<z = (≤-sucMono x≤y) ≤⨟ y<z
+    ¬<Z t ()
   \end{code}
 
 
@@ -232,8 +232,7 @@ on which we recur.
         → smaller-accessible x (ordWF x) y y≤x})
     ordWF (Lim c f) = acc wfLim
       where
-        wfLim : (y : Tree) → (y < Lim c f)
-          → Acc _<_ y
+        wfLim : (y : Tree) → (y < Lim c f) → Acc _<_ y
         wfLim y (≤-cocone .f k y<fk)
           = smaller-accessible (f k)
             (ordWF (f k)) y (<-in-≤ y<fk)

@@ -41,7 +41,6 @@ and it is idempotent.
             (≤-refl t1))
 
     limMax≤R : ∀ {t1 t2} → t2 ≤ limMax t1 t2
-    -- Symmetric
 
     limMaxIdem : ∀ {t} → limMax t t ≤ t
     limMaxIdem {t} = ≤-limiting _ helper
@@ -64,7 +63,7 @@ and it is idempotent.
 
     limMaxLUB : ∀ {t1 t2 t} → t1 ≤ t → t2 ≤ t → limMax t1 t2 ≤ t
   \end{code}
-  It is not surprising that this version of the maximum is a least upper bound:
+  This version of the maximum is a least upper bound:
   by definition $\Lim$ denotes the least upper bound of a function's image,
   and $\limMax$ is simply $\Lim$ applied to a function whose image has (at most) two elements.
 
@@ -95,7 +94,7 @@ and it is idempotent.
     limMaxCommut = limMaxLUB limMax≤R limMax≤L
     \end{code}
 
-  \subsubsection{Limitation: Strict Monotonicity}
+  \paragraph{Limitation: Strict Monotonicity}
 
 The one crucial property that this formulation lacks is that it is not
 strictly monotone: we cannot deduce $\max\ t_1\ t_2 < \max\ t'_1 \ t'_2 $
