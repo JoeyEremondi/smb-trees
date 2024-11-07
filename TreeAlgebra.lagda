@@ -10,7 +10,6 @@ open import Relation.Binary.Lattice
 open import Relation.Binary
 open import Relation.Nullary
 open import Relation.Nullary.Negation
-open import Function.Equivalence
 module TreeAlgebra {ℓ}
     (ℂ : Set ℓ)
     (El : ℂ → Set ℓ)

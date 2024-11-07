@@ -210,24 +210,28 @@ are also accessible.
     smaller-accessible : (x : Tree)
       → Acc _<_ x → ∀ y → y ≤ x → Acc _<_ y
     smaller-accessible x (acc r) y x≤y
-      = acc (λ y' y'<y → r y' (<∘≤-in-< y'<y x≤y))
+      = acc λ y'<y → r (<∘≤-in-< y'<y x≤y)
 \end{code}
+
+
+
+
 Then structural induction shows that all terms are accessible.
 The key observations are that zero is trivially accessible,
 since no trees are strictly smaller than it,
 and that the only way to derive
  $\up t \le \AgdaSymbol{(}\AgdaInductiveConstructor{Lim}\AgdaSpace{}\
-\AgdaBound{c}\AgdaSpace{}\ 
+\AgdaBound{c}\AgdaSpace{}\
 \AgdaBound{f}\AgdaSymbol{)}$ is with $\AgdaInductiveConstructor{≤-cocone}$,
 yielding a concrete $k$ for which $\uparrow t \le f\ k$,
 on which we recur.
 \begin{code}
     ordWF : WellFounded _<_
-    ordWF Z = acc λ _ ()
+    ordWF Z = acc λ ()
     ordWF (↑ x)
-      = acc (λ { y (≤-sucMono y≤x)
-        → smaller-accessible x (ordWF x) y y≤x})
-    ordWF (Lim c f) = acc wfLim
+      = acc (λ { (≤-sucMono y≤x)
+        → smaller-accessible x (ordWF x) _ y≤x})
+    ordWF (Lim c f) = acc (wfLim _)
       where
         wfLim : (y : Tree) → (y < Lim c f) → Acc _<_ y
         wfLim y (≤-cocone .f k y<fk)

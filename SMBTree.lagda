@@ -421,8 +421,8 @@ The key lemma is that an SMB-tree is accessible if its underlying Brouwer tree i
       sizeAcc : ∀ {t}
         → Acc Brouwer._<_ (rawTree t)
         → Acc _<_ t
-      sizeAcc {t} (acc x)
-        = acc ((λ y lt → sizeAcc (x (rawTree y) (get≤ lt))))
+      sizeAcc {t} (acc accPf)
+        = acc λ lt → sizeAcc (accPf (get≤ lt))
 \end{code}
 
 Thus, we have an ordinal type with limits, a strictly monotone join,
