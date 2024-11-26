@@ -24,7 +24,7 @@ the maximum and proving its properties.
   open import Relation.Binary.PropositionalEquality
   open import Data.Product
   open import Relation.Nullary
-  open import Iso
+  open import Iso hiding (refl)
 \end{code}
 
 To begin, we parameterize our definition over a function

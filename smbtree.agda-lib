@@ -3,4 +3,4 @@ name: smbtree
 depend:
     standard-library
 include: .
-flags: 
+flags: --cubical-compatible -WnoUnsupportedIndexedMatch

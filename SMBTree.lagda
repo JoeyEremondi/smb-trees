@@ -114,6 +114,7 @@ The idempotence proof is then the property of $\maxInf$ that we proved in \cref{
 
 SMB-trees are ordered by the order on their underlying Brouwer trees:
 %
+infixr
 \begin{code}
 record _≤_ (t1 t2 : SMBTree) : Set ℓ where
   constructor mk≤
