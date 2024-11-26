@@ -18,5 +18,5 @@ fromℕ (suc n) = ↑ (fromℕ n)
 ω : ℕω
 ω = Lim _ (λ n → fromℕ n)
 
-<ω : ∀ {n} → (fromℕ n) ≤ ω
-<ω {n = n} = ≤-limUpperBound n
+<ω : ∀ {n} → (fromℕ n) < ω
+<ω {n = n} = ≤-limUpperBound (suc n)
