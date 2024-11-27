@@ -62,11 +62,15 @@ containing an underlying Brouwer tree, and a proof
 that $\indMax$ is idempotent on this tree.
 
 \begin{code}
+
+IsIdem : Brouwer.Tree → Set _
+IsIdem x = indMax x x Brouwer.≤ x
+
 record SMBTree : Set ℓ where
   constructor MkTree
   field
     rawTree : Brouwer.Tree
-    isIdem : (indMax rawTree rawTree) Brouwer.≤ rawTree
+    isIdem : IsIdem rawTree
 open SMBTree
 \end{code}
 %
@@ -428,3 +432,37 @@ The key lemma is that an SMB-tree is accessible if its underlying Brouwer tree i
 
 Thus, we have an ordinal type with limits, a strictly monotone join,
 and well-founded recursion.
+
+\begin{code}
+
+--TODO use this generally?
+
+UnaryPreserveIdem : (Brouwer.Tree → Brouwer.Tree) → Set _
+UnaryPreserveIdem  f =  ∀ {x} → IsIdem x → IsIdem (f x)
+
+unaryPreserveSMB : ∀
+  (f : Brouwer.Tree → Brouwer.Tree)
+  (pf : UnaryPreserveIdem f)
+  → (SMBTree → SMBTree)
+unaryPreserveSMB f pf x = MkTree (f ((rawTree x))) (pf (isIdem x))
+
+brouwerOp : ∀ (Zcase Scase : Brouwer.Tree -> Brouwer.Tree)  (x y : Brouwer.Tree) → Brouwer.Tree
+brouwerOp Zcase Scase Brouwer.Tree.Z y = Zcase y
+brouwerOp Zcase Scase (Brouwer.Tree.↑ x) y = Scase (brouwerOp Zcase Scase x y)
+brouwerOp Zcase Scase (Brouwer.Tree.Lim c f) y = indMax∞ (Brouwer.Tree.Lim c (λ x → brouwerOp Zcase Scase (f x) y))
+
+smbOp : ∀  (Zcase Scase : Brouwer.Tree -> Brouwer.Tree) (Zpf : UnaryPreserveIdem Zcase) (Spf : UnaryPreserveIdem Scase)
+  (x y : SMBTree)
+  -> SMBTree
+smbOp Zcase Scase Zpf Spf x y = MkTree (brouwerOp Zcase Scase (rawTree x) (rawTree y)) (idem (rawTree x) (isIdem x))
+  where
+    opaque
+      unfolding indMax
+      idem : ∀  x (xpf : IsIdem x) → IsIdem (brouwerOp Zcase Scase x (rawTree y))
+      idem Brouwer.Tree.Z xpf = Zpf (isIdem y)
+      idem (Brouwer.Tree.↑ x) (Brouwer._≤_.≤-sucMono xpf) = Spf (idem x xpf)
+      idem (Brouwer.Tree.Lim c f) xpf = (indMax∞-idem _)
+
+
+
+\end{code}
