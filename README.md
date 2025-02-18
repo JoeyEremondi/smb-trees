@@ -1,5 +1,7 @@
 # An Agda Library for Strictly Monotone Brouwer Trees
 
+We have migrated to https://codeberg.org/JoeyEremondi/smb-trees
+
 This repository contains the code accompnaying the paper "Strictly Monotone Brouwer Trees for Well-founded Recursion Over Multiple Arguments".
 It is implemented as a literate Agda file.
 
